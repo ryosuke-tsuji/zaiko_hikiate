@@ -97,8 +97,8 @@
         </v-col>
 
         <v-col class="d-flex justify-end ml-10">
-          <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
           <v-btn class="ml-10 mb-3 primary" large @click="kakutei"><span>確定</span></v-btn>
+          <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
         </v-col>
       </v-row>
     </v-container>

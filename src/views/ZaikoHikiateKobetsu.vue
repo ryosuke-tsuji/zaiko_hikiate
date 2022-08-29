@@ -62,7 +62,7 @@
                 <div style="text-align: right;">{{item.hakosu}}</div>
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" @input="changeSyukko"/> 
+                <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" /> 
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
                 <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" /> 
@@ -88,7 +88,7 @@
           <v-btn class="mx-5 mb-3 primary" large href="zaiko_hikiate_kobetsu1"><span>決定</span></v-btn>
         </v-col>
         <v-col class="d-flex justify-end ml-10">
-          {{ $route.params.id }}
+          <v-btn class="ml-10 mb-3" depressed outlined large @click="redist"><span>再引当</span></v-btn>
           <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
         </v-col>
       </v-row>
@@ -272,6 +272,25 @@ export default {
       this.headers = this.headersBack;
       this.drawer = false;
     },
+    redist() {
+      // 現在の引当クリア
+      for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
+        this.itemsKobetsu[idx].syukkohakosu = "";
+      }
+      // 残り要求数
+      let lastRequest = parseInt(this.itemsSum[0].hikiateCnt);
+      for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
+        let syukko = 0;
+        for (let hako = parseInt(this.itemsKobetsu[idx].hakosu); hako > 0; hako--) {
+          if (lastRequest <= 0)
+            break;
+          lastRequest -= parseInt(this.itemsKobetsu[idx].irisu);
+          syukko += 1;
+        }
+        this.itemsKobetsu[idx].syukkohakosu = syukko;
+
+      }
+    }
   },
   components: {
     GamenInfo,
