@@ -114,7 +114,7 @@ export default {
         { displayOrder: 1,  text: '',           value: 'ID',            width: 65,  shown: false, sortable: false, },
         { displayOrder: 2,  text: '出荷日',     value: 'shippingDate',  width: 90,  shown: true, },
         { displayOrder: 3,  text: '届先名',     value: 'destName',      width: 120, shown: true, },
-        { displayOrder: 4,  text: '注番',       value: 'orderNo',       width: 100, shown: true, },
+        { displayOrder: 4,  text: '注番',       value: 'orderNo',       width: 130, shown: true, },
         { displayOrder: 5,  text: '得意先',     value: 'customerName',  width: 150, shown: true, },
         { displayOrder: 6,  text: '品名',       value: 'productName',   width: 180, shown: true, },
         { displayOrder: 7,  text: '内訳№',     value: 'uchiwakeNo',    width: 90,  shown: true, },

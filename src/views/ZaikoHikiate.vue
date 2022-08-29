@@ -144,7 +144,7 @@ export default {
         { displayOrder: 4,  text: '到着日時', value: 'arrivalTime',   width: 120, shown: '1', },
         { displayOrder: 5,  text: '住所',     value: 'address',       width: 150, shown: '1', },
         { displayOrder: 6,  text: '届先名',   value: 'destName',      width: 120, shown: '1', },
-        { displayOrder: 7,  text: '注番',     value: 'orderNo',       width: 100, shown: '1', },
+        { displayOrder: 7,  text: '注番',     value: 'orderNo',       width: 130, shown: '1', },
         { displayOrder: 8,  text: '得意先',   value: 'customerName',  width: 150, shown: '1', },
         { displayOrder: 9,  text: '品名',     value: 'productName',   width: 180, shown: '1', },
         { displayOrder: 10, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: '1', },
