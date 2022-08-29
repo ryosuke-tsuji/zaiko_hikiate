@@ -1,0 +1,162 @@
+  .v-application {
+    font-family:'メイリオ', 'Meiryo';
+    font-size:18px !important;
+  }
+ 
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #b8b9b9;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #696969;
+    border-radius: 10px;
+  }
+
+  /* v-data-table */
+  .v-data-table {
+    white-space : nowrap;
+  }
+  .v-data-table td {
+    background: #ffffff;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+  }
+  .v-data-table tr:nth-child(odd) td {
+    background: rgb(233, 233, 233);
+  }
+  /* マウスオーバー時の色 */
+    .v-data-table tr:hover td {
+      background-color: rgb(191, 238, 189);
+  }
+
+    /* 固定ヘッダ部分 */
+  .v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > th {
+    font-size:15px  !important;
+    background-color: #8ebbe9 !important;
+  }
+  .v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
+    background-color: #8ebbe9 !important;
+  }
+  /* 明細行部分 */
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+    font-size:16px  !important;
+    
+  }
+  .v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+    font-weight:bold;
+  }
+   /* 固定ヘッダ部分 */
+   .v-data-table--fixed-header > .v-data-table__wrapper {
+    height:500px;
+  }
+
+  /* ヘッダ 項目タイトル */
+  .cols-title {
+    white-space: nowrap;
+    background-color: #8ebbe9;
+    font-size:14px  !important;
+    color: #00000099;
+    font-weight:bold;
+  }
+  /* ヘッダ 項目値 */
+  .cols-detail {
+    font-weight: bolder;
+    white-space: nowrap;
+    font-size:18px  !important;
+  }
+
+  /* 全部線有 */
+  .cols-border {
+    border: 1px solid grey;
+    white-space: nowrap;
+  }
+
+  /* 枠線系定義 */
+  /* 右側のみ透明 */
+  .cols-r-transparent {
+    border-right: transparent !important;
+  }
+  /* 左側のみ透明 */
+  .cols-l-transparent {
+    border-left: transparent !important;
+  }
+  /* 上側のみ透明 */
+  .cols-t-transparent {
+    border-top: transparent !important;
+  }
+  /* 下側のみ透明 */
+  .cols-b-transparent {
+    border-bottom: transparent !important;
+  }
+
+  /* 左右透明 */
+  .cols-lr-transparent {
+    border-left: transparent !important;
+    border-right: transparent !important;
+  }
+  /* 左右上透明 */
+  .cols-lrt-transparent {
+    border-left: transparent !important;
+    border-right: transparent !important;
+    border-top: transparent !important;
+  }
+  /* 左右下透明 */
+  .cols-lrt-transparent {
+    border-left: transparent !important;
+    border-right: transparent !important;
+    border-bottom: transparent !important;
+  }
+  /* 上下透明 */
+  .cols-tb-transparent {
+    border-top: transparent !important;
+    border-bottom: transparent !important;
+  }
+  /* 上下左透明 */
+  .cols-tbl-transparent {
+    border-top: transparent !important;
+    border-bottom: transparent !important;
+    border-left: transparent !important;
+  }
+  /* 上下右透明 */
+  .cols-tbr-transparent {
+    border-top: transparent !important;
+    border-bottom: transparent !important;
+    border-right: transparent !important;
+  }
+  /* 上左透明 */
+  .cols-tl-transparent {
+    border-top: transparent !important;
+    border-left: transparent !important;
+  }
+  /* 上右透明 */
+  .cols-tr-transparent {
+    border-top: transparent !important;
+    border-right: transparent !important;
+  }
+  /* 下左透明 */
+  .cols-bl-transparent {
+    border-bottom: transparent !important;
+    border-left: transparent !important;
+  }
+  /* 下右透明 */
+  .cols-br-transparent {
+    border-bottom: transparent !important;
+    border-right: transparent !important;
+  }
+
+  /* マテリアルアイコンのアウトライン */
+  .v-icon.outlined {
+    border: 2px solid currentColor;
+    border-radius:30%;
+}
+
+
+
+
+  
