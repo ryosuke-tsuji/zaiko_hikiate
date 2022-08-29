@@ -51,7 +51,7 @@
             </v-card-title>
           </v-card>
           <v-card>
-            <v-data-table :headers="shownHeadersKobetsu" :items="itemsKobetsu" dense fixed-header height="300px">
+            <v-data-table :headers="shownHeadersKobetsu" :items="itemsKobetsu" dense multi-sort fixed-header height="300px">
               <template #[`item.suryo`]="{ item }">
                 <div style="text-align: right;">{{item.suryo}}</div>
               </template>
@@ -89,25 +89,45 @@
         </v-col>
         <v-col class="d-flex justify-end ml-10">
           {{ $route.params.id }}
-<!--
           <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
--->
         </v-col>
       </v-row>
     </v-container>
 <!--
     <DragSet v-bind:drawerParent="myDrawer" />
 -->
+
+    <v-navigation-drawer v-model="drawer" absolute clipped right>
+      <v-list-item>
+        <v-list-item-title />
+      </v-list-item>
+      <v-divider></v-divider>
+      <table>
+        <draggable v-model="headersKobetsu" tag="tbody" class="dragArea list-group">
+          <tr v-for="header in headersKobetsu" :key="header.displayOrder">
+            <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
+            <td>{{header.text}}</td>
+            <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
+            <td><img src="@/assets/menu.png" width=20></td>
+          </tr>
+        </draggable>
+      </table>
+      <v-btn @click="cancel"><span>キャンセル</span></v-btn>
+      <v-btn @click="save"><span>保存</span></v-btn>
+    </v-navigation-drawer>
+
   </div>
 </template>
 
 <script>
 import GamenInfo from '@/components/common/Header.vue'
+import draggable from "vuedraggable"
 // import DragSet from '@/components/common/DragSetting.vue'
 export default {
   props: ["id"],
   data() {
     return {
+      drawer: false,
       myDrawer: null,
       headersShijiH: [
         { displayOrder: 1, text: '届先名',   value: 'destinationName', width: 150,  shown: true },
@@ -128,7 +148,6 @@ export default {
         { displayOrder: 3,  text: '不足数', value: 'fusokuCnt',  width: 100,  shown: true, },
       ],
       headersKobetsu: [
-        { displayOrder: 1,  text: '',           value: 'ID',            width: 150,  shown: false },
         { displayOrder: 2,  text: '入荷日',     value: 'nyukaYmd',      width: 100,  shown: true },
         { displayOrder: 3,  text: '倉庫',       value: 'soko',          width: 100,  shown: true },
         { displayOrder: 4,  text: '棚番',       value: 'tanaBan',       width: 100,  shown: true },
@@ -142,6 +161,7 @@ export default {
         { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 100,  shown: true },
         { displayOrder: 13, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true },
         { displayOrder: 14, text: '',          value: 'status',         width: 200,  shown: false },
+        { displayOrder: 15, text: '',           value: 'ID',            width: 150,  shown: false },
       ],
       itemsShijiH: [
         {
@@ -213,6 +233,7 @@ export default {
           status: "0",
         },
       ],
+      headersBack: null,
     }
   },
   created() {
@@ -236,13 +257,25 @@ export default {
   },
   methods: {
     setting() {
-      this.myDrawer = !this.myDrawer;
+      // 現在の状態を退避
+      this.headersBack = this.headersKobetsu;
+      // サブ画面表示
+      this.drawer = !this.drawer;
     },
-    changeSyukko() {
+    save() {
+      // DB更新処理
+
+      this.drawer = false;
+    },
+    cancel() {
+      // 退避から戻す
+      this.headers = this.headersBack;
+      this.drawer = false;
     },
   },
   components: {
     GamenInfo,
+    draggable,
     // DragSet,
   },
 }

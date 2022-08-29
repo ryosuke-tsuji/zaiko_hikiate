@@ -62,7 +62,7 @@
             </v-card-title>
           </v-card>
           <v-card>
-            <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense fixed-header show-select height="300px">
+            <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select height="300px">
               <template #[`item.status`]="{ item }">
                 <!-- ここの条件をフラグ値にすればアイコン出る。 -->
                 <v-icon v-if="item.statusCd == 1" color="yellow darken-3" text class="btn-icon mr-2" style="background-color: transparent !important">mdi-alert</v-icon>
@@ -97,21 +97,42 @@
         </v-col>
 
         <v-col class="d-flex justify-end ml-10">
+          <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
           <v-btn class="ml-10 mb-3 primary" large @click="kakutei"><span>確定</span></v-btn>
         </v-col>
       </v-row>
     </v-container>
+
+    <v-navigation-drawer v-model="drawer" absolute clipped right>
+      <v-list-item>
+        <v-list-item-title />
+      </v-list-item>
+      <v-divider></v-divider>
+      <table>
+        <draggable v-model="headers" tag="tbody" class="dragArea list-group">
+          <tr v-for="header in headers" :key="header.displayOrder">
+            <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
+            <td>{{header.text}}</td>
+            <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
+            <td><img src="@/assets/menu.png" width=20></td>
+          </tr>
+        </draggable>
+      </table>
+      <v-btn @click="cancel"><span>キャンセル</span></v-btn>
+      <v-btn @click="save"><span>保存</span></v-btn>
+    </v-navigation-drawer>
 
   </div>
 </template>
 
 <script>
 import GamenInfo from '@/components/common/Header.vue'
+import draggable from "vuedraggable"
 export default {
   data() {
     return {
+      drawer: false,
       headers: [
-        { displayOrder: 1,  text: '',           value: 'ID',            width: 65,  shown: false, sortable: false, },
         { displayOrder: 2,  text: '出荷日',     value: 'shippingDate',  width: 90,  shown: true, },
         { displayOrder: 3,  text: '届先名',     value: 'destName',      width: 120, shown: true, },
         { displayOrder: 4,  text: '注番',       value: 'orderNo',       width: 130, shown: true, },
@@ -123,8 +144,9 @@ export default {
         { displayOrder: 10, text: '引当数',     value: 'hikiateCnt',    width: 100, shown: true, },
         { displayOrder: 11, text: '不足数',     value: 'fusokuCnt',     width: 100, shown: true, },
         { displayOrder: 12, text: 'ステータス', value: 'status',        width: 100, shown: true, },
-        { displayOrder: 13, text: '',           value: 'statusCd',      width: 100, shown: false, },
-        { displayOrder: 14, text: '倉庫',       value: 'soko',          width: 100, shown: true, },
+        { displayOrder: 13, text: '倉庫',       value: 'soko',          width: 100, shown: true, },
+        { displayOrder: 14, text: '',           value: 'statusCd',      width: 100, shown: false, },
+        { displayOrder: 15, text: '',           value: 'ID',            width: 65,  shown: false, sortable: false, },
       ],
       itemList: [
         {
@@ -208,7 +230,7 @@ export default {
           soko: "",
         },
       ],
-
+      headersBack: null,
       panelState: 0,
     }
   },
@@ -219,7 +241,23 @@ export default {
         alert("確定しました。");
         this.$router.push("zaiko_hikiate");
       }
-    }
+    },
+    setting() {
+      // 現在の状態を退避
+      this.headersBack = this.headers;
+      // サブ画面表示
+      this.drawer = !this.drawer;
+    },
+    save() {
+      // DB更新処理
+
+      this.drawer = false;
+    },
+    cancel() {
+      // 退避から戻す
+      this.headers = this.headersBack;
+      this.drawer = false;
+    },
   },
   computed: {
     shownHeaders() {
@@ -228,6 +266,7 @@ export default {
   },
   components: {
     GamenInfo,
+    draggable,
   },
 }
 </script>
