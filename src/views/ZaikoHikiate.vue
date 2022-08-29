@@ -91,7 +91,7 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="hoverBtn">
         <v-col class="d-flex justify-start mr-10">
           <v-btn class="mr-10 mb-3" depressed outlined large href="zaiko_hikiate"><span>戻る</span></v-btn>
         </v-col>
@@ -349,4 +349,10 @@ export default {
   width: 50px;
 }
 
+.hoverBtn {
+  position: fixed;
+  background-color: white;
+  bottom: 30px;
+  width: 100%;
+}
 </style>
