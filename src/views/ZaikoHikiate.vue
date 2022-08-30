@@ -98,7 +98,7 @@
 
         <v-col class="d-flex justify-center">
           <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate"><span>一括引当</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu"><span>個別引当</span></v-btn>
+          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu1"><span>個別引当</span></v-btn>
           <v-btn class="mx-5 mb-3 secondary" large @click="hikiateCancel"><span>引当取消</span></v-btn>
         </v-col>
 
@@ -160,7 +160,7 @@ export default {
           ID: "1",
           jun: "",
           shippingDate: "07/15",
-          arrivalTime: "07/15 08:00",
+          arrivalTime: "07/15 08:00 - 12:00",
           address: "東京都墨田区文花２－１－３",
           destName: "東京工場",
           orderNo: "4	QDA9Q2",
@@ -301,7 +301,7 @@ export default {
 
 
 
-<style>
+<style scoped>
 .backColor {
   background-color: #74992e;
 }

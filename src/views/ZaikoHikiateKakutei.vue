@@ -20,6 +20,10 @@
                       <v-subheader class="mr-2">デポ</v-subheader>
                       <div>EW0A 幸手</div>
                     </v-col>
+                    <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
+                      <v-subheader class="mr-2">品種</v-subheader>
+                      <div></div>
+                    </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">

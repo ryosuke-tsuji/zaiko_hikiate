@@ -54,12 +54,22 @@ const routes = [
   {
     path: '/zaiko_hikiate_kobetsu1',
     name: 'zaiko_hikiate_kobetsu1',
-    component: () => import('../views/ZaikoHikiateKobetsu.vue'),
+    component: () => import('../views/ZaikoHikiateKobetsu1.vue'),
   },
   {
     path: '/zaiko_hikiate_kobetsu2',
     name: 'zaiko_hikiate_kobetsu2',
-    component: () => import('../views/ZaikoHikiateKobetsu.vue'),
+    component: () => import('../views/ZaikoHikiateKobetsu2.vue'),
+  },
+  {
+    path: '/zaiko_hikiate_kobetsu3',
+    name: 'zaiko_hikiate_kobetsu3',
+    component: () => import('../views/ZaikoHikiateKobetsu3.vue'),
+  },
+  {
+    path: '/zaiko_hikiate_kobetsu4',
+    name: 'zaiko_hikiate_kobetsu4',
+    component: () => import('../views/ZaikoHikiateKobetsu4.vue'),
   },
   {
     path: '/zaiko_hikiate_kakutei',
