@@ -15,26 +15,31 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">管理部署</v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <div style="width:430px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">デポ</v-subheader>
                       <v-text-field class="required" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <div style="width:210px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">品種</v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <div style="width:610px"></div>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">輸送手段</v-subheader>
                       <v-select :items="binUnsoCdList" dense outlined hide-details="auto"></v-select>
+                      <div style="width:80px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="6">
                       <v-subheader class="mr-2">出荷日</v-subheader>
                       <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" @click:append="appendClick"></v-text-field>
                       <span style="vertical-align: middle" class="pl-1 pr-1 pt-2">～</span>
                       <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD"></v-text-field>
+                      <div style="width:270px"></div>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -42,6 +47,7 @@
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban1"></v-text-field>
                       <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban2"></v-text-field>
+                      <div style="width:15px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">引当状況</v-subheader>
@@ -50,6 +56,7 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">在庫有無</v-subheader>
                       <v-select :items="zaikoUmuList" dense outlined hide-details="auto"></v-select>
+                      <div style="width:80px"></div>
                     </v-col>
                     <v-spacer></v-spacer>
 
@@ -79,7 +86,6 @@
             <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select no-data-text="検索してください。" height=400>
               <template #[`item.jun`]="{ item }">
                 <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight" /> 
-<!--                <input type="text" :value="item.jun" style="width:50px;"/>-->
               </template>
               <template #[`item.weight`]="{ item }">
                 <div style="text-align: right;">{{item.weight}}</div>
@@ -115,7 +121,7 @@
       <v-divider></v-divider>
       <table>
         <draggable v-model="headers" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in headers" :key="header.displayOrder">
+          <tr v-for="header in shownHeaders" :key="header.displayOrder">
             <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
             <td>{{header.text}}</td>
             <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
@@ -340,7 +346,7 @@ export default {
   text-align: right;
 }
 .chuban1 {
-  width: 30px;
+  width: 50px;
 }
 .chuban2 {
   width: 90px;  
