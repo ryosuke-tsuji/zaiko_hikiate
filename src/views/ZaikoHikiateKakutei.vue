@@ -84,6 +84,9 @@
                 <div v-if="item.fusokuCnt==0" style="text-align: right;">{{item.fusokuCnt}}</div>
                 <div v-else class="text-end errorStatus" >{{item.fusokuCnt}}</div>
               </template>
+              <template #[`item.data-table-select`]="{ item, isSelected, select }">
+                <v-simple-checkbox v-if="item.fusokuCnt != ``" :value="isSelected" @input="select($event)"></v-simple-checkbox>
+              </template>
             </v-data-table>
           </v-card>
         </v-col>
