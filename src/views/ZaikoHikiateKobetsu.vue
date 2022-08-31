@@ -32,7 +32,8 @@
                     <div style="text-align: right;">{{item.kansanCnt}}</div>
                   </template>
                   <template #[`item.fusokuCnt`]="{ item }">
-                    <div style="text-align: right;">{{item.fusokuCnt}}</div>
+                    <div v-if="isFusoku(item.fusokuCnt)" class="text-end errorStatus">{{item.fusokuCnt}}</div>
+                    <div v-else style="text-align: right;">{{item.fusokuCnt}}</div>
                   </template>
                 </v-data-table>
               </v-col>
@@ -62,7 +63,11 @@
                 <div style="text-align: right;">{{item.hakosu}}</div>
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" /> 
+                <div style="display: flex; align-items: center;">
+                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" />
+                  <v-spacer></v-spacer>
+                  <v-btn class="secondary" depressed dense @click="hakoShitei"><span>箱指定</span></v-btn>
+                </div>
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
                 <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" /> 
@@ -79,13 +84,13 @@
       </v-row>
       <v-row>
         <v-col class="d-flex justify-start mr-10">
-          <v-btn class="mr-10 mb-3" depressed outlined large href="zaiko_hikiate"><span>戻る</span></v-btn>
+          <v-btn class="mr-10 mb-3" depressed outlined large href="../zaiko_hikiate"><span>戻る</span></v-btn>
         </v-col>
 
         <v-col class="d-flex justify-center">
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kakutei"><span>引当保留</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu2"><span>強制決定</span></v-btn>
-          <v-btn class="mx-5 mb-3 primary" large href="zaiko_hikiate_kobetsu1"><span>決定</span></v-btn>
+          <v-btn class="mx-5 mb-3 secondary" large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>引当保留</span></v-btn>
+          <v-btn class="mx-5 mb-3 secondary" large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>強制決定</span></v-btn>
+          <v-btn class="mx-5 mb-3 primary"   large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>決定</span></v-btn>
         </v-col>
         <v-col class="d-flex justify-end ml-10">
           <v-btn class="ml-10 mb-3" depressed outlined large @click="redist"><span>再引当</span></v-btn>
@@ -116,6 +121,78 @@
       <v-btn @click="save"><span>保存</span></v-btn>
     </v-navigation-drawer>
 
+    <!-- 積付構成変更画面 -->
+    <div id="overlay" v-show="showContent">
+      <div id="content">
+        <v-row>
+          <v-col class="pb-0">
+            <v-card class="pd-10">
+              <v-card-title class="pt-0 pb-2 ml-1">
+                <span class="titleFont d-flex">積付構成変更</span>
+                <v-spacer></v-spacer>
+              </v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex py-1" cols="6">
+            <v-subheader class="mr-2">指示区分</v-subheader>
+            <div style="display: flex; align-items: center; justify-content: center;">
+              <v-radio-group row>
+                <v-radio dense label="指示型" value="1"></v-radio>
+                <v-radio dense label="実績型" value="2"></v-radio>
+              </v-radio-group>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row align-content="center">
+          <v-col>
+            <div>【分割元】</div>
+            <v-data-table :headers="headersBunkatsu" :items="bunkatsuMoto" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+              <template #[`item.hakoNo`]="{ item }">
+                <div style="text-align: right;">{{item.hakoNo}}</div>
+              </template>
+              <template #[`item.suryo`]="{ item }">
+                <div style="text-align: right;">{{item.suryo}}</div>
+              </template>
+            </v-data-table>
+          </v-col>
+          <v-col class="ml-1 pl-1">
+            <div style="height:160px"></div>
+            <v-btn depressed dense @click="hakoShitei"><span>追加<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play</v-icon></span></v-btn>
+            <div style="height:10px"></div>
+            <v-btn depressed dense @click="hakoShitei"><span>削除<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play mdi-flip-h</v-icon></span></v-btn>
+          </v-col>
+          <v-col class="ml-0 pl-1">
+            <div>【分割先】</div>
+            <v-data-table :headers="headersBunkatsu" :items="bunkatsuSaki" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+              <template #[`item.hakoNo`]="{ item }">
+                <div style="text-align: right;">{{item.hakoNo}}</div>
+              </template>
+              <template #[`item.suryo`]="{ item }">
+                <div style="text-align: right;">{{item.suryo}}</div>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="d-flex justify-start mr-10">
+            <v-btn class="mr-10 mb-3" depressed outlined large @click="closeModal"><span>戻る</span></v-btn>
+          </v-col>
+
+          <v-col class="d-flex justify-center">
+          </v-col>
+
+          <v-col class="d-flex justify-end ml-10">
+            <v-btn class="ml-10 mb-3 primary" depressed large @click="closeModal"><span>決定</span></v-btn>
+          </v-col>
+        </v-row>
+
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -128,6 +205,7 @@ export default {
   data() {
     return {
       drawer: false,
+      showContent: false,
       myDrawer: null,
       headersShijiH: [
         { displayOrder: 1, text: '届先名',   value: 'destinationName', width: 150,  shown: true },
@@ -158,88 +236,275 @@ export default {
         { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, },
         { displayOrder: 10, text: '入り数',     value: 'irisu',         width: 70,  shown: true, },
         { displayOrder: 11, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, },
-        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 100,  shown: true },
+        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 180,  shown: true },
         { displayOrder: 13, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true },
         { displayOrder: 14, text: '',          value: 'status',         width: 200,  shown: false },
         { displayOrder: 15, text: '',           value: 'ID',            width: 150,  shown: false },
       ],
-      itemsShijiH: [
-        {
-          destinationName: "東京工場",
-          orderNo: "4	QDA9Q2",
-          customerName: "花王",
-          productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
-          uchiwakeNo: "-",
-          uchiwakeName: "",
-          weight: "1,800Kg",
-          shijiCnt: "42,000 S",
-        }
+      headersBunkatsu: [
+        { displayOrder: 3,  text: '箱番号',   value: 'hakoNo', width: 40,  shown: true },
+        { displayOrder: 4,  text: '数量',     value: 'suryo',  width: 80,  shown: true },
+        { displayOrder: 5,  text: '',         value: 'id',     width: 10,  shown: false },
       ],
-      itemsShijiL: [
-        {
-          eigyoBiko: "",
-        }
+      itemsShijiH:[],
+      itemsShijiHList: [
+        [
+          // 1明細目
+          {
+            destinationName: "東京工場",
+            orderNo: "4	QDA9Q2",
+            customerName: "花王",
+            productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
+            uchiwakeNo: "-",
+            uchiwakeName: "",
+            weight: "1,800Kg",
+            shijiCnt: "42,000 S",
+          }
+        ],
+        [
+          // 2明細目
+          {
+            destinationName: "㈲ヨコヤマ",
+            orderNo: "4 8A61Q2",
+            customerName: "コカ・コーラ",
+            productName: "７ミリヨウチューブ",
+            uchiwakeNo: "01",
+            uchiwakeName: "本体",
+            weight: "300Kg",
+            shijiCnt: "64,000 S",
+          }
+        ],
+        [
+          // 3明細目
+          {
+            destinationName: "㈲ヨコヤマ",
+            orderNo: "4 8O45S2",
+            customerName: "コカ・コーラ",
+            productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
+            uchiwakeNo: "01",
+            uchiwakeName: "本体",
+            weight: "500kg",
+            shijiCnt: "52,500 S",
+          }
+        ],
+        [
+          // 4明細目
+          {
+            destinationName: "㈲双葉商事",
+            orderNo: "4	QBA1R2",
+            customerName: "丸美屋食品",
+            productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
+            uchiwakeNo: "01",
+            uchiwakeName: "本体",
+            weight: "200Kg",
+            shijiCnt: "6,048 S",
+          }
+        ],
       ],
-      itemsSum: [
-        { hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"}
+      itemsShijiL: [],
+      itemsShijiLList: [
+        [
+          {
+            eigyoBiko: "",
+          }
+        ],
+        [
+          {
+            eigyoBiko: "",
+          }
+        ],
+        [
+          {
+            eigyoBiko: "",
+          }
+        ],
+        [
+          {
+            eigyoBiko: "",
+          }
+        ],
       ],
-      itemsKobetsu: [
-        {
-          ID: 1,
-          nyukaYmd: '22/07/14',
-          soko: '1810 関宿物流センター',
-          tanaBan: '070230',
-          fudagamiNo: '5056001108061X',
-          fudagamiSabu: '',
-          fudagamiSeq: '001',
-          productYmd: '22/07/13',
-          suryo: '30,000 S',
-          irisu: '3,000',
-          hakosu: '10',
-          syukkohakosu: '10',
-          tsurifuraBiko: '',
-          status: "0",
-        },
-        {
-          ID: 2,
-          nyukaYmd: '22/07/14',
-          soko: '1810 関宿物流センター',
-          tanaBan: '061603',
-          fudagamiNo: '5056001108063Z',
-          fudagamiSabu: '',
-          fudagamiSeq: '002',
-          productYmd: '22/07/14',
-          suryo: '30,000 S',
-          irisu: '3,000',
-          hakosu: '10',
-          syukkohakosu: '4',
-          tsurifuraBiko: '',
-          status: "0",
-        },
-        {
-          ID: 3,
-          nyukaYmd: '22/07/14',
-          soko: '1810 関宿物流センター',
-          tanaBan: '080802',
-          fudagamiNo: '5056001131548$',
-          fudagamiSabu: '',
-          fudagamiSeq: '003',
-          productYmd: '22/07/14',
-          suryo: '30,000 S',
-          irisu: '3,000',
-          hakosu: '10',
-          syukkohakosu: '',
-          tsurifuraBiko: '',
-          status: "0",
-        },
+      itemsSum: [],
+      itemsSumList: [
+        [
+          { hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"}
+        ],
+        [
+          { hikiateCnt: "57,600 S", kansanCnt: "57,600 S", fusokuCnt: "-6,400 S"}
+        ],
+        [
+          { hikiateCnt: "45,000 S", kansanCnt: "45,000 S", fusokuCnt: "-7,500 S"}
+        ],
+        [
+          { hikiateCnt: "6,048 S", kansanCnt: "6,048 S", fusokuCnt: "0 S"}
+        ],
+      ],
+      itemsKobetsu: [],
+      itemsKobetsuList: [
+        [
+          // 1明細目
+          {
+            ID: 1,
+            nyukaYmd: '22/07/14',
+            soko: '1810 関宿物流センター',
+            tanaBan: '070230',
+            fudagamiNo: '5056001108061X',
+            fudagamiSabu: '',
+            fudagamiSeq: '001',
+            productYmd: '22/07/13',
+            suryo: '30,000 S',
+            irisu: '3,000',
+            hakosu: '10',
+            syukkohakosu: '10',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+          {
+            ID: 2,
+            nyukaYmd: '22/07/14',
+            soko: '1810 関宿物流センター',
+            tanaBan: '061603',
+            fudagamiNo: '5056001108063Z',
+            fudagamiSabu: '',
+            fudagamiSeq: '002',
+            productYmd: '22/07/14',
+            suryo: '30,000 S',
+            irisu: '3,000',
+            hakosu: '10',
+            syukkohakosu: '4',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+          {
+            ID: 3,
+            nyukaYmd: '22/07/14',
+            soko: '1810 関宿物流センター',
+            tanaBan: '080802',
+            fudagamiNo: '5056001131548$',
+            fudagamiSabu: '',
+            fudagamiSeq: '003',
+            productYmd: '22/07/14',
+            suryo: '30,000 S',
+            irisu: '3,000',
+            hakosu: '10',
+            syukkohakosu: '',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+        ],
+        [
+          // 2明細目
+          {
+            ID: 1,
+            nyukaYmd: '22/07/14',
+            soko: '1810 関宿物流センター',
+            tanaBan: '020201',
+            fudagamiNo: '438940398593$%',
+            fudagamiSabu: '',
+            fudagamiSeq: '001',
+            productYmd: '22/07/14',
+            suryo: '64,000 S',
+            irisu: '640',
+            hakosu: '90',
+            syukkohakosu: '90',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+        ],
+        [
+          // 3明細目
+          {
+            ID: 1,
+            nyukaYmd: '22/07/14',
+            soko: '1810 関宿物流センター',
+            tanaBan: '010101',
+            fudagamiNo: '3248990234890A',
+            fudagamiSabu: '',
+            fudagamiSeq: '001',
+            productYmd: '22/07/14',
+            suryo: '37,500 S',
+            irisu: '7,500',
+            hakosu: '5',
+            syukkohakosu: '5',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+          {
+            ID: 2,
+            nyukaYmd: '22/07/14',
+            soko: '1220 盛運羽生倉庫',
+            tanaBan: '999999',
+            fudagamiNo: '9394938953889B',
+            fudagamiSabu: '',
+            fudagamiSeq: '002',
+            productYmd: '22/07/14',
+            suryo: '37,500 S',
+            irisu: '7,500',
+            hakosu: '1',
+            syukkohakosu: '1',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+        ],
+        [
+          // 4明細目
+          {
+            ID: 1,
+            nyukaYmd: '22/07/12',
+            soko: '1810 関宿物流センター',
+            tanaBan: '090403',
+            fudagamiNo: '3948038034589C',
+            fudagamiSabu: '',
+            fudagamiSeq: '001',
+            productYmd: '22/07/12',
+            suryo: '8,640 S',
+            irisu: '432',
+            hakosu: '20',
+            syukkohakosu: '14',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+          {
+            ID: 2,
+            nyukaYmd: '22/07/13',
+            soko: '1810 関宿物流センター',
+            tanaBan: '090404',
+            fudagamiNo: '3948038035628D',
+            fudagamiSabu: '1',
+            fudagamiSeq: '002',
+            productYmd: '22/07/12',
+            suryo: '8,640 S',
+            irisu: '432',
+            hakosu: '20',
+            syukkohakosu: '',
+            tsurifuraBiko: '',
+            status: "0",
+          },
+        ],
+      ],
+      bunkatsuMoto: [
+        { hakoNo:"1",  suryo:"3,000 S", id:1 },
+        { hakoNo:"2",  suryo:"3,000 S", id:2 },
+        { hakoNo:"3",  suryo:"3,000 S", id:3 },
+        { hakoNo:"4",  suryo:"3,000 S", id:4 },
+        { hakoNo:"5",  suryo:"3,000 S", id:5 },
+        { hakoNo:"6",  suryo:"3,000 S", id:6 },
+        { hakoNo:"7",  suryo:"3,000 S", id:7 },
+        { hakoNo:"8",  suryo:"3,000 S", id:8 },
+        { hakoNo:"9",  suryo:"3,000 S", id:9 },
+        { hakoNo:"10", suryo:"3,000 S", id:10 },
+      ],
+      bunkatsuSaki: [
+
       ],
       headersBack: null,
     }
   },
-  created() {
-    // if (this.props.id === undefined) {
-    //   this.itemsKobetsu = this.itemsKobetsuPages[0].concat();
-    // }
+  mounted: function() {
+    this.itemsShijiH = this.itemsShijiHList[parseInt(this._props.id) - 1];
+    this.itemsShijiL = this.itemsShijiLList[parseInt(this._props.id) - 1];
+    this.itemsSum = this.itemsSumList[parseInt(this._props.id) - 1];
+    this.itemsKobetsu = this.itemsKobetsuList[parseInt(this._props.id) - 1];
   },
   computed: {
     shownHeadersShijiH() {
@@ -254,6 +519,14 @@ export default {
     shownHeadersKobetsu() {
       return this.headersKobetsu.filter(h => h.shown);
     },
+    isFusoku() {
+      return function(fusoku) {
+        let fusokuNum = parseInt(fusoku.replace(/,/g, ''));
+        if (fusokuNum < 0)
+          return true;
+        return false;
+      }
+    }
   },
   methods: {
     setting() {
@@ -271,6 +544,12 @@ export default {
       // 退避から戻す
       this.headers = this.headersBack;
       this.drawer = false;
+    },
+    hakoShitei: async function () {
+      this.showContent = true;
+    },
+    closeModal() {
+      this.showContent = false;
     },
     redist() {
       // 現在の引当クリア
@@ -290,7 +569,7 @@ export default {
         this.itemsKobetsu[idx].syukkohakosu = syukko;
 
       }
-    }
+    },
   },
   components: {
     GamenInfo,
@@ -355,5 +634,36 @@ export default {
 }
 .bikoArea {
   width: 200px;
+}
+
+.errorStatus {
+  /* text-danger */
+  color: red;
+}
+#overlay {
+  z-index: 10;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#content {
+  z-index: 20;
+  width: "600px";
+  height: "350px";
+  padding: 1em;
+  background: #ffffff;
+}
+
+.v-input--selection-controls {
+  margin: 2px;
 }
 </style>

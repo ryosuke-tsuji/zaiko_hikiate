@@ -113,6 +113,7 @@
               </template>
 
             </v-data-table>
+            <div style="height:40px"></div>
           </v-card>
         </v-col>
       </v-row>
@@ -123,7 +124,7 @@
 
         <v-col class="d-flex justify-center">
           <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate"><span>一括引当</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu1"><span>個別引当</span></v-btn>
+          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu/1"><span>個別引当</span></v-btn>
           <v-btn class="mx-5 mb-3 secondary" large @click="hikiateCancel"><span>引当取消</span></v-btn>
         </v-col>
 
@@ -277,6 +278,7 @@ export default {
     },
     select() {
       this.itemList = this.resultList;
+      this.panelState = false;
     },
     setting() {
       // 現在の状態を退避

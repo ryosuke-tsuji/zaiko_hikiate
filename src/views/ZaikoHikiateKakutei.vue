@@ -94,7 +94,7 @@
       <v-row>
         <v-col class="d-flex justify-start mr-10">
           <v-btn class="mr-10 mb-3" depressed outlined large href="zaiko_hikiate"><span>戻る</span></v-btn>
-          <v-btn class="mr-10 mb-3 secondary" large href="zaiko_hikiate_kobetsu1"><span>修正</span></v-btn>
+          <v-btn class="mr-10 mb-3 secondary" large href="zaiko_hikiate_kobetsu/1"><span>修正</span></v-btn>
         </v-col>
 
         <v-col class="d-flex justify-center">
