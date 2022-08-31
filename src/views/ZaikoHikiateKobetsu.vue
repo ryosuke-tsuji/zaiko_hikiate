@@ -135,7 +135,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="d-flex py-1" cols="6">
+          <v-col class="d-flex py-1" cols="8">
             <v-subheader class="mr-2">指示区分</v-subheader>
             <div style="display: flex; align-items: center; justify-content: center;">
               <v-radio-group row>
@@ -148,7 +148,7 @@
         <v-row align-content="center">
           <v-col>
             <div>【分割元】</div>
-            <v-data-table :headers="headersBunkatsu" :items="bunkatsuMoto" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuMoto" item-key="id" v-model="selectMoto" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
               <template #[`item.hakoNo`]="{ item }">
                 <div style="text-align: right;">{{item.hakoNo}}</div>
               </template>
@@ -159,13 +159,13 @@
           </v-col>
           <v-col class="ml-1 pl-1">
             <div style="height:160px"></div>
-            <v-btn depressed dense @click="hakoShitei"><span>追加<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play</v-icon></span></v-btn>
+            <v-btn depressed dense @click="hakoAdd"><span>追加<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play</v-icon></span></v-btn>
             <div style="height:10px"></div>
-            <v-btn depressed dense @click="hakoShitei"><span>削除<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play mdi-flip-h</v-icon></span></v-btn>
+            <v-btn depressed dense @click="hakoDel"><span>削除<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play mdi-flip-h</v-icon></span></v-btn>
           </v-col>
           <v-col class="ml-0 pl-1">
             <div>【分割先】</div>
-            <v-data-table :headers="headersBunkatsu" :items="bunkatsuSaki" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuSaki" item-key="id" v-model="selectSaki" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
               <template #[`item.hakoNo`]="{ item }">
                 <div style="text-align: right;">{{item.hakoNo}}</div>
               </template>
@@ -482,7 +482,8 @@ export default {
           },
         ],
       ],
-      bunkatsuMoto: [
+      bunkatsuMoto: [],
+      bunkatsuMotoMaster: [
         { hakoNo:"1",  suryo:"3,000 S", id:1 },
         { hakoNo:"2",  suryo:"3,000 S", id:2 },
         { hakoNo:"3",  suryo:"3,000 S", id:3 },
@@ -494,9 +495,10 @@ export default {
         { hakoNo:"9",  suryo:"3,000 S", id:9 },
         { hakoNo:"10", suryo:"3,000 S", id:10 },
       ],
-      bunkatsuSaki: [
-
-      ],
+      bunkatsuSaki: [],
+      bunkatsuSakiMaster: [],
+      selectMoto: [],
+      selectSaki: [],
       headersBack: null,
     }
   },
@@ -518,6 +520,9 @@ export default {
     },
     shownHeadersKobetsu() {
       return this.headersKobetsu.filter(h => h.shown);
+    },
+    shownHeadersBunkatsu() {
+      return this.headersBunkatsu.filter(h => h.shown);
     },
     isFusoku() {
       return function(fusoku) {
@@ -546,10 +551,41 @@ export default {
       this.drawer = false;
     },
     hakoShitei: async function () {
+      // データ準備
+      this.bunkatsuSaki = this.bunkatsuSakiMaster.concat();
+      this.bunkatsuMoto = this.bunkatsuMotoMaster.concat();
       this.showContent = true;
     },
     closeModal() {
       this.showContent = false;
+    },
+    hakoAdd() {
+      for (const rowInfo of this.selectMoto) {
+        if (rowInfo.id) {
+          this.bunkatsuMoto.forEach((element, index) => {
+            if (element.id == rowInfo.id) {
+              this.bunkatsuSaki.push(element);
+              this.bunkatsuMoto.splice(index, 1);
+            }
+          });
+        }
+      }
+      // チェック状態クリア
+      this.selectMoto = [];
+    },
+    hakoDel() {
+      for (const rowInfo of this.selectSaki) {
+        if (rowInfo.id) {
+          this.bunkatsuSaki.forEach((element, index) => {
+            if (element.id == rowInfo.id) {
+              this.bunkatsuMoto.push(element);
+              this.bunkatsuSaki.splice(index, 1);
+            }
+          });
+        }
+      }
+      // チェック状態クリア
+      this.selectSaki = [];
     },
     redist() {
       // 現在の引当クリア
