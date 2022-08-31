@@ -32,7 +32,8 @@
                     <div style="text-align: right;">{{item.kansanCnt}}</div>
                   </template>
                   <template #[`item.fusokuCnt`]="{ item }">
-                    <div style="text-align: right;">{{item.fusokuCnt}}</div>
+                    <div v-if="isFusoku(item.fusokuCnt)" class="text-end errorStatus">{{item.fusokuCnt}}</div>
+                    <div v-else style="text-align: right;">{{item.fusokuCnt}}</div>
                   </template>
                 </v-data-table>
               </v-col>
@@ -62,7 +63,11 @@
                 <div style="text-align: right;">{{item.hakosu}}</div>
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" /> 
+                <div style="display: flex; align-items: center;">
+                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" />
+                  <v-spacer></v-spacer>
+                  <v-btn class="secondary" depressed dense @click="hakoShitei"><span>箱指定</span></v-btn>
+                </div>
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
                 <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" /> 
@@ -116,6 +121,78 @@
       <v-btn @click="save"><span>保存</span></v-btn>
     </v-navigation-drawer>
 
+    <!-- 積付構成変更画面 -->
+    <div id="overlay" v-show="showContent">
+      <div id="content">
+        <v-row>
+          <v-col class="pb-0">
+            <v-card class="pd-10">
+              <v-card-title class="pt-0 pb-2 ml-1">
+                <span class="titleFont d-flex">積付構成変更</span>
+                <v-spacer></v-spacer>
+              </v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="d-flex py-1" cols="6">
+            <v-subheader class="mr-2">指示区分</v-subheader>
+            <div style="display: flex; align-items: center; justify-content: center;">
+              <v-radio-group row>
+                <v-radio dense label="指示型" value="1"></v-radio>
+                <v-radio dense label="実績型" value="2"></v-radio>
+              </v-radio-group>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row align-content="center">
+          <v-col>
+            <div>【分割元】</div>
+            <v-data-table :headers="headersBunkatsu" :items="bunkatsuMoto" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+              <template #[`item.hakoNo`]="{ item }">
+                <div style="text-align: right;">{{item.hakoNo}}</div>
+              </template>
+              <template #[`item.suryo`]="{ item }">
+                <div style="text-align: right;">{{item.suryo}}</div>
+              </template>
+            </v-data-table>
+          </v-col>
+          <v-col class="ml-1 pl-1">
+            <div style="height:160px"></div>
+            <v-btn depressed dense @click="hakoShitei"><span>追加<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play</v-icon></span></v-btn>
+            <div style="height:10px"></div>
+            <v-btn depressed dense @click="hakoShitei"><span>削除<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play mdi-flip-h</v-icon></span></v-btn>
+          </v-col>
+          <v-col class="ml-0 pl-1">
+            <div>【分割先】</div>
+            <v-data-table :headers="headersBunkatsu" :items="bunkatsuSaki" item-key="id" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+              <template #[`item.hakoNo`]="{ item }">
+                <div style="text-align: right;">{{item.hakoNo}}</div>
+              </template>
+              <template #[`item.suryo`]="{ item }">
+                <div style="text-align: right;">{{item.suryo}}</div>
+              </template>
+            </v-data-table>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col class="d-flex justify-start mr-10">
+            <v-btn class="mr-10 mb-3" depressed outlined large @click="closeModal"><span>戻る</span></v-btn>
+          </v-col>
+
+          <v-col class="d-flex justify-center">
+          </v-col>
+
+          <v-col class="d-flex justify-end ml-10">
+            <v-btn class="ml-10 mb-3 primary" depressed large @click="closeModal"><span>決定</span></v-btn>
+          </v-col>
+        </v-row>
+
+
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -128,6 +205,7 @@ export default {
   data() {
     return {
       drawer: false,
+      showContent: false,
       myDrawer: null,
       headersShijiH: [
         { displayOrder: 1, text: '届先名',   value: 'destinationName', width: 150,  shown: true },
@@ -158,10 +236,15 @@ export default {
         { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, },
         { displayOrder: 10, text: '入り数',     value: 'irisu',         width: 70,  shown: true, },
         { displayOrder: 11, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, },
-        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 100,  shown: true },
+        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 180,  shown: true },
         { displayOrder: 13, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true },
         { displayOrder: 14, text: '',          value: 'status',         width: 200,  shown: false },
         { displayOrder: 15, text: '',           value: 'ID',            width: 150,  shown: false },
+      ],
+      headersBunkatsu: [
+        { displayOrder: 3,  text: '箱番号',   value: 'hakoNo', width: 40,  shown: true },
+        { displayOrder: 4,  text: '数量',     value: 'suryo',  width: 80,  shown: true },
+        { displayOrder: 5,  text: '',         value: 'id',     width: 10,  shown: false },
       ],
       itemsShijiH: [
         {
@@ -217,6 +300,21 @@ export default {
           status: "0",
         },
       ],
+      bunkatsuMoto: [
+        { hakoNo:"1",  suryo:"3,000 S", id:1 },
+        { hakoNo:"2",  suryo:"3,000 S", id:2 },
+        { hakoNo:"3",  suryo:"3,000 S", id:3 },
+        { hakoNo:"4",  suryo:"3,000 S", id:4 },
+        { hakoNo:"5",  suryo:"3,000 S", id:5 },
+        { hakoNo:"6",  suryo:"3,000 S", id:6 },
+        { hakoNo:"7",  suryo:"3,000 S", id:7 },
+        { hakoNo:"8",  suryo:"3,000 S", id:8 },
+        { hakoNo:"9",  suryo:"3,000 S", id:9 },
+        { hakoNo:"10", suryo:"3,000 S", id:10 },
+      ],
+      bunkatsuSaki: [
+
+      ],
       headersBack: null,
     }
   },
@@ -238,6 +336,14 @@ export default {
     shownHeadersKobetsu() {
       return this.headersKobetsu.filter(h => h.shown);
     },
+    isFusoku() {
+      return function(fusoku) {
+        let fusokuNum = parseInt(fusoku.replace(/,/g, ''));
+        if (fusokuNum < 0)
+          return true;
+        return false;
+      }
+    }
   },
   methods: {
     setting() {
@@ -255,6 +361,12 @@ export default {
       // 退避から戻す
       this.headers = this.headersBack;
       this.drawer = false;
+    },
+    hakoShitei: async function () {
+      this.showContent = true;
+    },
+    closeModal() {
+      this.showContent = false;
     },
     redist() {
       // 現在の引当クリア
@@ -274,7 +386,7 @@ export default {
         this.itemsKobetsu[idx].syukkohakosu = syukko;
 
       }
-    }
+    },
   },
   components: {
     GamenInfo,
@@ -339,5 +451,37 @@ export default {
 }
 .bikoArea {
   width: 200px;
+}
+
+.errorStatus {
+  /* text-danger */
+  color: red;
+}
+
+#overlay {
+  z-index: 10;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#content {
+  z-index: 20;
+  width: "600px";
+  height: "350px";
+  padding: 1em;
+  background: #ffffff;
+}
+
+.v-input--selection-controls {
+  margin: 2px;
 }
 </style>

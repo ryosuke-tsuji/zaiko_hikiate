@@ -93,6 +93,25 @@
               <template #[`item.shijiCnt`]="{ item }">
                 <div style="text-align: right;">{{item.shijiCnt}}</div>
               </template>
+
+              <template #[`item.address`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{on}">
+                    <span v-on="on">{{item.address}}</span>
+                  </template>
+                  <span>{{item.address}}</span>
+                </v-tooltip>
+              </template>
+
+              <template #[`item.productName`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{on}">
+                    <span v-on="on">{{item.productName}}</span>
+                  </template>
+                  <span>{{item.productName}}</span>
+                </v-tooltip>
+              </template>
+
             </v-data-table>
           </v-card>
         </v-col>
