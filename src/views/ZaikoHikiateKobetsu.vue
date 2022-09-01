@@ -91,10 +91,11 @@
                 <v-icon v-if="item.status == 2" color="red darken-3" class="btn-icon mr-2" style="background-color: transparent !important">mdi-alert-circle</v-icon>
               </template>
             </v-data-table>
+            <div style="height:60px"></div>
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="hoverBtn">
         <v-col class="d-flex justify-start mr-10">
           <v-btn class="mr-10 mb-3" depressed outlined large href="../zaiko_hikiate"><span>戻る</span></v-btn>
         </v-col>
@@ -703,6 +704,13 @@ td.hikiateSyoriJun {
   position: absolute; 
   right: 0;
   z-index: 2;
+}
+
+.hoverBtn {
+  position: fixed;
+  background-color: white;
+  bottom: 30px;
+  width: 100%;
 }
 
 .compact-form {

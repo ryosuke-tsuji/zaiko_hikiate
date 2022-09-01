@@ -88,10 +88,11 @@
                 <v-simple-checkbox v-if="item.fusokuCnt != ``" :value="isSelected" @input="select($event)"></v-simple-checkbox>
               </template>
             </v-data-table>
+            <div style="height:60px"></div>
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="hoverBtn">
         <v-col class="d-flex justify-start mr-10">
           <v-btn class="mr-10 mb-3" depressed outlined large href="zaiko_hikiate"><span>戻る</span></v-btn>
           <v-btn class="mr-10 mb-3 secondary" large href="zaiko_hikiate_kobetsu/1"><span>修正</span></v-btn>
@@ -319,6 +320,13 @@ export default {
 .errorStatus {
   /* text-danger */
   color: red;
+}
+
+.hoverBtn {
+  position: fixed;
+  background-color: white;
+  bottom: 30px;
+  width: 100%;
 }
 
 .leyerTop {
