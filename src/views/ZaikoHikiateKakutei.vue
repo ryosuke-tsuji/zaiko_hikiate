@@ -117,7 +117,7 @@
       <v-divider></v-divider>
       <table>
         <draggable v-model="headers" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in headers" :key="header.displayOrder">
+          <tr v-for="header in shownHeadersDraggable" :key="header.displayOrder">
             <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
             <td>{{header.text}}</td>
             <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
@@ -140,20 +140,20 @@ export default {
     return {
       drawer: false,
       headers: [
-        { displayOrder: 2,  text: '出荷日',     value: 'shippingDate',  width: 90,  shown: true, },
-        { displayOrder: 3,  text: '届先名',     value: 'destName',      width: 120, shown: true, },
-        { displayOrder: 4,  text: '注番',       value: 'orderNo',       width: 130, shown: true, },
-        { displayOrder: 5,  text: '得意先',     value: 'customerName',  width: 150, shown: true, },
-        { displayOrder: 6,  text: '品名',       value: 'productName',   width: 180, shown: true, },
-        { displayOrder: 7,  text: '内訳№',     value: 'uchiwakeNo',    width: 90,  shown: true, },
-        { displayOrder: 8,  text: '内訳名',     value: 'uchiwakeName',  width: 100, shown: true, },
-        { displayOrder: 9,  text: '指示数',     value: 'shijiCnt',      width: 100, shown: true, },
-        { displayOrder: 10, text: '引当数',     value: 'hikiateCnt',    width: 100, shown: true, },
-        { displayOrder: 11, text: '不足数',     value: 'fusokuCnt',     width: 100, shown: true, },
-        { displayOrder: 12, text: 'ステータス', value: 'status',        width: 100, shown: true, },
-        { displayOrder: 13, text: '倉庫',       value: 'soko',          width: 100, shown: true, },
-        { displayOrder: 14, text: '',           value: 'statusCd',      width: 100, shown: false, },
-        { displayOrder: 15, text: '',           value: 'ID',            width: 65,  shown: false, sortable: false, },
+        { displayOrder: 2,  text: '出荷日',     value: 'shippingDate',  width: 90,  shown: true, manage: false, },
+        { displayOrder: 3,  text: '届先名',     value: 'destName',      width: 120, shown: true, manage: false, },
+        { displayOrder: 4,  text: '注番',       value: 'orderNo',       width: 130, shown: true, manage: false, },
+        { displayOrder: 5,  text: '得意先',     value: 'customerName',  width: 150, shown: true, manage: false, },
+        { displayOrder: 6,  text: '品名',       value: 'productName',   width: 180, shown: true, manage: false, },
+        { displayOrder: 7,  text: '内訳№',     value: 'uchiwakeNo',    width: 90,  shown: true, manage: false, },
+        { displayOrder: 8,  text: '内訳名',     value: 'uchiwakeName',  width: 100, shown: true, manage: false, },
+        { displayOrder: 9,  text: '指示数',     value: 'shijiCnt',      width: 100, shown: true, manage: false, },
+        { displayOrder: 10, text: '引当数',     value: 'hikiateCnt',    width: 100, shown: true, manage: false, },
+        { displayOrder: 11, text: '不足数',     value: 'fusokuCnt',     width: 100, shown: true, manage: false, },
+        { displayOrder: 12, text: 'ステータス', value: 'status',        width: 100, shown: true, manage: false, },
+        { displayOrder: 13, text: '倉庫',       value: 'soko',          width: 100, shown: true, manage: false, },
+        { displayOrder: 14, text: '',           value: 'statusCd',      width: 100, shown: false, manage: true },
+        { displayOrder: 15, text: '',           value: 'ID',            width: 65,  shown: false, manage: true, sortable: false, },
       ],
       itemList: [
         {
@@ -251,7 +251,8 @@ export default {
     },
     setting() {
       // 現在の状態を退避
-      this.headersBack = this.headers;
+      this.headersBack = JSON.parse(JSON.stringify(this.headers));
+
       // サブ画面表示
       this.drawer = !this.drawer;
     },
@@ -268,7 +269,10 @@ export default {
   },
   computed: {
     shownHeaders() {
-      return this.headers.filter(h => h.shown);
+      return this.headers.filter(h => h.shown && !h.manage);
+    },
+    shownHeadersDraggable() {
+      return this.headers.filter(h => !h.manage);
     },
   },
   components: {

@@ -70,13 +70,13 @@
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
                 <div style="display: flex; align-items: center;">
-                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight" v-if="item.status != 2" />
+                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight compact-form" v-if="item.status != 2" />
                   <v-spacer></v-spacer>
                   <v-btn class="secondary" depressed dense @click="hakoShitei"><span>箱指定</span></v-btn>
                 </div>
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" /> 
+                <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" class="compact-form" /> 
               </template>
               <template #[`item.fudagamiNo`]="{ item }">
                 {{ item.fudagamiNo }}
@@ -115,7 +115,7 @@
       <v-divider></v-divider>
       <table>
         <draggable v-model="headersKobetsu" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in headersKobetsu" :key="header.displayOrder">
+          <tr v-for="header in shownHeadersKobetsuDraggable" :key="header.displayOrder">
             <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
             <td>{{header.text}}</td>
             <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
@@ -176,8 +176,6 @@
             <v-btn class="ml-10 mb-3 primary" depressed large @click="closeModal"><span>決定</span></v-btn>
           </v-col>
         </v-row>
-
-
       </div>
     </div>
 
@@ -215,20 +213,20 @@ export default {
         { displayOrder: 4,  text: '不足数', value: 'fusokuCnt',  width: 100,  shown: true, },
       ],
       headersKobetsu: [
-        { displayOrder: 2,  text: '入荷日',     value: 'nyukaYmd',      width: 100,  shown: true },
-        { displayOrder: 3,  text: '倉庫',       value: 'soko',          width: 100,  shown: true },
-        { displayOrder: 4,  text: '棚番',       value: 'tanaBan',       width: 100,  shown: true },
-        { displayOrder: 5,  text: '札紙番号',   value: 'fudagamiNo',    width: 200,  shown: true },
-        { displayOrder: 6,  text: '札紙連番',   value: 'fudagamiSeq',   width: 80,  shown: true },
-        { displayOrder: 7,  text: 'サブ',       value: 'fudagamiSabu',  width: 80,  shown: true },
-        { displayOrder: 8,  text: '製造年月日', value: 'productYmd',    width: 100,  shown: true },
-        { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, },
-        { displayOrder: 10, text: '入り数',     value: 'irisu',         width: 70,  shown: true, },
-        { displayOrder: 11, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, },
-        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',    width: 180,  shown: true },
-        { displayOrder: 13, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true },
-        { displayOrder: 14, text: '',          value: 'status',         width: 200,  shown: false },
-        { displayOrder: 15, text: '',           value: 'ID',            width: 150,  shown: false },
+        { displayOrder: 2,  text: '入荷日',     value: 'nyukaYmd',      width: 100,  shown: true, manage: false, },
+        { displayOrder: 3,  text: '倉庫',       value: 'soko',          width: 100,  shown: true, manage: false, },
+        { displayOrder: 4,  text: '棚番',       value: 'tanaBan',       width: 100,  shown: true, manage: false, },
+        { displayOrder: 5,  text: '札紙番号',   value: 'fudagamiNo',    width: 200,  shown: true, manage: false, },
+        { displayOrder: 6,  text: '札紙連番',   value: 'fudagamiSeq',   width: 80,  shown: true, manage: false, },
+        { displayOrder: 7,  text: 'サブ',       value: 'fudagamiSabu',  width: 80,  shown: true, manage: false, },
+        { displayOrder: 8,  text: '製造年月日', value: 'productYmd',    width: 100,  shown: true, manage: false, },
+        { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, manage: false, },
+        { displayOrder: 10, text: '入り数',     value: 'irisu',         width: 70,  shown: true, manage: false, },
+        { displayOrder: 11, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, manage: false, },
+        { displayOrder: 12, text: '出庫箱数',   value: 'syukkohakosu',  width: 180,  shown: true, manage: false, },
+        { displayOrder: 13, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true, manage: false, },
+        { displayOrder: 14, text: '',          value: 'status',         width: 200,  shown: false, manage: true, },
+        { displayOrder: 15, text: '',           value: 'ID',            width: 150,  shown: false, manage: true, },
       ],
       headersBunkatsu: [
         { displayOrder: 3,  text: '箱番号',   value: 'hakoNo', width: 40,  shown: true },
@@ -513,6 +511,9 @@ export default {
     shownHeadersKobetsu() {
       return this.headersKobetsu.filter(h => h.shown);
     },
+    shownHeadersKobetsuDraggable() {
+      return this.headersKobetsu.filter(h => !h.manage);
+    },
     shownHeadersBunkatsu() {
       return this.headersBunkatsu.filter(h => h.shown);
     },
@@ -528,7 +529,7 @@ export default {
   methods: {
     setting() {
       // 現在の状態を退避
-      this.headersBack = this.headersKobetsu;
+      this.headersBack = JSON.parse(JSON.stringify(this.headersKobetsu));
       // サブ画面表示
       this.drawer = !this.drawer;
     },
@@ -539,7 +540,7 @@ export default {
     },
     cancel() {
       // 退避から戻す
-      this.headers = this.headersBack;
+      this.headersKobetsu = this.headersBack;
       this.drawer = false;
     },
     hakoShitei: async function () {
@@ -677,6 +678,11 @@ td.hikiateSyoriJun {
   position: absolute; 
   right: 0;
   z-index: 2;
+}
+
+.compact-form {
+  transform: scale(0.875);
+  transform-origin: left;
 }
 
 </style>

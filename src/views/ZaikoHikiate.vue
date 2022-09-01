@@ -18,8 +18,8 @@
                       <div style="width:430px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">デポ</v-subheader>
-                      <v-text-field class="required" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-subheader class="mr-2">デポ<span style="color: red">&nbsp;*</span></v-subheader>
+                      <v-text-field class="yellow lighten-3" outlined dense clearable hint="" hide-details="auto"></v-text-field>
                       <div style="width:210px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
@@ -85,7 +85,7 @@
           <v-card>
             <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select no-data-text="検索してください。" height=400>
               <template #[`item.jun`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight" /> 
+                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form" /> 
               </template>
               <template #[`item.weight`]="{ item }">
                 <div style="text-align: right;">{{item.weight}}</div>
@@ -141,7 +141,7 @@
       <v-divider></v-divider>
       <table>
         <draggable v-model="headers" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in shownHeaders" :key="header.displayOrder">
+          <tr v-for="header in shownHeadersDraggable" :key="header.displayOrder">
             <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
             <td>{{header.text}}</td>
             <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
@@ -165,20 +165,20 @@ export default {
       drawer: false,
       panelState: 0,
       headers: [
-        { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: '1', },
-        { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: '1', },
-        { displayOrder: 4,  text: '到着日時', value: 'arrivalTime',   width: 120, shown: '1', },
-        { displayOrder: 5,  text: '住所',     value: 'address',       width: 150, shown: '1', },
-        { displayOrder: 6,  text: '届先名',   value: 'destName',      width: 120, shown: '1', },
-        { displayOrder: 7,  text: '注番',     value: 'orderNo',       width: 130, shown: '1', },
-        { displayOrder: 8,  text: '得意先',   value: 'customerName',  width: 150, shown: '1', },
-        { displayOrder: 9,  text: '品名',     value: 'productName',   width: 180, shown: '1', },
-        { displayOrder: 10, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: '1', },
-        { displayOrder: 11, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: '1', },
-        { displayOrder: 12, text: '重量',     value: 'weight',        width: 100, shown: '1', },
-        { displayOrder: 13, text: '指示数',   value: 'shijiCnt',      width: 100, shown: '1', },
-        { displayOrder: 14, text: '営業備考', value: 'eigyoBiko',     width: 120, shown: '1', },
-        { displayOrder: 1,  text: '',         value: 'ID',            width: 65,  shown: '2', sortable: false, },
+        { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: true, manage: false, },
+        { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: true, manage: false , },
+        { displayOrder: 4,  text: '到着日時', value: 'arrivalTime',   width: 120, shown: true, manage: false , },
+        { displayOrder: 5,  text: '住所',     value: 'address',       width: 150, shown: true, manage: false , },
+        { displayOrder: 6,  text: '届先名',   value: 'destName',      width: 120, shown: true, manage: false, },
+        { displayOrder: 7,  text: '注番',     value: 'orderNo',       width: 130, shown: true, manage: false, },
+        { displayOrder: 8,  text: '得意先',   value: 'customerName',  width: 150, shown: true, manage: false, },
+        { displayOrder: 9,  text: '品名',     value: 'productName',   width: 180, shown: true, manage: false, },
+        { displayOrder: 10, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: true, manage: false, },
+        { displayOrder: 11, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: true, manage: false, },
+        { displayOrder: 12, text: '重量',     value: 'weight',        width: 100, shown: true, manage: false, },
+        { displayOrder: 13, text: '指示数',   value: 'shijiCnt',      width: 100, shown: true, manage: false, },
+        { displayOrder: 14, text: '営業備考', value: 'eigyoBiko',     width: 120, shown: true, manage: false, },
+        { displayOrder: 1,  text: '',         value: 'ID',            width: 65,  shown: false, manage: true, sortable: false, },
       ],
       itemList: [],
       resultList: [
@@ -282,7 +282,7 @@ export default {
     },
     setting() {
       // 現在の状態を退避
-      this.headersBack = this.headers;
+      this.headersBack = JSON.parse(JSON.stringify(this.headers));
       // サブ画面表示
       this.drawer = !this.drawer;
     },
@@ -296,7 +296,7 @@ export default {
     },
     cancel() {
       // 退避から戻す
-      this.headers = this.headersBack;
+      this.headers = this.headersBack.concat();
       this.drawer = false;
     },
     appendClick() {
@@ -311,10 +311,10 @@ export default {
   },
   computed: {
     shownHeaders() {
-      return this.headers.filter(h => h.shown == "1");
+      return this.headers.filter(h => h.shown);
     },
-    draggableHeaders() {
-      return this.headers.filter(h => h.shown != "2")
+    shownHeadersDraggable() {
+      return this.headers.filter(h => !h.manage)
     }
   },
   components: {
@@ -361,9 +361,6 @@ export default {
   border-radius: 3px;
   white-space: nowrap;
 }
-.required {
-  background-color: yellow;
-}
 .textRight input {
   text-align: right;
 }
@@ -383,4 +380,10 @@ export default {
   bottom: 30px;
   width: 100%;
 }
+
+.compact-form {
+  transform: scale(0.875);
+  transform-origin: left;
+}
+
 </style>
