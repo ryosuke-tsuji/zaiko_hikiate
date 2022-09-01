@@ -355,6 +355,7 @@ export default {
 }
 .v-subheader {
   height: 40px;
+  min-width: 90px;
   background-color: #cfd8dc;
   font-weight: bold;
   border-radius: 3px;

@@ -23,7 +23,7 @@
                 </v-data-table>
               </v-col>
               <v-col></v-col>
-              <v-col cols="3" class="d-flex justify-end">
+              <v-col cols="4" class="d-flex justify-end">
                 <v-data-table :headers="shownHeadersSum" :items="itemsSum" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="summarys">
                   <template #[`item.hikiateCnt`]="{ item }">
                     <div style="text-align: right;">{{item.hikiateCnt}}</div>
@@ -47,7 +47,13 @@
         <v-col class="pb-0">
           <v-card>
             <v-card-title class="pt-0 pb-2 ml-1">
-              <span class="titleFont d-flex">吊札個別出庫数</span>
+              <span class="titleFont d-flex">吊札個別出庫数</span><v-spacer></v-spacer><span class="text-left leyerTop" style="width:350px">
+                <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-footer hide-default-header height="40px">
+                  <template v-slot:item="{ item }">
+                    <tr><td class="hikiateSyoriJun">{{ item.title }}</td><td>{{ item.value }}</td></tr>
+                  </template>
+                </v-data-table>
+                </span>
               <v-spacer></v-spacer>
             </v-card-title>
           </v-card>
@@ -135,7 +141,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="d-flex py-1" cols="8">
+          <v-col class="d-flex py-1" >
             <v-subheader class="mr-2">指示区分</v-subheader>
             <div style="display: flex; align-items: center; justify-content: center;">
               <v-radio-group row>
@@ -147,25 +153,7 @@
         </v-row>
         <v-row align-content="center">
           <v-col>
-            <div>【分割元】</div>
-            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuMoto" item-key="id" v-model="selectMoto" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
-              <template #[`item.hakoNo`]="{ item }">
-                <div style="text-align: right;">{{item.hakoNo}}</div>
-              </template>
-              <template #[`item.suryo`]="{ item }">
-                <div style="text-align: right;">{{item.suryo}}</div>
-              </template>
-            </v-data-table>
-          </v-col>
-          <v-col class="ml-1 pl-1">
-            <div style="height:160px"></div>
-            <v-btn depressed dense @click="hakoAdd"><span>追加<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play</v-icon></span></v-btn>
-            <div style="height:10px"></div>
-            <v-btn depressed dense @click="hakoDel"><span>削除<v-icon color="black darken-3" text dense class="btn-icon mr-2" style="background-color: transparent !important">mdi-play mdi-flip-h</v-icon></span></v-btn>
-          </v-col>
-          <v-col class="ml-0 pl-1">
-            <div>【分割先】</div>
-            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuSaki" item-key="id" v-model="selectSaki" dense multi-sort fixed-header hide-default-footer show-select height="380px" no-data-text="">
+            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuMoto" item-key="id" v-model="selectMoto" dense multi-sort fixed-header hide-default-footer show-select height="360px" no-data-text="">
               <template #[`item.hakoNo`]="{ item }">
                 <div style="text-align: right;">{{item.hakoNo}}</div>
               </template>
@@ -214,16 +202,17 @@ export default {
         { displayOrder: 4, text: '品名',     value: 'productName',   width: 180, shown: true, },
         { displayOrder: 5, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: true, },
         { displayOrder: 6, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: true, },
-        { displayOrder: 7, text: '重量',     value: 'weight',        width: 100, shown: true, },
-        { displayOrder: 8, text: '指示数',   value: 'shijiCnt',      width: 100, shown: true, },
+//        { displayOrder: 7, text: '重量',     value: 'weight',        width: 100, shown: true, },
+//        { displayOrder: 8, text: '指示数',   value: 'shijiCnt',      width: 100, shown: true, },
       ],
       headersShijiL: [
         { displayOrder: 1, text: '営業備考',   value: 'eigyoBiko', width: 150,  shown: true },
       ],
       headersSum: [
-        { displayOrder: 1,  text: '引当数', value: 'hikiateCnt', width: 100,  shown: true, },
-        { displayOrder: 2,  text: '換算数', value: 'kansanCnt',  width: 100,  shown: true, },
-        { displayOrder: 3,  text: '不足数', value: 'fusokuCnt',  width: 100,  shown: true, },
+        { displayOrder: 1,  text: '指示数', value: 'shijiCnt',   width: 100,  shown: true, },
+        { displayOrder: 2,  text: '引当数', value: 'hikiateCnt', width: 100,  shown: true, },
+        { displayOrder: 3,  text: '換算数', value: 'kansanCnt',  width: 100,  shown: true, },
+        { displayOrder: 4,  text: '不足数', value: 'fusokuCnt',  width: 100,  shown: true, },
       ],
       headersKobetsu: [
         { displayOrder: 2,  text: '入荷日',     value: 'nyukaYmd',      width: 100,  shown: true },
@@ -257,8 +246,8 @@ export default {
             productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
             uchiwakeNo: "-",
             uchiwakeName: "",
-            weight: "1,800Kg",
-            shijiCnt: "42,000 S",
+//            weight: "1,800Kg",
+//            shijiCnt: "42,000 S",
           }
         ],
         [
@@ -270,8 +259,8 @@ export default {
             productName: "７ミリヨウチューブ",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-            weight: "300Kg",
-            shijiCnt: "64,000 S",
+//            weight: "300Kg",
+//            shijiCnt: "64,000 S",
           }
         ],
         [
@@ -283,8 +272,8 @@ export default {
             productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-            weight: "500kg",
-            shijiCnt: "52,500 S",
+//            weight: "500kg",
+//            shijiCnt: "52,500 S",
           }
         ],
         [
@@ -296,8 +285,8 @@ export default {
             productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-            weight: "200Kg",
-            shijiCnt: "6,048 S",
+//            weight: "200Kg",
+//            shijiCnt: "6,048 S",
           }
         ],
       ],
@@ -327,16 +316,16 @@ export default {
       itemsSum: [],
       itemsSumList: [
         [
-          { hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"}
+          { shijiCnt: "42,000 S", hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"}
         ],
         [
-          { hikiateCnt: "57,600 S", kansanCnt: "57,600 S", fusokuCnt: "-6,400 S"}
+          { shijiCnt: "64,000 S", hikiateCnt: "57,600 S", kansanCnt: "57,600 S", fusokuCnt: "-6,400 S"}
         ],
         [
-          { hikiateCnt: "45,000 S", kansanCnt: "45,000 S", fusokuCnt: "-7,500 S"}
+          { shijiCnt: "52,500 S", hikiateCnt: "45,000 S", kansanCnt: "45,000 S", fusokuCnt: "-7,500 S"}
         ],
         [
-          { hikiateCnt: "6,048 S", kansanCnt: "6,048 S", fusokuCnt: "0 S"}
+          { shijiCnt: "6,048 S", hikiateCnt: "6,048 S", kansanCnt: "6,048 S", fusokuCnt: "0 S"}
         ],
       ],
       itemsKobetsu: [],
@@ -482,8 +471,14 @@ export default {
           },
         ],
       ],
-      bunkatsuMoto: [],
-      bunkatsuMotoMaster: [
+      headersHikiateJun: [
+        { text: "引当処理順", value: "title", width: 130, class: "hikiateSyoriJun", },
+        { text: "札紙番号⇒入荷日", value: "value", width: 200, },
+      ],
+      itemsHikiateJun: [
+        { title:"引当処理順", value:"札紙番号⇒入荷日"}
+      ],
+      bunkatsuMoto: [
         { hakoNo:"1",  suryo:"3,000 S", id:1 },
         { hakoNo:"2",  suryo:"3,000 S", id:2 },
         { hakoNo:"3",  suryo:"3,000 S", id:3 },
@@ -495,10 +490,7 @@ export default {
         { hakoNo:"9",  suryo:"3,000 S", id:9 },
         { hakoNo:"10", suryo:"3,000 S", id:10 },
       ],
-      bunkatsuSaki: [],
-      bunkatsuSakiMaster: [],
       selectMoto: [],
-      selectSaki: [],
       headersBack: null,
     }
   },
@@ -552,40 +544,11 @@ export default {
     },
     hakoShitei: async function () {
       // データ準備
-      this.bunkatsuSaki = this.bunkatsuSakiMaster.concat();
-      this.bunkatsuMoto = this.bunkatsuMotoMaster.concat();
+      this.selectMoto = [];
       this.showContent = true;
     },
     closeModal() {
       this.showContent = false;
-    },
-    hakoAdd() {
-      for (const rowInfo of this.selectMoto) {
-        if (rowInfo.id) {
-          this.bunkatsuMoto.forEach((element, index) => {
-            if (element.id == rowInfo.id) {
-              this.bunkatsuSaki.push(element);
-              this.bunkatsuMoto.splice(index, 1);
-            }
-          });
-        }
-      }
-      // チェック状態クリア
-      this.selectMoto = [];
-    },
-    hakoDel() {
-      for (const rowInfo of this.selectSaki) {
-        if (rowInfo.id) {
-          this.bunkatsuSaki.forEach((element, index) => {
-            if (element.id == rowInfo.id) {
-              this.bunkatsuMoto.push(element);
-              this.bunkatsuSaki.splice(index, 1);
-            }
-          });
-        }
-      }
-      // チェック状態クリア
-      this.selectSaki = [];
     },
     redist() {
       // 現在の引当クリア
@@ -660,6 +623,13 @@ export default {
 #summarys.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
   background-color: #FFE699 !important;
 }
+#hikiateSyoriJun.v-data-table td:nth-child(odd) {
+  background-color: #FFE699;
+}
+td.hikiateSyoriJun {
+  background-color: #FFE699 !important;
+}
+.hikiateSyoriJun {background-color: #FFE699 !important;}
 
 .textRight input {
   text-align: right;
@@ -677,7 +647,7 @@ export default {
   color: red;
 }
 #overlay {
-  z-index: 10;
+  z-index: 99;
 
   position: fixed;
   top: 0;
@@ -692,8 +662,8 @@ export default {
 }
 
 #content {
-  z-index: 20;
-  width: "600px";
+  z-index: 100;
+  width: "200px";
   height: "350px";
   padding: 1em;
   background: #ffffff;
@@ -702,4 +672,11 @@ export default {
 .v-input--selection-controls {
   margin: 2px;
 }
+
+.leyerTop {
+  position: absolute; 
+  right: 0;
+  z-index: 2;
+}
+
 </style>
