@@ -25,6 +25,9 @@
               <v-col></v-col>
               <v-col cols="4" class="d-flex justify-end">
                 <v-data-table :headers="shownHeadersSum" :items="itemsSum" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="summarys">
+                  <template #[`item.shijiCnt`]="{ item }">
+                    <div style="text-align: right;">{{item.shijiCnt}}</div>
+                  </template>
                   <template #[`item.hikiateCnt`]="{ item }">
                     <div style="text-align: right;">{{item.hikiateCnt}}</div>
                   </template>
@@ -47,10 +50,13 @@
         <v-col class="pb-0">
           <v-card>
             <v-card-title class="pt-0 pb-2 ml-1">
-              <span class="titleFont d-flex">吊札個別出庫数</span><v-spacer></v-spacer><span class="text-left leyerTop" style="width:350px">
-                <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-footer hide-default-header height="40px">
+              <span class="titleFont d-flex">吊札個別出庫数</span><v-spacer></v-spacer><span class="text-left leyerTop" style="width:400px">
+                <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-header hide-default-footer calculate-widths height="40px">
                   <template v-slot:item="{ item }">
-                    <tr><td class="hikiateSyoriJun">{{ item.title }}</td><td>{{ item.value }}</td></tr>
+                    <tr>
+                      <td width="100" class="hikiateSyoriJun">{{ item.title }}</td>
+                      <td width="300">{{ item.value }}</td>
+                    </tr>
                   </template>
                 </v-data-table>
                 </span>
@@ -72,7 +78,7 @@
                 <div style="display: flex; align-items: center;">
                   <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight compact-form" v-if="item.status != 2" />
                   <v-spacer></v-spacer>
-                  <v-btn class="secondary" depressed dense @click="hakoShitei"><span>箱指定</span></v-btn>
+                  <v-btn :class='[item.isSetting ? "outlined" : "secondary"]' depressed dense @click="hakoShitei(item.ID)"><span>箱指定</span></v-btn>
                 </div>
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
@@ -127,14 +133,14 @@
       <v-btn @click="save"><span>保存</span></v-btn>
     </v-navigation-drawer>
 
-    <!-- 積付構成変更画面 -->
+    <!-- 箱番号個別引当画面 -->
     <div id="overlay" v-show="showContent">
       <div id="content">
         <v-row>
           <v-col class="pb-0">
             <v-card class="pd-10">
               <v-card-title class="pt-0 pb-2 ml-1">
-                <span class="titleFont d-flex">積付構成変更</span>
+                <span class="titleFont d-flex">箱番号個別引当</span>
                 <v-spacer></v-spacer>
               </v-card-title>
             </v-card>
@@ -166,7 +172,7 @@
 
         <v-row>
           <v-col class="d-flex justify-start mr-10">
-            <v-btn class="mr-10 mb-3" depressed outlined large @click="closeModal"><span>戻る</span></v-btn>
+            <v-btn class="mr-10 mb-3" depressed outlined large @click="cancelModal"><span>戻る</span></v-btn>
           </v-col>
 
           <v-col class="d-flex justify-center">
@@ -314,7 +320,7 @@ export default {
       itemsSum: [],
       itemsSumList: [
         [
-          { shijiCnt: "42,000 S", hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"}
+          { shijiCnt: "42,000 S", hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"},
         ],
         [
           { shijiCnt: "64,000 S", hikiateCnt: "57,600 S", kansanCnt: "57,600 S", fusokuCnt: "-6,400 S"}
@@ -345,6 +351,7 @@ export default {
             syukkohakosu: '10',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
           {
             ID: 2,
@@ -361,6 +368,7 @@ export default {
             syukkohakosu: '4',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
           {
             ID: 3,
@@ -377,6 +385,7 @@ export default {
             syukkohakosu: '',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
         ],
         [
@@ -396,6 +405,7 @@ export default {
             syukkohakosu: '90',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
         ],
         [
@@ -415,6 +425,7 @@ export default {
             syukkohakosu: '5',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
           {
             ID: 2,
@@ -431,6 +442,7 @@ export default {
             syukkohakosu: '1',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
         ],
         [
@@ -450,6 +462,7 @@ export default {
             syukkohakosu: '14',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
           {
             ID: 2,
@@ -466,12 +479,13 @@ export default {
             syukkohakosu: '',
             tsurifuraBiko: '',
             status: "0",
+            isSetting: false,
           },
         ],
       ],
       headersHikiateJun: [
-        { text: "引当処理順", value: "title", width: 130, class: "hikiateSyoriJun", },
-        { text: "札紙番号⇒入荷日", value: "value", width: 200, },
+        { text: "引当処理順", value: "title", width: '25%', },
+        { text: "札紙番号⇒入荷日", value: "value", width: '75%', },
       ],
       itemsHikiateJun: [
         { title:"引当処理順", value:"札紙番号⇒入荷日"}
@@ -490,6 +504,7 @@ export default {
       ],
       selectMoto: [],
       headersBack: null,
+      procId: 0,
     }
   },
   mounted: function() {
@@ -524,6 +539,11 @@ export default {
           return true;
         return false;
       }
+    },
+    classObject: function(id) {
+      return {
+        active: this.itemsKobetsu[id].isSetting, "primary" : "errorClass"
+      }
     }
   },
   methods: {
@@ -543,12 +563,17 @@ export default {
       this.headersKobetsu = this.headersBack;
       this.drawer = false;
     },
-    hakoShitei: async function () {
+    hakoShitei: async function (id) {
       // データ準備
       this.selectMoto = [];
       this.showContent = true;
+      this.procId = id-1;
     },
     closeModal() {
+      this.itemsKobetsu[this.procId].isSetting = true;
+      this.showContent = false;
+    },
+    cancelModal() {
       this.showContent = false;
     },
     redist() {

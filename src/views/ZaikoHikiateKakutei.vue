@@ -17,11 +17,11 @@
                       <div>生活産業</div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">デポ</v-subheader>
+                      <v-subheader class="mr-2">&ensp;&ensp;デポ</v-subheader>
                       <div>EW0A 幸手</div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">品種</v-subheader>
+                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
                       <div></div>
                     </v-col>
                   </v-row>
@@ -31,7 +31,7 @@
                       <div>車建</div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="6">
-                      <v-subheader class="mr-2">出荷日</v-subheader>
+                      <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
                       <div>2022/07/15 ～ 2022/07/15</div>
                     </v-col>
                   </v-row>

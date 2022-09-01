@@ -13,17 +13,17 @@
                 <v-expansion-panel-content>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">管理部署</v-subheader>
+                      <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
                       <div style="width:430px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">デポ<span style="color: red">&nbsp;*</span></v-subheader>
+                      <v-subheader class="mr-2">&ensp;&nbsp;デポ<span style="color: red">&nbsp;*</span></v-subheader>
                       <v-text-field class="yellow lighten-3" outlined dense clearable hint="" hide-details="auto"></v-text-field>
                       <div style="width:210px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">品種</v-subheader>
+                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
                       <div style="width:610px"></div>
                     </v-col>
@@ -35,7 +35,7 @@
                       <div style="width:80px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="6">
-                      <v-subheader class="mr-2">出荷日</v-subheader>
+                      <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
                       <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" @click:append="appendClick"></v-text-field>
                       <span style="vertical-align: middle" class="pl-1 pr-1 pt-2">～</span>
                       <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD"></v-text-field>
@@ -360,6 +360,7 @@ export default {
   font-weight: bold;
   border-radius: 3px;
   white-space: nowrap;
+  text-align: center;
 }
 .textRight input {
   text-align: right;
