@@ -85,7 +85,7 @@
           <v-card>
             <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select no-data-text="検索してください。" height=400>
               <template #[`item.jun`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form" /> 
+                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form white" /> 
               </template>
               <template #[`item.weight`]="{ item }">
                 <div style="text-align: right;">{{item.weight}}</div>

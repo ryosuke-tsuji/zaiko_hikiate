@@ -76,13 +76,13 @@
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
                 <div style="display: flex; align-items: center;">
-                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight compact-form" v-if="item.status != 2" />
+                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight compact-form white" v-if="item.status != 2" />
                   <v-spacer></v-spacer>
                   <v-btn :class='[item.isSetting ? "outlined" : "secondary"]' depressed dense @click="hakoShitei(item.ID)"><span>箱指定</span></v-btn>
                 </div>
               </template>
               <template #[`item.tsurifuraBiko`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" class="compact-form" /> 
+                <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" class="compact-form white" /> 
               </template>
               <template #[`item.fudagamiNo`]="{ item }">
                 {{ item.fudagamiNo }}
