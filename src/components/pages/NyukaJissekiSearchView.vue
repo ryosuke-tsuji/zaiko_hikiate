@@ -13,15 +13,15 @@
                   <v-row>
                     <v-col class="pt-0 pb-0 pr-1 d-flex" cols="auto">
                       <v-subheader class="mr-2">デポ(入荷場所)*</v-subheader>
-                      <v-text-field class="depo" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-text-field class="depo" outlined dense clearable hint="" hide-details="auto" background-color="yellow lighten-3"></v-text-field>
                       <v-text-field class="depoName" outlined dense clearable hint="" hide-details="auto"></v-text-field>
                     </v-col>
 
                     <v-col class="pt-0 pr-1 d-flex" cols="auto">
                       <v-subheader class="mr-2">入荷年月日*</v-subheader>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD"></v-text-field>
+                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" background-color="yellow lighten-3"></v-text-field>
                       <span style="vertical-align: middle" class="pl-1 pr-1 pt-2">～</span>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD"></v-text-field>
+                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" background-color="yellow lighten-3"></v-text-field>
                     </v-col>
 
                     <v-col class="pt-0 pb-0 pr-1 d-flex" cols="auto">
@@ -37,8 +37,8 @@
                   <v-row>
                     <v-col class="pt-0 pb-0 pr-1 d-flex" cols="auto">
                       <v-subheader class="mr-2">事&emsp;注番*</v-subheader>
-                      <v-text-field class="chuban1" outlined dense clearable hint="" hide-details="auto"></v-text-field>
-                      <v-text-field class="chuban2" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-text-field class="chuban1" outlined dense clearable hint="" hide-details="auto" background-color="yellow lighten-3"></v-text-field>
+                      <v-text-field class="chuban2" outlined dense clearable hint="" hide-details="auto" background-color="yellow lighten-3"></v-text-field>
                     </v-col>
 
                     <v-col class="pt-0 pr-1 d-flex" cols="auto">
@@ -1032,12 +1032,10 @@ export default {
 .ymd {
   width: 170px;
   height: 40px;
-  background-color: yellow;
 }
 .depo {
   width: 90px;
   height: 40px;
-  background-color: yellow;
 }
 .depoName {
   width: 120px;
@@ -1051,12 +1049,10 @@ export default {
 .chuban1 {
   width: 60px;
   height: 40px;
-  background-color: yellow;
 }
 .chuban2 {
   width: 90px;  
   height: 40px;
-  background-color: yellow;
 }
 .sokoTo {
   width: 120px;

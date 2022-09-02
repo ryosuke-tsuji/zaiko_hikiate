@@ -18,13 +18,13 @@
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&nbsp;デポ<span style="color: red">&nbsp;*</span></v-subheader>
-                      <v-text-field class="yellow lighten-3" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto"></v-text-field>
                       <div style="width:210px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
-                      <div style="width:610px"></div>
+                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple></v-select>
+                      <div style="width:80px"></div>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -84,7 +84,7 @@
           <v-card>
             <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select no-data-text="検索してください。" height=400>
               <template #[`item.jun`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form white" /> 
+                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form" background-color="white" /> 
               </template>
               <template #[`item.weight`]="{ item }">
                 <div style="text-align: right;">{{item.weight}}</div>
@@ -266,6 +266,7 @@ export default {
       binUnsoCdList: ["", "全て", "車建（区域）", "個配（地方）"],
       hikiateStatusList: ["未引当分", "一部引当中", "引当済"],
       zaikoUmuList: ["", "在庫有り分", "在庫無し分"],
+      hinsyuList: ["一般", "紙器", "特印", "液体", "プラスチック", "建装", "レーベル"],
       headersBack: null,
     }
   },
