@@ -1,6 +1,5 @@
 <template>
   <div>
-    <GamenInfo><template v-slot:GamenName>在庫引当&emsp;吊札個別選択</template></GamenInfo>
     <v-container fluid>
       <v-row>
         <v-col class="pb-0">
@@ -190,7 +189,6 @@
 </template>
 
 <script>
-import GamenInfo from '@/components/common/Header.vue'
 import draggable from "vuedraggable"
 // import DragSet from '@/components/common/DragSetting.vue'
 export default {
@@ -598,7 +596,6 @@ export default {
     },
   },
   components: {
-    GamenInfo,
     draggable,
     // DragSet,
   },

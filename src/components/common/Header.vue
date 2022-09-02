@@ -33,7 +33,7 @@
 
       <v-spacer></v-spacer>
       <span class="shrink mr-3 hidden-sm-and-down title"
-        ><slot name="GamenName">〇〇マスタ管理画面</slot></span
+        >{{ headerTitle }}</span
       >
       <v-spacer></v-spacer>
 
@@ -73,6 +73,41 @@ export default {
 
   created: function () {
     this.selectedDepo = '関宿';
+  },
+
+  computed: {
+    headerTitle: function () {
+      switch (this.$route.path) {
+        case '/':
+/*
+          return '新物流システム\u3000メニュー';
+*/
+          return ' ';
+        case '/assortList':
+          return '荷揃指示一覧';
+        case '/assortInst':
+          return '(出庫兼)荷揃指示明細(※原案)';
+        case '/assortInst2':
+          return '(出庫兼)荷揃指示明細(※A案)';
+        case '/searchInst':
+          return '輸送指示 \u00a0 管轄デポ・運送会社変更 \u00a0 検索';
+        case '/option':
+          return 'オプション';
+        case '/assortList_sample':
+          return '荷揃指示一覧(サンプル)';
+        case '/zaiko_hikiate':
+          return '在庫引当';
+        case '/zaiko_hikiate_kobetsu/1':
+        case '/zaiko_hikiate_kobetsu/2':
+        case '/zaiko_hikiate_kobetsu/3':
+        case '/zaiko_hikiate_kobetsu/4':
+          return '在庫引当\u3000吊札個別選択';
+        case '/zaiko_hikiate_kakutei':
+          return '在庫引当\u3000引当確定';
+        default:
+          return ' ';
+      }
+    },
   },
 };
 </script>

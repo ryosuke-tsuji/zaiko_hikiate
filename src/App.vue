@@ -1,6 +1,6 @@
 <template>
   <v-app>
-<!--    <Header />  8/8: viewsからslotでheaderを指定したのでこちらはコメント-->
+    <Header />
     <v-main>
       <router-view/>
 <!--      <Body />-->
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import Header from './components/common/Header.vue';
+import Header from './components/common/Header.vue';
 
 // import Body from './components/Body.vue';
 import Footer from './components/common/Footer.vue';
@@ -20,7 +20,7 @@ export default {
 
   components: {
     // Body,
-    // Header,
+    Header,
     Footer,
   },
 

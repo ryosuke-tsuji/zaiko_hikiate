@@ -1,6 +1,5 @@
 <template>
   <div>
-    <GamenInfo><template v-slot:GamenName>在庫引当</template></GamenInfo>
     <v-container fluid>
       <v-row>
         <v-col class="pb-0">
@@ -157,7 +156,6 @@
 </template>
 
 <script>
-import GamenInfo from '@/components/common/Header.vue'
 import draggable from "vuedraggable"
 export default {
   data() {
@@ -318,7 +316,6 @@ export default {
     }
   },
   components: {
-    GamenInfo,
     draggable,
   },
 
@@ -383,8 +380,8 @@ export default {
 }
 
 .compact-form {
-  transform: scale(0.875);
-  transform-origin: left;
+  transform: scale(0.75);
+  transform-origin: right;
 }
 
 </style>
