@@ -1,95 +1,49 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+//import HomeView from '../views/HomeView.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
-  },
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: HomeView,
+  // },
+  // {
+  //   path: '/about',
+  //   name: 'about',
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+  // },
   {
     path: '/nyuka',
     name: 'nyuka',
-    component: () => import('../views/NyukaJissekiSearchView.vue'),
+    component: () => import('../components/pages/NyukaJissekiSearchView.vue'),
   },
-  // {
-  //   path: '/nyuka_setting',
-  //   name: 'nyuka_setting',
-  //   component: () => import('../views/NyukaJissekiSearchSettingView.vue'),
-  //   props: true,
-  // },
   {
     path: '/nyuka_dtl',
     name: 'nyuka_dtl',
-    component: () => import('../views/NyukaJissekiDetailView.vue'),
+    component: () => import('../components/pages/NyukaJissekiDetailView.vue'),
   },
   {
     path: '/zaiko_hikiate',
     name: 'zaiko_hikiate',
-    component: () => import('../views/ZaikoHikiate.vue'),
-  },
-  {
-    path: '/zaiko_hikiate_kobetsu',
-    name: 'zaiko_hikiate_kobetsu',
-    component: () => import('../views/ZaikoHikiateKobetsu.vue'),
+    component: () => import('../components/pages/ZaikoHikiate.vue'),
   },
   {
     path: '/zaiko_hikiate_kobetsu/:id',
     name: 'zaiko_hikiate_kobetsu_4_id',
     props: true,
-    component: () => import('../views/ZaikoHikiateKobetsu.vue'),
-  },
-  {
-    path: '/zaiko_hikiate_kobetsu1',
-    name: 'zaiko_hikiate_kobetsu1',
-    component: () => import('../views/ZaikoHikiateKobetsu1.vue'),
-  },
-  {
-    path: '/zaiko_hikiate_kobetsu2',
-    name: 'zaiko_hikiate_kobetsu2',
-    component: () => import('../views/ZaikoHikiateKobetsu2.vue'),
-  },
-  {
-    path: '/zaiko_hikiate_kobetsu3',
-    name: 'zaiko_hikiate_kobetsu3',
-    component: () => import('../views/ZaikoHikiateKobetsu3.vue'),
-  },
-  {
-    path: '/zaiko_hikiate_kobetsu4',
-    name: 'zaiko_hikiate_kobetsu4',
-    component: () => import('../views/ZaikoHikiateKobetsu4.vue'),
+    component: () => import('../components/pages/ZaikoHikiateKobetsu.vue'),
   },
   {
     path: '/zaiko_hikiate_kakutei',
     name: 'zaiko_hikiate_kakutei',
-    component: () => import('../views/ZaikoHikiateKakutei.vue'),
-  },
-  {
-    path: '/test0824',
-    name: 'test0824',
-    component: () => import('../views/test0824.vue'),
-  },
-  {
-    path: '/mycom',
-    name: 'mycom',
-    component: () => import('../components/MyCom.vue'),
-  },
-  {
-    path: '/ab',
-    name: 'ab',
-    component: () => import('../components/About.vue'),
+    component: () => import('../components/pages/ZaikoHikiateKakutei.vue'),
   },
   {
     path: '/2-13s',
@@ -127,8 +81,47 @@ const routes = [
         /* webpackChunkName: "about" */ '../components/pages/ArrivalReport.vue'
       ),
   },
-
-
+  // {
+  //   path: '/nyuka_setting',
+  //   name: 'nyuka_setting',
+  //   component: () => import('../views/NyukaJissekiSearchSettingView.vue'),
+  //   props: true,
+  // },
+  // {
+  //   path: '/zaiko_hikiate_kobetsu',
+  //   name: 'zaiko_hikiate_kobetsu',
+  //   component: () => import('../components/pages/ZaikoHikiateKobetsu.vue'),
+  // },
+  // {
+  //   path: '/zaiko_hikiate_kobetsu1',
+  //   name: 'zaiko_hikiate_kobetsu1',
+  //   component: () => import('../views/ZaikoHikiateKobetsu1.vue'),
+  // },
+  // {
+  //   path: '/zaiko_hikiate_kobetsu2',
+  //   name: 'zaiko_hikiate_kobetsu2',
+  //   component: () => import('../views/ZaikoHikiateKobetsu2.vue'),
+  // },
+  // {
+  //   path: '/zaiko_hikiate_kobetsu3',
+  //   name: 'zaiko_hikiate_kobetsu3',
+  //   component: () => import('../views/ZaikoHikiateKobetsu3.vue'),
+  // },
+  // {
+  //   path: '/zaiko_hikiate_kobetsu4',
+  //   name: 'zaiko_hikiate_kobetsu4',
+  //   component: () => import('../views/ZaikoHikiateKobetsu4.vue'),
+  // },
+  // {
+  //   path: '/test0824',
+  //   name: 'test0824',
+  //   component: () => import('../views/test0824.vue'),
+  // },
+  // {
+  //   path: '/ab',
+  //   name: 'ab',
+  //   component: () => import('../components/About.vue'),
+  // },
 ];
 
 const router = new VueRouter({

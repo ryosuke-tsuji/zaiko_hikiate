@@ -97,13 +97,17 @@ export default {
           return '荷揃指示一覧(サンプル)';
         case '/zaiko_hikiate':
           return '在庫引当';
-        case '/zaiko_hikiate_kobetsu/1':
+        case '/zaiko_hikiate_kobetsu/1': // いまいち
         case '/zaiko_hikiate_kobetsu/2':
         case '/zaiko_hikiate_kobetsu/3':
         case '/zaiko_hikiate_kobetsu/4':
           return '在庫引当\u3000吊札個別選択';
         case '/zaiko_hikiate_kakutei':
           return '在庫引当\u3000引当確定';
+        case '/nyuka':
+          return '入荷実績廃棄';
+        case '/nyuka_dtl':
+          return '入荷実績明細廃棄';
         default:
           return ' ';
       }

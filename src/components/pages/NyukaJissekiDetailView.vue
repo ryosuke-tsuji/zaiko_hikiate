@@ -1,6 +1,5 @@
 <template>
   <div>
-    <GamenInfo><template v-slot:GamenName>入荷実績明細廃棄</template></GamenInfo>
     <v-container fluid>
       <v-row>
         <v-col class="pb-0">
@@ -102,7 +101,6 @@
 </template>
 
 <script>
-import GamenInfo from '../components/common/Header.vue'
 export default {
   data() {
     return {
@@ -278,7 +276,6 @@ export default {
     },
   },
   components: {
-    GamenInfo
   },
 
 }
