@@ -6,6 +6,9 @@
           <v-card>
             <v-card-title class="pt-0 pb-2 ml-1">
               <span class="titleFont d-flex">輸送指示ヘッダー</span>
+              <span class="leyerTop mr-1" style="width:200px; text-align: right;">
+                {{id}}/4
+              </span>
               <v-spacer></v-spacer>
             </v-card-title>
           </v-card>
@@ -49,7 +52,9 @@
         <v-col class="pb-0">
           <v-card>
             <v-card-title class="pt-0 pb-2 ml-1">
-              <span class="titleFont d-flex">吊札個別出庫数</span><v-spacer></v-spacer><span class="text-left leyerTop" style="width:400px">
+              <span class="titleFont d-flex">吊札個別出庫数</span>
+              <v-spacer></v-spacer>
+              <span class="text-left leyerTop" style="width:400px">
                 <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-header hide-default-footer calculate-widths height="40px">
                   <template v-slot:item="{ item }">
                     <tr>
@@ -341,7 +346,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '070230',
             fudagamiNo: '5056001108061X',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/13',
             suryo: '30,000 S',
@@ -358,7 +363,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '061603',
             fudagamiNo: '5056001108063Z',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '002',
             productYmd: '22/07/14',
             suryo: '30,000 S',
@@ -375,7 +380,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '080802',
             fudagamiNo: '5056001131548$',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '003',
             productYmd: '22/07/14',
             suryo: '30,000 S',
@@ -395,7 +400,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '020201',
             fudagamiNo: '438940398593$%',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/14',
             suryo: '64,000 S',
@@ -415,7 +420,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '010101',
             fudagamiNo: '3248990234890A',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/14',
             suryo: '37,500 S',
@@ -432,7 +437,7 @@ export default {
             soko: '1220 盛運羽生倉庫',
             tanaBan: '999999',
             fudagamiNo: '9394938953889B',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '002',
             productYmd: '22/07/14',
             suryo: '37,500 S',
@@ -452,7 +457,7 @@ export default {
             soko: '1810 関宿物流センター',
             tanaBan: '090403',
             fudagamiNo: '3948038034589C',
-            fudagamiSabu: '',
+            fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/12',
             suryo: '8,640 S',

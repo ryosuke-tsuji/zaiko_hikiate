@@ -7,18 +7,18 @@
             <v-expansion-panels v-model="panelState">
               <v-expansion-panel>
                 <v-expansion-panel-header class="py-0 d-inline-flex">
-                    <span class="px-0 titleFont leyerBottom">検索条件</span>
+                  <span class="px-0 titleFont leyerBottom">検索条件</span>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="4"></v-text-field>
                       <div style="width:430px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&nbsp;デポ<span style="color: red">&nbsp;*</span></v-subheader>
-                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto"></v-text-field>
+                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto" value="EWDA"></v-text-field>
                       <div style="width:210px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
@@ -35,10 +35,10 @@
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="6">
                       <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" @click:append="appendClick"></v-text-field>
+                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" @click:append="appendClick" value="2022/07/14"></v-text-field>
                       <span style="vertical-align: middle" class="pl-1 pr-1 pt-2">～</span>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD"></v-text-field>
-                      <div style="width:270px"></div>
+                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" value="2022/07/15"></v-text-field>
+                      <div style="width:220px"></div>
                     </v-col>
                   </v-row>
                   <v-row>
@@ -360,6 +360,7 @@ export default {
   white-space: nowrap;
   text-align: center;
 }
+
 .textRight input {
   text-align: right;
 }
