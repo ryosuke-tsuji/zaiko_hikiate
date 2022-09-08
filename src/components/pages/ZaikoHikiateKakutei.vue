@@ -73,18 +73,28 @@
                 <v-icon v-if="item.statusCd == 3" color="yellow darken-3" text class="btn-icon mr-2" style="background-color: transparent !important">mdi-alert</v-icon>
                 <span class="errorStatus">{{ item.status }}</span>
               </template>
+
+              <template #[`item.iriCnt`]="{ item }">
+                <div style="text-align: right;">{{(item.iriCnt == null ? "" : item.iriCnt.toLocaleString())}}{{item.iriCntUnit}}</div>
+              </template>
+              <template #[`item.uchiCnt`]="{ item }">
+                <div style="text-align: right;">{{(item.uchiCnt == null ? "" : item.uchiCnt.toLocaleString())}}</div>
+              </template>
+              <template #[`item.hakoCnt`]="{ item }">
+                <div style="text-align: right;">{{(item.hakoCnt == null ? "" : item.hakoCnt.toLocaleString())}}</div>
+              </template>
               <template #[`item.shijiCnt`]="{ item }">
-                <div style="text-align: right;">{{item.shijiCnt}}</div>
+                <div style="text-align: right;">{{(item.shijiCnt == null ? "" : item.shijiCnt.toLocaleString())}}{{item.shijiCntUnit}}</div>
               </template>
               <template #[`item.hikiateCnt`]="{ item }">
-                <div style="text-align: right;">{{item.hikiateCnt}}</div>
+                <div style="text-align: right;">{{(item.hikiateCnt == null ? "" : item.hikiateCnt.toLocaleString())}}</div>
               </template>
-              <template #[`item.fusokuCnt`]="{ item }">
-                <div v-if="item.fusokuCnt==0" style="text-align: right;">{{item.fusokuCnt}}</div>
-                <div v-else class="text-end errorStatus" >{{item.fusokuCnt}}</div>
+              <template #[`item.kafusokuCnt`]="{ item }">
+                <div v-if="item.kafusokuCnt==0" style="text-align: right;">{{(item.kafusokuCnt == null ? "" : item.kafusokuCnt.toLocaleString())}}</div>
+                <div v-else class="text-end errorStatus">{{(item.kafusokuCnt == null ? "" : item.kafusokuCnt.toLocaleString())}}</div>
               </template>
               <template #[`item.data-table-select`]="{ item, isSelected, select }">
-                <v-simple-checkbox v-if="item.fusokuCnt != ``" :value="isSelected" @input="select($event)"></v-simple-checkbox>
+                <v-simple-checkbox v-if="item.kafusokuCnt != null" :value="isSelected" @input="select($event)"></v-simple-checkbox>
               </template>
             </v-data-table>
             <div style="height:60px"></div>
@@ -146,13 +156,18 @@ export default {
         { displayOrder: 6,  text: '品名',       value: 'productName',   width: 180, shown: true, manage: false, },
         { displayOrder: 7,  text: '内訳№',     value: 'uchiwakeNo',    width: 90,  shown: true, manage: false, },
         { displayOrder: 8,  text: '内訳名',     value: 'uchiwakeName',  width: 100, shown: true, manage: false, },
-        { displayOrder: 9,  text: '指示数',     value: 'shijiCnt',      width: 100, shown: true, manage: false, },
-        { displayOrder: 10, text: '引当数',     value: 'hikiateCnt',    width: 100, shown: true, manage: false, },
-        { displayOrder: 11, text: '不足数',     value: 'fusokuCnt',     width: 100, shown: true, manage: false, },
-        { displayOrder: 12, text: 'ステータス', value: 'status',        width: 100, shown: true, manage: false, },
-        { displayOrder: 13, text: '倉庫',       value: 'soko',          width: 100, shown: true, manage: false, },
-        { displayOrder: 14, text: '',           value: 'statusCd',      width: 100, shown: false, manage: true },
-        { displayOrder: 15, text: '',           value: 'ID',            width: 65,  shown: false, manage: true, sortable: false, },
+        { displayOrder: 9,  text: '入り数',     value: 'iriCnt',        width: 100, shown: true, manage: false, },
+        { displayOrder: 10, text: '内数',       value: 'uchiCnt',       width: 100, shown: true, manage: false, },
+        { displayOrder: 11, text: '箱数',       value: 'hakoCnt',       width: 100, shown: true, manage: false, },
+        { displayOrder: 12, text: '指示数',     value: 'shijiCnt',      width: 100, shown: true, manage: false, },
+        { displayOrder: 13, text: '引当数',     value: 'hikiateCnt',    width: 100, shown: true, manage: false, },
+        { displayOrder: 14, text: '過不足数',   value: 'kafusokuCnt',   width: 100, shown: true, manage: false, },
+        { displayOrder: 15, text: 'ステータス', value: 'status',        width: 140, shown: true, manage: false, },
+        { displayOrder: 16, text: '倉庫',       value: 'soko',          width: 200, shown: true, manage: false, },
+        { displayOrder: 96, text: '',           value: 'shijiCntUnit',  width: 100, shown: false, manage: true, },
+        { displayOrder: 97, text: '',           value: 'iriCntUnit',    width: 100, shown: false, manage: true, },
+        { displayOrder: 98, text: '',           value: 'statusCd',      width: 100, shown: false, manage: true },
+        { displayOrder: 99, text: '',           value: 'ID',            width: 65,  shown: false, manage: true, sortable: false, },
       ],
       itemList: [
         {
@@ -164,9 +179,14 @@ export default {
           productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
           uchiwakeNo: "－",
           uchiwakeName: "",
-          shijiCnt: "42,000 S",
-          hikiateCnt: "42,000",
-          fusokuCnt: "0",
+          iriCnt: 3000,
+          iriCntUnit: " S",
+          uchiCnt: null,
+          hakoCnt: 14,
+          shijiCnt: 42000,
+          shijiCntUnit: " S",
+          hikiateCnt: 42000,
+          kafusokuCnt: 0,
           status: "",
           statusCd: "0",
           soko: "1810 関宿物流センター",
@@ -180,9 +200,14 @@ export default {
           productName: "７ミリヨウチューブ",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          shijiCnt: "64,000 S",
-          hikiateCnt: "57,600",
-          fusokuCnt: "-6,400",
+          iriCnt: 640,
+          iriCntUnit: " S",
+          uchiCnt: null,
+          hakoCnt: 90,
+          shijiCnt: 64000,
+          shijiCntUnit: " S",
+          hikiateCnt: 57600,
+          kafusokuCnt: -6400,
           status: "一部欠品",
           statusCd: "1",
           soko: "1810 関宿物流センター",
@@ -196,9 +221,14 @@ export default {
           productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          shijiCnt: "52,000 S",
-          hikiateCnt: "37,500",
-          fusokuCnt: "0",
+          iriCnt: 7500,
+          iriCntUnit: " S",
+          uchiCnt: null,
+          hakoCnt: 5,
+          shijiCnt: 52000,
+          shijiCntUnit: " S",
+          hikiateCnt: 37500,
+          kafusokuCnt: 0,
           status: "強制決定",
           statusCd: "2",
           soko: "1810 関宿物流センター",
@@ -212,9 +242,14 @@ export default {
           productName: "",
           uchiwakeNo: "",
           uchiwakeName: "",
-          shijiCnt: "",
-          hikiateCnt: "7,500",
-          fusokuCnt: "",
+          iriCnt: 7500,
+          iriCntUnit: " S",
+          uchiCnt: null,
+          hakoCnt: 1,
+          shijiCnt: null,
+          shijiCntUnit: null,
+          hikiateCnt: 7500,
+          kafusokuCnt: null,
           status: "",
           statusCd: "",
           soko: "1220 盛運羽生倉庫",
@@ -228,9 +263,14 @@ export default {
           productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          shijiCnt: "6,048 S",
-          hikiateCnt: "0",
-          fusokuCnt: "0",
+          iriCnt: 8640,
+          iriCntUnit: " S",
+          uchiCnt: null,
+          hakoCnt: 14,
+          shijiCnt: 6048,
+          shijiCntUnit: " S",
+          hikiateCnt: 0,
+          kafusokuCnt: 0,
           status: "引当保留",
           statusCd: "3",
           soko: "",

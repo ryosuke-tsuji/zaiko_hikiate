@@ -13,49 +13,50 @@
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="4"></v-text-field>
-                      <div style="width:430px"></div>
+                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="4" style="max-width: 70px"></v-text-field>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&nbsp;デポ<span style="color: red">&nbsp;*</span></v-subheader>
-                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto" value="EWDA"></v-text-field>
-                      <div style="width:210px"></div>
+                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto" value="EWDA" style="max-width: 95px"></v-text-field>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
-                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple></v-select>
-                      <div style="width:80px"></div>
+                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple style="max-width: 160px"></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">輸送手段</v-subheader>
-                      <v-select :items="binUnsoCdList" dense outlined hide-details="auto"></v-select>
-                      <div style="width:80px"></div>
+                      <v-select :items="binUnsoCdList" dense outlined hide-details="auto" style="max-width: 90px"></v-select>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="6">
                       <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" @click:append="appendClick" value="2022/07/14"></v-text-field>
-                      <span style="vertical-align: middle" class="pl-1 pr-1 pt-2">～</span>
-                      <v-text-field class="ymd" outlined hide-details="auto" clearable append-icon="mdi-calendar-range" dense hint="YYYY/MM/DD" value="2022/07/15"></v-text-field>
-                      <div style="width:220px"></div>
+                      <v-dialog ref="dialog_date" v-model="modal_date" :return-value.sync="dates" persistent width="30vw">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field v-model="dateRangeText" append-icon="mdi-calendar" readonly dense v-bind="attrs" v-on="on" outlined class="py-0" style="max-width: 250px; height: 40px;"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="dates" locale="ja-jp" no-title range :day-format="(d) => new Date(d).getDate()">
+                          <v-spacer></v-spacer>
+                          <v-btn text class="subwin_button" color="primary" @click="modal_date = false">Cancel</v-btn>
+                          <v-btn text class="subwin_button" color="primary" @click="$refs.dialog_date.save(dates)">OK</v-btn>
+                        </v-date-picker>
+                      </v-dialog>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban1"></v-text-field>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban2"></v-text-field>
+                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban1" style="max-width: 70px"></v-text-field>
+                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban2" style="max-width: 200px"></v-text-field>
                       <div style="width:15px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">引当状況</v-subheader>
-                      <v-select :items="hikiateStatusList" dense outlined hide-details="auto" multiple></v-select>
+                      <v-select :items="hikiateStatusList" dense outlined hide-details="auto" multiple style="max-width: 150px"></v-select>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">在庫有無</v-subheader>
-                      <v-select :items="zaikoUmuList" dense outlined hide-details="auto"></v-select>
-                      <div style="width:80px"></div>
+                      <v-select :items="zaikoUmuList" dense outlined hide-details="auto" style="max-width: 150px"></v-select>
                     </v-col>
                     <v-spacer></v-spacer>
 
@@ -162,6 +163,11 @@ export default {
     return {
       drawer: false,
       panelState: 0,
+      // ダイアログ画面のclose用変数
+      modal_date: false,
+      // 出荷日用初期日付(fromのみ)
+      // dates: [new Date().toISOString().substr(0, 10)],
+      dates: ["2022-07-14","2022-07-15"],
       headers: [
         { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: true, manage: false, },
         { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: true, manage: false , },
@@ -263,7 +269,7 @@ export default {
       ],
       // リストボックスの中身
       inputKbnList: ["新規", "引当取消", "強制完了"],
-      binUnsoCdList: ["", "全て", "車建（区域）", "個配（地方）"],
+      binUnsoCdList: ["", "車建", "個配"],
       hikiateStatusList: ["未引当分", "一部引当中", "引当済"],
       zaikoUmuList: ["", "在庫有り分", "在庫無し分"],
       hinsyuList: ["一般", "紙器", "特印", "液体", "プラスチック", "建装", "レーベル"],
@@ -306,7 +312,12 @@ export default {
       if (result) {
         alert("取り消しました。");
       }
-    }
+    },
+    // datepickerクリア処理
+    clear: function () {
+      // this.dates = [new Date().toISOString().substr(0, 10)];
+      this.dates = ["2022-07-14","2022-07-15"];
+    },
   },
   computed: {
     shownHeaders() {
@@ -314,7 +325,11 @@ export default {
     },
     shownHeadersDraggable() {
       return this.headers.filter(h => !h.manage)
-    }
+    },
+    // datepickerのfrom-to日付ソートとYYYY-MM-DD形式→YYYY/MM/DD形式への変換
+    dateRangeText() {
+      return this.dates.slice().sort().join(' ～ ').replaceAll('-', '/');
+    },
   },
   components: {
     draggable,
@@ -384,6 +399,16 @@ export default {
 .compact-form {
   transform: scale(0.75);
   transform-origin: right;
+}
+
+/* datepicker ボタン定義 */
+.subwin_button {
+  width: 20%;
+  text-align: center;
+  margin: 10px;
+  padding: 3px 3px;
+  background: #bad6ee;
+  border-radius: 10px;
 }
 
 </style>
