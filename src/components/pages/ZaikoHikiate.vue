@@ -88,10 +88,10 @@
                 <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form" background-color="white" /> 
               </template>
               <template #[`item.weight`]="{ item }">
-                <div style="text-align: right;">{{item.weight}}</div>
+                <div style="text-align: right;">{{ (item.weight == null ? "" : item.weight.toLocaleString()) }}{{ item.weightUnit }}</div>
               </template>
               <template #[`item.shijiCnt`]="{ item }">
-                <div style="text-align: right;">{{item.shijiCnt}}</div>
+                <div style="text-align: right;">{{ (item.shijiCnt == null ? "" : item.shijiCnt.toLocaleString()) }}{{ item.shijiCntUnit }}</div>
               </template>
 
               <template #[`item.address`]="{ item }">
@@ -198,8 +198,10 @@ export default {
           productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
           uchiwakeNo: "－",
           uchiwakeName: "",
-          weight: "1,800kg",
-          shijiCnt: "42,000 S",
+          weight: 1800,
+          weightUnit: "kg",
+          shijiCnt: 42000,
+          shijiCntUnit: " S",
           eigyoBiko: "",
         },
         {
@@ -214,8 +216,10 @@ export default {
           productName: "７ミリヨウチューブ",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          weight: "300kg",
-          shijiCnt: "64,000 S",
+          weight: 300,
+          weightUnit: "kg",
+          shijiCnt: 64000,
+          shijiCntUnit: " S",
           eigyoBiko: "",
         },
         {
@@ -230,8 +234,10 @@ export default {
           productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          weight: "500kg",
-          shijiCnt: "52,000 S",
+          weight: 500,
+          weightUnit: "kg",
+          shijiCnt: 52000,
+          shijiCntUnit: " S",
           eigyoBiko: "",
         },
         {
@@ -246,26 +252,12 @@ export default {
           productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
           uchiwakeNo: "01",
           uchiwakeName: "本体",
-          weight: "200kg",
-          shijiCnt: "6,048 S",
+          weight: 200,
+          weightUnit: "kg",
+          shijiCnt: 6048,
+          shijiCntUnit: " S",
           eigyoBiko: "",
         },
-        // {
-        //   ID: "5",
-        //   jun: "",
-        //   shippingDate: "07/15",
-        //   arrivalTime: "07/15 12:00-07/15 17:00",
-        //   address: "東京都江戸川区",
-        //   destName: "㈲ヨコヤマ",
-        //   orderNo: "4 8A61Q2",
-        //   customerName: "コカ・コーラ",
-        //   productName: "７ミリヨウチューブ",
-        //   uchiwakeNo: "01",
-        //   uchiwakeName: "",
-        //   weight: "300kg",
-        //   shijiCnt: "64.000 S",
-        //   eigyoBiko: "",
-        // },
       ],
       // リストボックスの中身
       inputKbnList: ["新規", "引当取消", "強制完了"],

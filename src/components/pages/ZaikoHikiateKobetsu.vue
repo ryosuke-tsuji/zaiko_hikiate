@@ -70,13 +70,13 @@
           <v-card>
             <v-data-table :headers="shownHeadersKobetsu" :items="itemsKobetsu" dense multi-sort fixed-header height="300px">
               <template #[`item.suryo`]="{ item }">
-                <div style="text-align: right;">{{item.suryo}}</div>
+                <div style="text-align: right;">{{ (item.suryo == null ? "" : item.suryo.toLocaleString()) }}{{ item.suryoUnit }}</div>
               </template>
-              <template #[`item.irisu`]="{ item }">
-                <div style="text-align: right;">{{item.irisu}}</div>
+              <template #[`item.iriCnt`]="{ item }">
+                <div style="text-align: right;">{{(item.iriCnt == null ? "" : item.iriCnt.toLocaleString())}}</div>
               </template>
               <template #[`item.hakosu`]="{ item }">
-                <div style="text-align: right;">{{item.hakosu}}</div>
+                <div style="text-align: right;">{{(item.hakosu == null ? "" : item.hakosu.toLocaleString())}}</div>
               </template>
               <template #[`item.syukkohakosu`]="{ item }">
                 <div style="display: flex; align-items: center;">
@@ -169,7 +169,7 @@
                 <div style="text-align: right;">{{item.hakoNo}}</div>
               </template>
               <template #[`item.suryo`]="{ item }">
-                <div style="text-align: right;">{{item.suryo}}</div>
+                <div style="text-align: right;">{{ (item.suryo == null ? "" : item.suryo.toLocaleString()) }}{{ item.suryoUnit }}</div>
               </template>
             </v-data-table>
           </v-col>
@@ -231,18 +231,20 @@ export default {
         { displayOrder: 7,  text: 'サブ',       value: 'fudagamiSabu',  width: 80,  shown: true, manage: false, },
         { displayOrder: 8,  text: '製造年月日', value: 'productYmd',    width: 100,  shown: true, manage: false, },
         { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, manage: false, },
-        { displayOrder: 10, text: '入り数',     value: 'irisu',         width: 70,  shown: true, manage: false, },
+        { displayOrder: 10, text: '入り数',     value: 'iriCnt',        width: 70,  shown: true, manage: false, },
         { displayOrder: 11, text: '内数',       value: 'uchisu',        width: 60,  shown: true, manage: false, },
         { displayOrder: 12, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, manage: false, },
         { displayOrder: 13, text: '出庫箱数',   value: 'syukkohakosu',  width: 180,  shown: true, manage: false, },
         { displayOrder: 14, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true, manage: false, },
-        { displayOrder: 15, text: '',          value: 'status',         width: 200,  shown: false, manage: true, },
-        { displayOrder: 16, text: '',           value: 'ID',            width: 150,  shown: false, manage: true, },
+        { displayOrder: 91, text: '',           value: 'suryoUnit',     width: 80,  shown: false, manage: true, },
+        { displayOrder: 98, text: '',          value: 'status',         width: 200,  shown: false, manage: true, },
+        { displayOrder: 99, text: '',           value: 'ID',            width: 150,  shown: false, manage: true, },
       ],
       headersBunkatsu: [
         { displayOrder: 3,  text: '箱番号',   value: 'hakoNo', width: 40,  shown: true },
         { displayOrder: 4,  text: '数量',     value: 'suryo',  width: 80,  shown: true },
-        { displayOrder: 5,  text: '',         value: 'id',     width: 10,  shown: false },
+        { displayOrder: 91, text: '',         value: 'suryoUnit',width: 80,shown: false },
+        { displayOrder: 99, text: '',         value: 'id',     width: 10,  shown: false },
       ],
       itemsShijiH:[],
       itemsShijiHList: [
@@ -350,11 +352,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/13',
-            suryo: '30,000 S',
-            irisu: '3,000',
-            uchisu: '',
-            hakosu: '10',
-            syukkohakosu: '10',
+            suryo: 30000,
+            suryoUnit: " S",
+            iriCnt: 3000,
+            uchisu: null,
+            hakosu: 10,
+            syukkohakosu: 10,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -368,11 +371,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '002',
             productYmd: '22/07/14',
-            suryo: '30,000 S',
-            irisu: '3,000',
-            uchisu: '',
-            hakosu: '10',
-            syukkohakosu: '4',
+            suryo: 30000,
+            suryoUnit: " S",
+            iriCnt: 3000,
+            uchisu: null,
+            hakosu: 10,
+            syukkohakosu: 4,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -386,11 +390,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '003',
             productYmd: '22/07/14',
-            suryo: '30,000 S',
-            irisu: '3,000',
-            uchisu: '',
-            hakosu: '10',
-            syukkohakosu: '',
+            suryo: 30000,
+            suryoUnit: " S",
+            iriCnt: 3000,
+            uchisu: null,
+            hakosu: 10,
+            syukkohakosu: null,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -407,11 +412,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/14',
-            suryo: '64,000 S',
-            irisu: '640',
-            uchisu: '',
-            hakosu: '90',
-            syukkohakosu: '90',
+            suryo: 64000,
+            suryoUnit: " S",
+            iriCnt: 640,
+            uchisu: null,
+            hakosu: 90,
+            syukkohakosu: 90,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -428,11 +434,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/14',
-            suryo: '37,500 S',
-            irisu: '7,500',
-            uchisu: '',
-            hakosu: '5',
-            syukkohakosu: '5',
+            suryo: 37500,
+            suryoUnit: " S",
+            iriCnt: 7500,
+            uchisu: null,
+            hakosu: 5,
+            syukkohakosu: 5,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -446,11 +453,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '002',
             productYmd: '22/07/14',
-            suryo: '37,500 S',
-            irisu: '7,500',
-            uchisu: '',
-            hakosu: '1',
-            syukkohakosu: '1',
+            suryo: 37500,
+            suryoUnit: " S",
+            iriCnt: 7500,
+            uchisu: null,
+            hakosu: 1,
+            syukkohakosu: 1,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -467,11 +475,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '001',
             productYmd: '22/07/12',
-            suryo: '8,640 S',
-            irisu: '432',
-            uchisu: '',
-            hakosu: '20',
-            syukkohakosu: '14',
+            suryo: 8640,
+            suryoUnit: " S",
+            iriCnt: 432,
+            uchisu: null,
+            hakosu: 20,
+            syukkohakosu: 14,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -485,11 +494,12 @@ export default {
             fudagamiSabu: '1',
             fudagamiSeq: '002',
             productYmd: '22/07/12',
-            suryo: '8,640 S',
-            irisu: '432',
-            uchisu: '',
-            hakosu: '20',
-            syukkohakosu: '',
+            suryo: 8640,
+            suryoUnit: " S",
+            iriCnt: 432,
+            uchisu: null,
+            hakosu: 20,
+            syukkohakosu: null,
             tsurifuraBiko: '',
             status: "0",
             isSetting: false,
@@ -504,16 +514,16 @@ export default {
         { title:"引当処理順", value:"札紙番号⇒入荷日"}
       ],
       bunkatsuMoto: [
-        { hakoNo:"1",  suryo:"3,000 S", id:1 },
-        { hakoNo:"2",  suryo:"3,000 S", id:2 },
-        { hakoNo:"3",  suryo:"3,000 S", id:3 },
-        { hakoNo:"4",  suryo:"3,000 S", id:4 },
-        { hakoNo:"5",  suryo:"3,000 S", id:5 },
-        { hakoNo:"6",  suryo:"3,000 S", id:6 },
-        { hakoNo:"7",  suryo:"3,000 S", id:7 },
-        { hakoNo:"8",  suryo:"3,000 S", id:8 },
-        { hakoNo:"9",  suryo:"3,000 S", id:9 },
-        { hakoNo:"10", suryo:"3,000 S", id:10 },
+        { hakoNo:"1",  suryo:3000, suryoUnit: " S",id:1 },
+        { hakoNo:"2",  suryo:3000, suryoUnit: " S",id:2 },
+        { hakoNo:"3",  suryo:3000, suryoUnit: " S",id:3 },
+        { hakoNo:"4",  suryo:3000, suryoUnit: " S",id:4 },
+        { hakoNo:"5",  suryo:3000, suryoUnit: " S",id:5 },
+        { hakoNo:"6",  suryo:3000, suryoUnit: " S",id:6 },
+        { hakoNo:"7",  suryo:3000, suryoUnit: " S",id:7 },
+        { hakoNo:"8",  suryo:3000, suryoUnit: " S",id:8 },
+        { hakoNo:"9",  suryo:3000, suryoUnit: " S",id:9 },
+        { hakoNo:"10", suryo:3000, suryoUnit: " S",id:10 },
       ],
       selectMoto: [],
       headersBack: null,
@@ -601,7 +611,7 @@ export default {
         for (let hako = parseInt(this.itemsKobetsu[idx].hakosu); hako > 0; hako--) {
           if (lastRequest <= 0)
             break;
-          lastRequest -= parseInt(this.itemsKobetsu[idx].irisu);
+          lastRequest -= parseInt(this.itemsKobetsu[idx].iriCnt);
           syukko += 1;
         }
         this.itemsKobetsu[idx].syukkohakosu = syukko;
