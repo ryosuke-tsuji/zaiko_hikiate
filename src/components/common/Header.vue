@@ -108,6 +108,8 @@ export default {
           return '入荷実績廃棄';
         case '/nyuka_dtl':
           return '入荷実績明細廃棄';
+        case '/haisya_add':
+          return '配車情報登録';
         default:
           return ' ';
       }
