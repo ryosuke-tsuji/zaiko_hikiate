@@ -51,9 +51,6 @@ const routes = [
     component: () => import('../components/pages/HaisyaInfoAdd.vue'),
   },
   {
-    path: '/test', name: 'test', component: () => import('../components/pages/TsujiTest.vue')
-  },
-  {
     path: '/2-13s',
     name: '2-13s',
     component: () => import('../views/SuisyoIdouSakiTourokuSearchView.vue'),
