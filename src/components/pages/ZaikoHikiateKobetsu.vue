@@ -25,7 +25,7 @@
                 </v-data-table>
               </v-col>
               <v-col></v-col>
-              <v-col cols="4" class="d-flex justify-end">
+              <v-col cols="5" class="d-flex justify-end">
                 <v-data-table :headers="shownHeadersSum" :items="itemsSum" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="summarys">
                   <template #[`item.shijiCnt`]="{ item }">
                     <div style="text-align: right;">{{item.shijiCnt}}</div>
@@ -41,6 +41,11 @@
                     <div v-else style="text-align: right;">{{item.fusokuCnt}}</div>
                   </template>
                 </v-data-table>
+                <keppin-add-dlg :isYoteiAdd=isYoteiAdd></keppin-add-dlg>
+<!--
+                <v-btn v-if="isYoteiAdd" class="mx-1 secondary" depressed large @click="yoteiAdd"><span>予定</span></v-btn>
+                <v-btn v-else class="mx-1 disable" disabled depressed large><span>予定</span></v-btn>
+-->
               </v-col>
             </v-row>
           </v-card>
@@ -54,16 +59,16 @@
             <v-card-title class="pt-0 pb-2 ml-1">
               <span class="titleFont d-flex">吊札個別出庫数</span>
               <v-spacer></v-spacer>
-              <span class="text-left leyerTop" style="width:400px">
+              <div class="text-left leyerTop" style="width:400px;">
                 <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-header hide-default-footer calculate-widths height="40px">
                   <template v-slot:item="{ item }">
                     <tr>
-                      <td width="100" class="hikiateSyoriJun">{{ item.title }}</td>
-                      <td width="300">{{ item.value }}</td>
+                      <td max-width="100" class="hikiateSyoriJun">{{ item.title }}</td>
+                      <td max-width="300">{{ item.value }}</td>
                     </tr>
                   </template>
                 </v-data-table>
-                </span>
+              </div>
               <v-spacer></v-spacer>
             </v-card-title>
           </v-card>
@@ -196,6 +201,7 @@
 <script>
 import draggable from "vuedraggable"
 // import DragSet from '@/components/common/DragSetting.vue'
+import KeppinAddDlg from '@/components/pages/dialogs/KeppinAddDialog.vue'
 export default {
   props: ["id"],
   data() {
@@ -210,8 +216,6 @@ export default {
         { displayOrder: 4, text: '品名',     value: 'productName',   width: 180, shown: true, },
         { displayOrder: 5, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: true, },
         { displayOrder: 6, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: true, },
-//        { displayOrder: 7, text: '重量',     value: 'weight',        width: 100, shown: true, },
-//        { displayOrder: 8, text: '指示数',   value: 'shijiCnt',      width: 100, shown: true, },
       ],
       headersShijiL: [
         { displayOrder: 1, text: '営業備考',   value: 'eigyoBiko', width: 150,  shown: true },
@@ -257,8 +261,6 @@ export default {
             productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
             uchiwakeNo: "-",
             uchiwakeName: "",
-//            weight: "1,800Kg",
-//            shijiCnt: "42,000 S",
           }
         ],
         [
@@ -270,8 +272,6 @@ export default {
             productName: "７ミリヨウチューブ",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-//            weight: "300Kg",
-//            shijiCnt: "64,000 S",
           }
         ],
         [
@@ -283,8 +283,6 @@ export default {
             productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-//            weight: "500kg",
-//            shijiCnt: "52,500 S",
           }
         ],
         [
@@ -296,33 +294,15 @@ export default {
             productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
             uchiwakeNo: "01",
             uchiwakeName: "本体",
-//            weight: "200Kg",
-//            shijiCnt: "6,048 S",
           }
         ],
       ],
       itemsShijiL: [],
       itemsShijiLList: [
-        [
-          {
-            eigyoBiko: "",
-          }
-        ],
-        [
-          {
-            eigyoBiko: "",
-          }
-        ],
-        [
-          {
-            eigyoBiko: "",
-          }
-        ],
-        [
-          {
-            eigyoBiko: "",
-          }
-        ],
+        [{ eigyoBiko: "", }],
+        [{ eigyoBiko: "", }],
+        [{ eigyoBiko: "", }],
+        [{ eigyoBiko: "", }],
       ],
       itemsSum: [],
       itemsSumList: [
@@ -563,11 +543,16 @@ export default {
         return false;
       }
     },
+    isYoteiAdd() {
+    // 予定ボタン表示制御
+      var work = new String(this.itemsSum[0]?.fusokuCnt);
+      return work.substring(0, 1) == "-";
+    },
     classObject: function(id) {
       return {
         active: this.itemsKobetsu[id].isSetting, "primary" : "errorClass"
       }
-    }
+    },
   },
   methods: {
     setting() {
@@ -592,6 +577,10 @@ export default {
       this.showContent = true;
       this.procId = id-1;
     },
+    yoteiAdd() {
+      // 予定ボタン 欠品分入荷予定登録
+
+    },
     closeModal() {
       this.itemsKobetsu[this.procId].isSetting = true;
       this.showContent = false;
@@ -615,13 +604,13 @@ export default {
           syukko += 1;
         }
         this.itemsKobetsu[idx].syukkohakosu = syukko;
-
       }
     },
   },
   components: {
     draggable,
     // DragSet,
+    KeppinAddDlg,
   },
 }
 </script>
@@ -719,7 +708,7 @@ td.hikiateSyoriJun {
 
 .leyerTop {
   position: absolute; 
-  right: 0;
+  right: 86px;
   z-index: 2;
 }
 
