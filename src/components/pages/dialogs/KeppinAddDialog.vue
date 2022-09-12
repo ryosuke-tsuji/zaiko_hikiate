@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="1200" persistent>
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-if="isYoteiAdd" class="mx-1 secondary" depressed large v-bind="attrs" v-on="on"><span>予定</span></v-btn>
+      <v-btn v-if="isYoteiAdd" class="mx-1 secondary" depressed large v-bind="attrs" v-on="on" @click="calcAddCnt"><span>予定</span></v-btn>
       <v-btn v-else class="mx-1 disable" disabled depressed large><span>予定</span></v-btn>
     </template>
 
@@ -15,7 +15,15 @@
       </v-row>
       <v-row>
         <v-col class="d-flex justify-end ml-10">
-          <v-btn class="secondary" @click="rowAdd">行追加</v-btn>
+          <v-data-table :headers="headersScoreList" :items="itemsScoreList" dense multi-sort fixed-header hide-default-footer height="auto" id="summarys">
+            <template #[`item.fusokuCnt`]="{ item }">
+              <div class="text-end errorStatus">{{ item.fusokuCnt.toLocaleString() }}</div>
+            </template>
+            <template #[`item.addCnt`]="{ item }">
+              <div class="text-end">{{ item.addCnt.toLocaleString() }}</div>
+            </template>
+          </v-data-table>
+          <v-btn class="ml-1 secondary" @click="rowAdd">行挿入</v-btn>
         </v-col>
       </v-row>
 
@@ -78,7 +86,6 @@ export default {
       dialog: false,
       selectItemList: [],
       headers: [
-        { text:"",           value:"id",             width:30,  shown:true,},
         { text:"生産完了日", value:"productionYMD",  width:120, shown:true, },
         { text:"時間",       value:"productionTime", width:120, shown:true, },
         { text:"生産場所",   value:"productPlace",   width:150,  shown:true, },
@@ -88,7 +95,12 @@ export default {
         { text:"箱数",       value:"hakoCnt",        width:60,  shown:true, },
         { text:"総数",       value:"totalCnt",       width:120, shown:true, },
         { text:"単位",       value:"totalCntUnit",   width:80,  shown:true,},
-        { text:"ステータス", value:"status",         width:140, shown:true, }
+        { text:"ステータス", value:"status",         width:140, shown:true, },
+        { text:"",           value:"id",             width:30,  shown:true,},
+      ],
+      headersScoreList: [
+        { text:"不足数", value:"fusokuCnt", width:90, shown:true, },
+        { text:"登録数", value:"addCnt",    width:90, shown:true, },
       ],
       itemsList: [
         {
@@ -117,6 +129,9 @@ export default {
           totalCntUnit:"S",
           status:"未登録",
         },
+      ],
+      itemsScoreList: [
+        { fusokuCnt:-6400, addCnt:null, },
       ],
     }
   },
@@ -150,13 +165,29 @@ export default {
     closeModal() {
       this.dialog = false;
     },
+    calcAddCnt() {
+      var totalAddCnt = 0;
+      for (const rowInfo of this.itemsList) {
+        totalAddCnt += parseInt(rowInfo.totalCnt) || 0;
+      }
+      this.itemsScoreList[0].addCnt = totalAddCnt;
+    },
 
   },
   computed: {
     shownHeaders() {
-      return this.headers.filter(h => h.shown && !h.manage);
+      return this.headers.filter(h => h.shown);
     },
   },
+  watch: {
+    // 値変更監視
+    itemsList: {
+      handler: function() {
+        this.calcAddCnt();
+      },
+      deep: true,
+    }
+  }
 }
 </script>
 
@@ -200,5 +231,21 @@ export default {
   transform: scale(0.75);
 /*  transform-origin: right;*/
 }
+
+
+/* サマリ表示専用 */
+#summarys.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > th {
+  font-size:15px  !important;
+  background-color: #FFe699 !important;
+}
+#summarys.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
+  background-color: #FFE699 !important;
+}
+
+.errorStatus {
+  /* text-danger */
+  color: red;
+}
+
 
 </style>

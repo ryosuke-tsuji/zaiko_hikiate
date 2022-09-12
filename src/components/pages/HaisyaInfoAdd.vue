@@ -47,7 +47,7 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&ensp;車番</v-subheader>
                       <v-text-field outlined hide-details="auto" clearable append-icon="mdi-magnify" dense @click:append="clickCarNo(-1)" maxlength="5" style="max-width: 130px;" class="textRight" v-model="selectWordCarNo"></v-text-field>
-<!--
+<!-- 車番検索をv-dialog化調査
                       <DTest textFieldStyle="max-width: 130px;"></DTest>
 -->
                     </v-col>
@@ -221,6 +221,7 @@
 
 <script>
 import CarNoSearch from './dialogs/CarNoSearchDialog.vue'
+// import DTest from './dialogs/DlgText.vue'
 export default {
   data() {
     return {
@@ -721,6 +722,7 @@ export default {
   },
   components: {
     CarNoSearch,
+    // DTest,
   },
 }
 </script>
