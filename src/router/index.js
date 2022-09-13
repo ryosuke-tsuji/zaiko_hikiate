@@ -46,6 +46,11 @@ const routes = [
     component: () => import('../components/pages/ZaikoHikiateKakutei.vue'),
   },
   {
+    path: '/keppin_add',
+    name: 'keppin_add',
+    component: () => import('@/components/pages/KeppinNyukaYoteiAdd.vue'),
+  },
+  {
     path: '/haisya_add',
     name: 'haisya_add',
     component: () => import('../components/pages/HaisyaInfoAdd.vue'),
