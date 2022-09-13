@@ -30,7 +30,36 @@
       <v-row>
         <v-data-table :headers="shownHeaders" :items="itemsList" v-model="selectItemList" dense multi-sort fixed-header hide-default-footer show-select height=200>
           <template #[`item.productionYMD`]="{ item }">
+
+
+
+
+            <v-dialog ref="dialog_date" v-model="modal_date" :return-value.sync="item.productionYMD" persistent width="30vw">
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field v-model="item.productionYMD" append-icon="mdi-calendar" readonly dense v-bind="attrs" v-on="on" outlined class="py-0 compact-form" style="max-width: 250px; height: 40px;"></v-text-field>
+              </template>
+              <!-- <v-date-picker v-model="item.productionYMD" locale="ja-jp" no-title  :day-format="(d) => new Date(d).getDate()"> -->
+              <v-date-picker locale="ja-jp" no-title  :day-format="(d) => new Date(d).getDate()">
+                <v-spacer></v-spacer>
+                <v-btn text class="subwin_button" color="primary" @click="modal_date = false">Cancel</v-btn>
+                <v-btn text class="subwin_button" color="primary" @click="$refs.dialog_date.save(item.productionYMD)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+
+
+
+
+
+
+<!--
+              <v-date-picker v-model="dates" locale="ja-jp" no-title range :day-format="(d) => new Date(d).getDate()">
+                <v-spacer></v-spacer>
+                <v-btn text class="subwin_button" color="primary" @click="modal_date = false">Cancel</v-btn>
+                <v-btn text class="subwin_button" color="primary" @click="$refs.dialog_date.save(dates)">OK</v-btn>
+              </v-date-picker>
+
             <v-text-field outlined dense hide-details v-model="item.productionYMD" class="compact-form" background-color="white" /> 
+-->
           </template>
           <template #[`item.productionTime`]="{ item }">
             <v-text-field outlined dense hide-details v-model="item.productionTime" class="compact-form" background-color="white" type="time" /> 
@@ -85,8 +114,13 @@ export default {
     return {
       dialog: false,
       selectItemList: [],
+      // ダイアログ画面のclose用変数
+      modal_date: false,
+      // 出荷日用初期日付(fromのみ)
+      // dates: [new Date().toISOString().substr(0, 10)],
+      // dates: "2022-07-14",
       headers: [
-        { text:"生産完了日", value:"productionYMD",  width:120, shown:true, },
+        { text:"生産完了日", value:"productionYMD",  width:180, shown:true, },
         { text:"時間",       value:"productionTime", width:120, shown:true, },
         { text:"生産場所",   value:"productPlace",   width:150,  shown:true, },
         { text:"倉庫コード", value:"sokoCd",         width:100, shown:true, },
@@ -172,11 +206,21 @@ export default {
       }
       this.itemsScoreList[0].addCnt = totalAddCnt;
     },
+    // datepickerクリア処理
+    clear: function () {
+      // this.dates = [new Date().toISOString().substr(0, 10)];
+      // this.dates = "2022-07-14";
+    },
 
   },
   computed: {
     shownHeaders() {
       return this.headers.filter(h => h.shown);
+    },
+    // datepickerのfrom-to日付ソートとYYYY-MM-DD形式→YYYY/MM/DD形式への変換
+    dateRangeText() {
+//      return this.dates.slice().sort().join(' ～ ').replaceAll('-', '/');
+      return this.dates.replaceAll('-', '/');
     },
   },
   watch: {
