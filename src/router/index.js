@@ -55,9 +55,6 @@ const routes = [
     name: 'haisya_add',
     component: () => import('../components/pages/HaisyaInfoAdd.vue'),
   },
-  // {
-  //   path: '/test', name: 'test', component: () => import('../components/pages/TsujiTest.vue')
-  // },
   {
     path: '/2-13s',
     name: '2-13s',

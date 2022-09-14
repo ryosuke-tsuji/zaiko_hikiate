@@ -221,7 +221,6 @@
 
 <script>
 import CarNoSearch from './dialogs/CarNoSearchDialog.vue'
-// import DTest from './dialogs/DlgText.vue'
 export default {
   data() {
     return {
@@ -722,7 +721,6 @@ export default {
   },
   components: {
     CarNoSearch,
-    // DTest,
   },
 }
 </script>

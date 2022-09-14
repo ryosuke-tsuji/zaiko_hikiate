@@ -110,6 +110,8 @@ export default {
           return '入荷実績明細廃棄';
         case '/haisya_add':
           return '配車情報登録';
+        case '/keppin_add':
+          return '欠品分入荷予定\u3000登録';
         default:
           return ' ';
       }

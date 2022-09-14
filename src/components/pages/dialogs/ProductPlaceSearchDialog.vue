@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-text-field outlined dense clearable hint="" hide-details="auto" style="max-width: 130px" append-icon="mdi-magnify" @click:append="dialog=true" v-model="place"></v-text-field>
+    <v-text-field outlined dense clearable hint="" hide-details="auto" :style="fStyle" append-icon="mdi-magnify" @click:append="dialog=true" v-model="place"></v-text-field>
 
     <v-dialog v-model="dialog" width="600" persistent>
       <v-card class="px-5">
@@ -70,6 +70,7 @@
 export default {
   props: {
     value: String,
+    fStyle: String,
   },
   data() {
     return {
@@ -127,6 +128,7 @@ export default {
   },
   mounted: function() {
     this.place = this.value;
+    this.selectItem = [];
   },
 }
 </script>

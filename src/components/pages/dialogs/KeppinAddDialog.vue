@@ -30,10 +30,6 @@
       <v-row>
         <v-data-table :headers="shownHeaders" :items="itemsList" v-model="selectItemList" dense multi-sort fixed-header hide-default-footer show-select height=200>
           <template #[`item.productionYMD`]="{ item }">
-
-
-
-
             <v-dialog ref="dialog_date" v-model="modal_date" :return-value.sync="item.productionYMD" persistent width="30vw">
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="item.productionYMD" append-icon="mdi-calendar" readonly dense v-bind="attrs" v-on="on" outlined class="py-0 compact-form" style="max-width: 250px; height: 40px;"></v-text-field>
@@ -62,28 +58,43 @@
 -->
           </template>
           <template #[`item.productionTime`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.productionTime" class="compact-form" background-color="white" type="time" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.productionTime" class="compact-form" background-color="white" type="time" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.productionTime" class="compact-form" background-color="white" type="time" readonly /> 
           </template>
           <template #[`item.productPlace`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.productPlace" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.productPlace" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.productPlace" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.sokoCd`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.sokoCd" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.sokoCd" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.sokoCd" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.iriCnt`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.iriCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.iriCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.iriCnt" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.uchiCnt`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.uchiCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.uchiCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.uchiCnt" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.hakoCnt`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.hakoCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.hakoCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.hakoCnt" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.totalCnt`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.totalCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.totalCnt" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.totalCnt" class="compact-form" background-color="white" readonly /> 
           </template>
           <template #[`item.totalCntUnit`]="{ item }">
-            <v-text-field outlined dense hide-details v-model="item.totalCntUnit" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='0'" outlined dense hide-details v-model="item.totalCntUnit" class="compact-form" background-color="white" /> 
+            <v-text-field v-if="item.statusCd=='1'" outlined dense hide-details v-model="item.totalCntUnit" class="compact-form" background-color="white" readonly /> 
+          </template>
+          <template #[`item.statusCd`]="{ item }">
+            <div v-if="item.statusCd=='0'">未登録</div>
+            <div v-if="item.statusCd=='1'">登録済</div>
+          </template>
+          <template #[`item.delRow`]="{ item }">
+            <div class="align-middle"><v-btn class="secondary" depressed dense @click="delRow(item.id)"><span>行削除</span></v-btn></div>
           </template>
 
         </v-data-table>
@@ -93,10 +104,7 @@
         <v-col class="d-flex justify-start mr-10">
           <v-btn class="mr-10 mb-3" depressed outlined large @click="cancelModal"><span>戻る</span></v-btn>
         </v-col>
-
-        <v-col class="d-flex justify-center">
-        </v-col>
-
+        <v-spacer/>
         <v-col class="d-flex justify-end ml-10">
           <v-btn class="ml-10 mb-3 primary" depressed large @click="closeModal"><span>決定</span></v-btn>
         </v-col>
@@ -129,8 +137,9 @@ export default {
         { text:"箱数",       value:"hakoCnt",        width:60,  shown:true, },
         { text:"総数",       value:"totalCnt",       width:120, shown:true, },
         { text:"単位",       value:"totalCntUnit",   width:80,  shown:true,},
-        { text:"ステータス", value:"status",         width:140, shown:true, },
-        { text:"",           value:"id",             width:30,  shown:true,},
+        { text:"ステータス", value:"statusCd",       width:100, shown:true, },
+        { text:"削除",       value:"delRow",         width:90, shown:true, },
+        { text:"",           value:"id",             width:30,  shown:false,},
       ],
       headersScoreList: [
         { text:"不足数", value:"fusokuCnt", width:90, shown:true, },
@@ -148,7 +157,8 @@ export default {
           hakoCnt:10,
           totalCnt:6400,
           totalCntUnit:"S",
-          status:"未登録",
+          statusCd:"0",
+          delRow:null,
         },
         {
           id:2,
@@ -161,7 +171,8 @@ export default {
           hakoCnt:10,
           totalCnt:6400,
           totalCntUnit:"S",
-          status:"未登録",
+          statusCd:"1",
+          delRow:null,
         },
       ],
       itemsScoreList: [
@@ -172,6 +183,11 @@ export default {
   methods: {
     // 行追加ボタン
     rowAdd() {
+      if (this.itemsList.length == 0) {
+        // 強制入力
+        this.itemsList.splice(1, 0, this.makeNewRecord(1));
+        return;
+      }
       for (const selectInfo of this.selectItemList.reverse()) {
         var idx = 1;
         var target = -1;
@@ -184,7 +200,25 @@ export default {
           idx++;
         }
         if (target != -1) {
-          this.itemsList.splice(target, 0, {id:selectInfo.id+1,productionYMD:null,productionTime:null,productPlace:null,sokoCd:null,iriCnt:null,uchiCnt:null,hakoCnt:null,totalCnt:null,totalCntUnit:null,status:"未登録"});
+          this.itemsList.splice(target, 0, this.makeNewRecord(selectInfo.id+1));
+        }
+      }
+      this.selectItemList = [];
+    },
+    // 行挿入用の初期データ
+    makeNewRecord(newId) {
+      return ({id:newId,productionYMD:null,productionTime:null,productPlace:null,sokoCd:null,iriCnt:null,uchiCnt:null,hakoCnt:0,totalCnt:0,totalCntUnit:null,statusCd:"0"});
+    },
+    // 行削除ボタン
+    delRow(delId) {
+      var result = confirm("行を削除します。よろしいですか？");
+      if (result) {
+        for (var idx = 0; idx < this.itemsList.length; idx++) {
+          if (delId == this.itemsList[idx].id) {
+            this.itemsList.splice(idx, 1);
+            alert("削除しました。");
+            return;
+          }
         }
       }
     },
@@ -262,8 +296,6 @@ export default {
 }
 .v-subheader {
   height: 40px;
-  min-width: 90px;
-  max-width:90px;
   width:90px;
   background-color: #cfd8dc;
   font-weight: bold;
@@ -272,8 +304,8 @@ export default {
 }
 
 .compact-form {
-  transform: scale(0.75);
-/*  transform-origin: right;*/
+  transform: scale(0.875);
+  transform-origin: left;
 }
 
 
