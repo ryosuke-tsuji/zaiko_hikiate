@@ -13,7 +13,7 @@
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="4">
                       <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
-                      <div>2022/07/14</div>
+                      <div>2022/07/15</div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
                       <v-subheader class="mr-2">引当状況</v-subheader>

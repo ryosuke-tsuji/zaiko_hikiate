@@ -42,7 +42,7 @@
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="" style="max-width: 70px"></v-text-field>
+                      <v-select :items="kanriBukaList" dense outlined multiple hide-details="auto" style="max-width: 150px"></v-select>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
@@ -163,7 +163,7 @@ export default {
       modal_date: false,
       // 出荷日用初期日付(fromのみ)
       // dates: [new Date().toISOString().substr(0, 10)],
-      dates: ["2022-07-14"],
+      dates: ["2022-07-15"],
       headers: [
         { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: true, manage: false, },
         { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: true, manage: false , },
@@ -255,6 +255,7 @@ export default {
           eigyoBiko: "",
         },
       ],
+      // リストボックスの初期値
       hikiateStatusModel: "未引当",
       // リストボックスの中身
       inputKbnList: ["新規", "引当取消", "強制完了"],
@@ -262,6 +263,11 @@ export default {
       hikiateStatusList: ["未引当", "一部引当中", "引当済"],
       zaikoUmuList: ["", "在庫有り分", "在庫無し分"],
       hinsyuList: ["一般", "紙器", "特印", "液体", "プラスチック", "建装", "レーベル"],
+      kanriBukaList: [
+        { text:"4 生活産業", value: "4" },
+        { text:"6 西日本",   value: "6" },
+      ],
+
       headersBack: null,
     }
   },
@@ -305,7 +311,7 @@ export default {
     // datepickerクリア処理
     clear: function () {
       // this.dates = [new Date().toISOString().substr(0, 10)];
-      this.dates = ["2022-07-14"];
+      this.dates = ["2022-07-15"];
     },
   },
   computed: {
