@@ -11,25 +11,7 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="4" style="max-width: 70px"></v-text-field>
-                    </v-col>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">&ensp;&nbsp;デポ<span style="color: red">&nbsp;*</span></v-subheader>
-                      <v-text-field background-color="yellow lighten-3" outlined dense clearable hint="" hide-details="auto" value="EWDA" style="max-width: 95px"></v-text-field>
-                    </v-col>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
-                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple style="max-width: 160px"></v-select>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">輸送手段</v-subheader>
-                      <v-select :items="binUnsoCdList" dense outlined hide-details="auto" style="max-width: 90px"></v-select>
-                    </v-col>
-                    <v-col class="pt-0 pr-1 d-flex" cols="6">
+                    <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
                       <v-dialog ref="dialog_date" v-model="modal_date" :return-value.sync="dates" persistent width="30vw">
                         <template v-slot:activator="{ on, attrs }">
@@ -42,8 +24,26 @@
                         </v-date-picker>
                       </v-dialog>
                     </v-col>
+                    <v-col class="pt-0 pr-1 d-flex" cols="3">
+                      <v-subheader class="mr-2">引当状況</v-subheader>
+                      <v-select v-model="hikiateStatusModel" :items="hikiateStatusList" dense outlined hide-details="auto" multiple style="max-width: 150px"></v-select>
+                    </v-col>
                   </v-row>
                   <v-row>
+                    <v-col class="pt-0 pr-1 d-flex" cols="4">
+                      <v-subheader class="mr-2">在庫有無</v-subheader>
+                      <v-select :items="zaikoUmuList" dense outlined hide-details="auto" style="max-width: 150px"></v-select>
+                    </v-col>
+                    <v-col class="pt-0 pr-1 d-flex" cols="3">
+                      <v-subheader class="mr-2">輸送手段</v-subheader>
+                      <v-select :items="binUnsoCdList" dense outlined hide-details="auto" style="max-width: 90px"></v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col class="pt-0 pr-1 d-flex" cols="4">
+                      <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
+                      <v-text-field outlined dense clearable hint="" hide-details="auto" value="" style="max-width: 70px"></v-text-field>
+                    </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
                       <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban1" style="max-width: 70px"></v-text-field>
@@ -51,12 +51,8 @@
                       <div style="width:15px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">引当状況</v-subheader>
-                      <v-select :items="hikiateStatusList" dense outlined hide-details="auto" multiple style="max-width: 150px"></v-select>
-                    </v-col>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
-                      <v-subheader class="mr-2">在庫有無</v-subheader>
-                      <v-select :items="zaikoUmuList" dense outlined hide-details="auto" style="max-width: 150px"></v-select>
+                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
+                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple style="max-width: 160px"></v-select>
                     </v-col>
                     <v-spacer></v-spacer>
 
@@ -167,7 +163,7 @@ export default {
       modal_date: false,
       // 出荷日用初期日付(fromのみ)
       // dates: [new Date().toISOString().substr(0, 10)],
-      dates: ["2022-07-14","2022-07-15"],
+      dates: ["2022-07-14"],
       headers: [
         { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: true, manage: false, },
         { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: true, manage: false , },
@@ -259,10 +255,11 @@ export default {
           eigyoBiko: "",
         },
       ],
+      hikiateStatusModel: "未引当",
       // リストボックスの中身
       inputKbnList: ["新規", "引当取消", "強制完了"],
       binUnsoCdList: ["", "車建", "個配"],
-      hikiateStatusList: ["未引当分", "一部引当中", "引当済"],
+      hikiateStatusList: ["未引当", "一部引当中", "引当済"],
       zaikoUmuList: ["", "在庫有り分", "在庫無し分"],
       hinsyuList: ["一般", "紙器", "特印", "液体", "プラスチック", "建装", "レーベル"],
       headersBack: null,
@@ -308,7 +305,7 @@ export default {
     // datepickerクリア処理
     clear: function () {
       // this.dates = [new Date().toISOString().substr(0, 10)];
-      this.dates = ["2022-07-14","2022-07-15"];
+      this.dates = ["2022-07-14"];
     },
   },
   computed: {

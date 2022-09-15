@@ -11,40 +11,36 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                   <v-row>
-                    <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">管理部署</v-subheader>
-                      <div>生活産業</div>
+                    <v-col class="pt-0 pr-1 d-flex align-center" cols="4">
+                      <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
+                      <div>2022/07/14</div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">&ensp;&ensp;デポ</v-subheader>
-                      <div>EW0A 幸手</div>
+                      <v-subheader class="mr-2">引当状況</v-subheader>
+                      <div>未引当</div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col class="pt-0 pr-1 d-flex align-center" cols="4">
+                      <v-subheader class="mr-2">在庫有無</v-subheader>
+                      <div></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
+                      <v-subheader class="mr-2">輸送手段</v-subheader>
                       <div></div>
                     </v-col>
                   </v-row>
                   <v-row>
-                    <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">輸送手段</v-subheader>
-                      <div>車建</div>
+                    <v-col class="pt-0 pr-1 d-flex align-center" cols="4">
+                      <v-subheader class="mr-2">管理部署</v-subheader>
+                      <div></div>
                     </v-col>
-                    <v-col class="pt-0 pr-1 d-flex align-center" cols="6">
-                      <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
-                      <div>2022/07/15 ～ 2022/07/15</div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
                       <div></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">引当状況</v-subheader>
-                      <div>未引当分</div>
-                    </v-col>
-                    <v-col class="pt-0 pr-1 d-flex align-center" cols="3">
-                      <v-subheader class="mr-2">在庫有無</v-subheader>
+                      <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
                       <div></div>
                     </v-col>
                   </v-row>

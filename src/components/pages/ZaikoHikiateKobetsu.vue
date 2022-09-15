@@ -20,11 +20,13 @@
               </v-col>
             </v-row>
             <v-row class="pb-0">
-              <v-col cols="5">
+              <v-col cols="4">
                 <v-data-table :headers="shownHeadersShijiL" :items="itemsShijiL" dense fixed-header hide-default-footer height="auto" width="auto">
                 </v-data-table>
               </v-col>
-              <v-col></v-col>
+              <v-col cols="3">
+                <v-data-table :headers="headersCaution" :items="itemsCaution" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="caution" />
+              </v-col>
               <v-col cols="5" class="d-flex justify-end">
                 <v-data-table :headers="shownHeadersSum" :items="itemsSum" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="summarys">
                   <template #[`item.shijiCnt`]="{ item }">
@@ -220,6 +222,9 @@ export default {
       headersShijiL: [
         { displayOrder: 1, text: '営業備考',   value: 'eigyoBiko', width: 150,  shown: true },
       ],
+      headersCaution: [
+        { displayOrder: 1, text: '注意事項',   value: 'caution', width: 300,  shown: true },
+      ],
       headersSum: [
         { displayOrder: 1,  text: '指示数', value: 'shijiCnt',   width: 100,  shown: true, },
         { displayOrder: 2,  text: '引当数', value: 'hikiateCnt', width: 100,  shown: true, },
@@ -303,6 +308,13 @@ export default {
         [{ eigyoBiko: "", }],
         [{ eigyoBiko: "", }],
         [{ eigyoBiko: "", }],
+      ],
+      itemsCaution: [],
+      itemsCautionList: [
+        [{ caution:"数量厳守", }],
+        [{ caution:"数量厳守", }],
+        [{ caution:"数量厳守", }],
+        [{ caution:"数量厳守", }],
       ],
       itemsSum: [],
       itemsSumList: [
@@ -513,6 +525,7 @@ export default {
   mounted: function() {
     this.itemsShijiH = this.itemsShijiHList[parseInt(this._props.id) - 1];
     this.itemsShijiL = this.itemsShijiLList[parseInt(this._props.id) - 1];
+    this.itemsCaution = this.itemsCautionList[parseInt(this._props.id) - 1];
     this.itemsSum = this.itemsSumList[parseInt(this._props.id) - 1];
     this.itemsKobetsu = this.itemsKobetsuList[parseInt(this._props.id) - 1];
   },
@@ -646,6 +659,15 @@ export default {
   font-weight: bold;
   border-radius: 3px;
   white-space: nowrap;
+}
+
+/* 注意事項 */
+#caution.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > th {
+  font-size:15px  !important;
+  background-color: #F1B386 !important;
+}
+#caution.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
+  background-color: #F1B386 !important;
 }
 
 /* サマリ表示専用 */
