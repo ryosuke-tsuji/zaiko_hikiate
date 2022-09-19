@@ -13,52 +13,153 @@
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2">&ensp;出荷日</v-subheader>
-                      <v-dialog ref="dialog_date" v-model="modal_date" :return-value.sync="dates" persistent width="30vw">
+                      <v-dialog
+                        ref="dialog_date"
+                        v-model="modal_date"
+                        :return-value.sync="screenModel.sykkYmd"
+                        persistent
+                        width="30vw"
+                      >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-text-field v-model="dateRangeText" append-icon="mdi-calendar" readonly dense v-bind="attrs" v-on="on" outlined class="py-0" style="max-width: 250px; height: 40px;"></v-text-field>
+                          <v-text-field
+                            v-model="dateRangeText"
+                            append-icon="mdi-calendar"
+                            readonly
+                            dense
+                            v-bind="attrs"
+                            v-on="on"
+                            outlined
+                            class="py-0"
+                            style="max-width: 250px; height: 40px"
+                          ></v-text-field>
                         </template>
-                        <v-date-picker v-model="dates" locale="ja-jp" no-title range :day-format="(d) => new Date(d).getDate()">
+                        <v-date-picker
+                          v-model="screenModel.sykkYmd"
+                          locale="ja-jp"
+                          no-title
+                          range
+                          :day-format="(d) => new Date(d).getDate()"
+                        >
                           <v-spacer></v-spacer>
-                          <v-btn text class="subwin_button" color="primary" @click="modal_date = false">Cancel</v-btn>
-                          <v-btn text class="subwin_button" color="primary" @click="$refs.dialog_date.save(dates)">OK</v-btn>
+                          <v-btn
+                            text
+                            class="subwin_button"
+                            color="primary"
+                            @click="modal_date = false"
+                            >Cancel</v-btn
+                          >
+                          <v-btn
+                            text
+                            class="subwin_button"
+                            color="primary"
+                            @click="$refs.dialog_date.save(screenModel.sykkYmd)"
+                            >OK</v-btn
+                          >
                         </v-date-picker>
                       </v-dialog>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">引当状況</v-subheader>
-                      <v-select v-model="hikiateStatusModel" :items="hikiateStatusList" dense outlined hide-details="auto" multiple style="max-width: 150px"></v-select>
+                      <v-select
+                        v-model="hikiateStatusModel"
+                        :items="hikiateStatusList"
+                        dense
+                        outlined
+                        hide-details="auto"
+                        multiple
+                        style="max-width: 150px"
+                      ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2">在庫有無</v-subheader>
-                      <v-select :items="zaikoUmuList" dense outlined hide-details="auto" style="max-width: 150px"></v-select>
+                      <v-select
+                        :items="zaikoUmuList"
+                        dense
+                        outlined
+                        hide-details="auto"
+                        style="max-width: 150px"
+                      ></v-select>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">輸送手段</v-subheader>
-                      <v-select :items="binUnsoCdList" dense outlined hide-details="auto" style="max-width: 90px"></v-select>
+                      <v-select
+                        :items="binUnsoCdList"
+                        dense
+                        outlined
+                        hide-details="auto"
+                        style="max-width: 90px"
+                      ></v-select>
                     </v-col>
                   </v-row>
                   <v-row>
                     <v-col class="pt-0 pr-1 d-flex" cols="4">
-                      <v-subheader class="mr-2"><span style="text-align:center">管理部署</span></v-subheader>
-                      <v-select :items="kanriBukaList" dense outlined multiple hide-details="auto" style="max-width: 150px"></v-select>
+                      <v-subheader class="mr-2"
+                        ><span style="text-align: center"
+                          >管理部署</span
+                        ></v-subheader
+                      >
+                      <v-select
+                        :items="kanriBukaList"
+                        dense
+                        outlined
+                        multiple
+                        hide-details="auto"
+                        style="max-width: 150px"
+                      ></v-select>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban1" style="max-width: 70px"></v-text-field>
-                      <v-text-field outlined dense clearable hint="" hide-details="auto" class="chuban2" style="max-width: 200px"></v-text-field>
-                      <div style="width:15px"></div>
+                      <v-text-field
+                        outlined
+                        dense
+                        clearable
+                        hint=""
+                        hide-details="auto"
+                        class="chuban1"
+                        style="max-width: 70px"
+                      ></v-text-field>
+                      <v-text-field
+                        outlined
+                        dense
+                        clearable
+                        hint=""
+                        hide-details="auto"
+                        class="chuban2"
+                        style="max-width: 200px"
+                      ></v-text-field>
+                      <div style="width: 15px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
-                      <v-select :items="hinsyuList" dense outlined hide-details="auto" multiple style="max-width: 160px"></v-select>
+                      <v-select
+                        :items="hinsyuList"
+                        dense
+                        outlined
+                        hide-details="auto"
+                        multiple
+                        style="max-width: 160px"
+                      ></v-select>
                     </v-col>
                     <v-spacer></v-spacer>
 
                     <v-col class="d-flex justify-end mr-5">
-                      <v-btn class="mr-2 mb-3" depressed outlined large @click="clearList">クリア</v-btn>
-                      <v-btn class="primary mb-3" depressed large @click="select"><span>検索</span></v-btn>
+                      <v-btn
+                        class="mr-2 mb-3"
+                        depressed
+                        outlined
+                        large
+                        @click="clearList"
+                        >クリア</v-btn
+                      >
+                      <v-btn
+                        class="primary mb-3"
+                        depressed
+                        large
+                        @click="select"
+                        ><span>検索</span></v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-expansion-panel-content>
@@ -79,53 +180,99 @@
             </v-card-title>
           </v-card>
           <v-card>
-            <v-data-table :headers="shownHeaders" :items="itemList" item-key="ID" dense multi-sort fixed-header show-select no-data-text="検索してください。" height=400>
-              <template #[`item.jun`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.jun" class="junArea textRight compact-form" background-color="white" /> 
+            <v-data-table
+              :headers="shownHeaders"
+              :items="screenModel.searchedRow"
+              item-key="ID"
+              dense
+              multi-sort
+              fixed-header
+              show-select
+              no-data-text="検索してください。"
+              height="400"
+            >
+              <template #[`item.jn`]="{ item }">
+                <v-text-field
+                  outlined
+                  dense
+                  hide-details
+                  v-model="item.jn"
+                  class="junArea textRight compact-form"
+                  background-color="white"
+                />
               </template>
-              <template #[`item.weight`]="{ item }">
-                <div style="text-align: right;">{{ (item.weight == null ? "" : item.weight.toLocaleString()) }}{{ item.weightUnit }}</div>
+              <template #[`item.jyry`]="{ item }">
+                <div style="text-align: right">
+                  {{ item.jyry == null ? '' : item.jyry.toLocaleString()
+                  }}kg
+                </div>
               </template>
-              <template #[`item.shijiCnt`]="{ item }">
-                <div style="text-align: right;">{{ (item.shijiCnt == null ? "" : item.shijiCnt.toLocaleString()) }}{{ item.shijiCntUnit }}</div>
+              <template #[`item.sjCnt`]="{ item }">
+                <div style="text-align: right">
+                  {{
+                    item.sjCnt == null ? '' : item.sjCnt.toLocaleString()
+                  }}{{ item.shijiCntUnit }}
+                </div>
               </template>
 
-              <template #[`item.address`]="{ item }">
+              <template #[`item.addr`]="{ item }">
                 <v-tooltip top>
-                  <template v-slot:activator="{on}">
-                    <span v-on="on">{{item.address}}</span>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.addr }}</span>
                   </template>
-                  <span>{{item.address}}</span>
+                  <span>{{ item.addr }}</span>
                 </v-tooltip>
               </template>
 
-              <template #[`item.productName`]="{ item }">
+              <template #[`item.hnNm`]="{ item }">
                 <v-tooltip top>
-                  <template v-slot:activator="{on}">
-                    <span v-on="on">{{item.productName}}</span>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.hnNm }}</span>
                   </template>
-                  <span>{{item.productName}}</span>
+                  <span>{{ item.hnNm }}</span>
                 </v-tooltip>
               </template>
-
             </v-data-table>
-            <div style="height:40px"></div>
+            <div style="height: 40px"></div>
           </v-card>
         </v-col>
       </v-row>
       <v-row class="hoverBtn">
         <v-col class="d-flex justify-start mr-10">
-          <v-btn class="mr-10 mb-3" depressed outlined large href="zaiko_hikiate"><span>戻る</span></v-btn>
+          <v-btn
+            class="mr-10 mb-3"
+            depressed
+            outlined
+            large
+            href="zaiko_hikiate"
+            ><span>戻る</span></v-btn
+          >
         </v-col>
 
         <v-col class="d-flex justify-center">
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate"><span>一括引当</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate_kobetsu/1"><span>個別引当</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large @click="hikiateCancel"><span>引当取消</span></v-btn>
+          <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate"
+            ><span>一括引当</span></v-btn
+          >
+          <v-btn
+            class="mx-5 mb-3 secondary"
+            large
+            href="zaiko_hikiate_kobetsu/1"
+            ><span>個別引当</span></v-btn
+          >
+          <v-btn class="mx-5 mb-3 secondary" large @click="hikiateCancel"
+            ><span>引当取消</span></v-btn
+          >
         </v-col>
 
         <v-col class="d-flex justify-end ml-10">
-          <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
+          <v-btn
+            class="ml-10 mb-3"
+            depressed
+            outlined
+            large
+            @click.stop="setting"
+            ><span>設定</span></v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -137,23 +284,36 @@
       <v-divider></v-divider>
       <table>
         <draggable v-model="headers" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in shownHeadersDraggable" :key="header.displayOrder">
-            <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
-            <td>{{header.text}}</td>
-            <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
-            <td><img src="@/assets/menu.png" width=20></td>
+          <tr
+            v-for="header in shownHeadersDraggable"
+            :key="header.displayOrder"
+          >
+            <td class="text-center" scope="row" width="40">
+              <input type="checkbox" v-model="header.shown" />
+            </td>
+            <td>{{ header.text }}</td>
+            <td>
+              <input
+                type="number"
+                min="1"
+                class="text-end"
+                v-model="header.width"
+                style="width: 50px; text-align: right"
+              />
+            </td>
+            <td><img src="@/assets/menu.png" width="20" /></td>
           </tr>
         </draggable>
       </table>
       <v-btn @click="cancel"><span>キャンセル</span></v-btn>
       <v-btn @click="save"><span>保存</span></v-btn>
     </v-navigation-drawer>
-
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable"
+import draggable from 'vuedraggable';
+import * as axios from 'axios';
 export default {
   data() {
     return {
@@ -163,122 +323,184 @@ export default {
       modal_date: false,
       // 出荷日用初期日付(fromのみ)
       // dates: [new Date().toISOString().substr(0, 10)],
-      dates: ["2022-07-15"],
+      dates: ['2022-07-15'],
+
+      // 画面モデル
+      screenModel: {
+        // 検索条件
+        sykkYmd: ['2022-07-15'],
+        hkatJyky: [],
+        zikUm: null,
+        ysuSydn: null,
+        chuNoH: null,
+        chuNoL: null,
+        hnsy: null,
+
+        // 検索結果一覧
+        searchedRow: [],
+      },
+
       headers: [
-        { displayOrder: 2,  text: '順',       value: 'jun',           width: 65,  shown: true, manage: false, },
-        { displayOrder: 3,  text: '出荷日',   value: 'shippingDate',  width: 90,  shown: true, manage: false , },
-        { displayOrder: 4,  text: '到着日時', value: 'arrivalTime',   width: 120, shown: true, manage: false , },
-        { displayOrder: 5,  text: '住所',     value: 'address',       width: 150, shown: true, manage: false , },
-        { displayOrder: 6,  text: '届先名',   value: 'destName',      width: 120, shown: true, manage: false, },
-        { displayOrder: 7,  text: '注番',     value: 'orderNo',       width: 130, shown: true, manage: false, },
-        { displayOrder: 8,  text: '得意先',   value: 'customerName',  width: 150, shown: true, manage: false, },
-        { displayOrder: 9,  text: '品名',     value: 'productName',   width: 180, shown: true, manage: false, },
-        { displayOrder: 10, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: true, manage: false, },
-        { displayOrder: 11, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: true, manage: false, },
-        { displayOrder: 12, text: '重量',     value: 'weight',        width: 100, shown: true, manage: false, },
-        { displayOrder: 13, text: '指示数',   value: 'shijiCnt',      width: 100, shown: true, manage: false, },
-        { displayOrder: 14, text: '営業備考', value: 'eigyoBiko',     width: 120, shown: true, manage: false, },
-        { displayOrder: 1,  text: '',         value: 'ID',            width: 65,  shown: false, manage: true, sortable: false, },
+        {
+          displayOrder: 2,
+          text: '順',
+          value: 'jn',
+          width: 65,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 3,
+          text: '出荷日',
+          value: 'shkkYmd',
+          width: 90,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 4,
+          text: '到着日時',
+          value: 'tutykDt',
+          width: 120,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 5,
+          text: '住所',
+          value: 'addr',
+          width: 150,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 6,
+          text: '届先名',
+          value: 'tdkskNm',
+          width: 120,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 7,
+          text: '注番',
+          value: 'chuNo',
+          width: 130,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 8,
+          text: '得意先',
+          value: 'tkisk',
+          width: 150,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 9,
+          text: '品名',
+          value: 'hnNm',
+          width: 180,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 10,
+          text: '内訳№',
+          value: 'ucwkNo',
+          width: 90,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 11,
+          text: '内訳名',
+          value: 'ucwkNm',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 12,
+          text: '重量',
+          value: 'jyry',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 13,
+          text: '指示数',
+          value: 'sjCnt',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 14,
+          text: '営業備考',
+          value: 'aigyBku',
+          width: 120,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 1,
+          text: '',
+          value: 'ID',
+          width: 65,
+          shown: false,
+          manage: true,
+          sortable: false,
+        },
       ],
       itemList: [],
-      resultList: [
-        {
-          ID: "1",
-          jun: "",
-          shippingDate: "07/15",
-          arrivalTime: "07/15 08:00 - 12:00",
-          address: "東京都墨田区文花２－１－３",
-          destName: "東京工場",
-          orderNo: "4	QDA9Q2",
-          customerName: "花王",
-          productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
-          uchiwakeNo: "－",
-          uchiwakeName: "",
-          weight: 1800,
-          weightUnit: "kg",
-          shijiCnt: 42000,
-          shijiCntUnit: " S",
-          eigyoBiko: "",
-        },
-        {
-          ID: "2",
-          jun: "",
-          shippingDate: "07/15",
-          arrivalTime: "07/15",
-          address: "東京都江戸川区小松川４－９２",
-          destName: "㈲ヨコヤマ",
-          orderNo: "4	8A61Q2",
-          customerName: "コカ・コーラ",
-          productName: "７ミリヨウチューブ",
-          uchiwakeNo: "01",
-          uchiwakeName: "本体",
-          weight: 300,
-          weightUnit: "kg",
-          shijiCnt: 64000,
-          shijiCntUnit: " S",
-          eigyoBiko: "",
-        },
-        {
-          ID: "3",
-          jun: "",
-          shippingDate: "07/15",
-          arrivalTime: "07/15",
-          address: "東京都江戸川区小松川４－９２",
-          destName: "㈲ヨコヤマ",
-          orderNo: "4	8O45S2",
-          customerName: "コカ・コーラ",
-          productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
-          uchiwakeNo: "01",
-          uchiwakeName: "本体",
-          weight: 500,
-          weightUnit: "kg",
-          shijiCnt: 52000,
-          shijiCntUnit: " S",
-          eigyoBiko: "",
-        },
-        {
-          ID: "4",
-          jun: "",
-          shippingDate: "07/15",
-          arrivalTime: "07/15",
-          address: "埼玉県志木市中宗岡３－２５－１４",
-          destName: "㈲双葉商事",
-          orderNo: "4	QBA1R2",
-          customerName: "丸美屋食品",
-          productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
-          uchiwakeNo: "01",
-          uchiwakeName: "本体",
-          weight: 200,
-          weightUnit: "kg",
-          shijiCnt: 6048,
-          shijiCntUnit: " S",
-          eigyoBiko: "",
-        },
-      ],
       // リストボックスの初期値
-      hikiateStatusModel: "未引当",
+      hikiateStatusModel: '未引当',
       // リストボックスの中身
-      inputKbnList: ["新規", "引当取消", "強制完了"],
-      binUnsoCdList: ["", "車建", "個配"],
-      hikiateStatusList: ["未引当", "一部引当中", "引当済"],
-      zaikoUmuList: ["", "在庫有り分", "在庫無し分"],
-      hinsyuList: ["一般", "紙器", "特印", "液体", "プラスチック", "建装", "レーベル"],
+      inputKbnList: ['新規', '引当取消', '強制完了'],
+      binUnsoCdList: ['', '車建', '個配'],
+      hikiateStatusList: ['未引当', '一部引当中', '引当済'],
+      zaikoUmuList: ['', '在庫有り分', '在庫無し分'],
+      hinsyuList: [
+        '一般',
+        '紙器',
+        '特印',
+        '液体',
+        'プラスチック',
+        '建装',
+        'レーベル',
+      ],
       kanriBukaList: [
-        { text:"4 生活産業", value: "4" },
-        { text:"6 西日本",   value: "6" },
+        { text: '4 生活産業', value: '4' },
+        { text: '6 西日本', value: '6' },
       ],
 
       headersBack: null,
-    }
+    };
   },
   methods: {
     // クリアボタン
     clearList() {
       this.itemList = [];
     },
-    select() {
-      this.itemList = this.resultList;
-      this.panelState = false;
+    // select() {
+    //   this.itemList = this.resultList;
+    //   this.panelState = false;
+    // },
+    select: async function () {
+      try {
+        const res = await axios.post(
+          'http://localhost:8081/ssb01001pc/select',
+          this.screenModel
+        );
+        if (res.data) {
+          this.screenModel.searchedRow = res.data.searchedRow;
+        }
+      } catch (error) {
+        alert('検索に失敗しました。');
+      }
     },
     setting() {
       // 現在の状態を退避
@@ -303,38 +525,36 @@ export default {
       // alert("クリックテスト");
     },
     hikiateCancel() {
-      var result = confirm("引当を取り消します。よろしいですか？");
+      var result = confirm('引当を取り消します。よろしいですか？');
       if (result) {
-        alert("取り消しました。");
+        alert('取り消しました。');
       }
     },
     // datepickerクリア処理
     clear: function () {
       // this.dates = [new Date().toISOString().substr(0, 10)];
-      this.dates = ["2022-07-15"];
+//      this.dates = ['2022-07-15'];
+      this.screenModel.sykkYmd = ['2022-07-15'];
     },
   },
   computed: {
     shownHeaders() {
-      return this.headers.filter(h => h.shown);
+      return this.headers.filter((h) => h.shown);
     },
     shownHeadersDraggable() {
-      return this.headers.filter(h => !h.manage)
+      return this.headers.filter((h) => !h.manage);
     },
     // datepickerのfrom-to日付ソートとYYYY-MM-DD形式→YYYY/MM/DD形式への変換
     dateRangeText() {
-      return this.dates.slice().sort().join(' ～ ').replaceAll('-', '/');
+//      return this.dates.slice().sort().join(' ～ ').replaceAll('-', '/');
+      return this.screenModel.sykkYmd.slice().sort().join(' ～ ').replaceAll('-', '/');
     },
   },
   components: {
     draggable,
   },
-
-}
-
+};
 </script>
-
-
 
 <style scoped>
 .backColor {
@@ -378,7 +598,7 @@ export default {
   width: 50px;
 }
 .chuban2 {
-  width: 90px;  
+  width: 90px;
 }
 .junArea {
   width: 50px;
@@ -405,5 +625,4 @@ export default {
   background: #bad6ee;
   border-radius: 10px;
 }
-
 </style>
