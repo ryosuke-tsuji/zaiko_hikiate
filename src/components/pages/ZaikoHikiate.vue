@@ -16,7 +16,7 @@
                       <v-dialog
                         ref="dialog_date"
                         v-model="modal_date"
-                        :return-value.sync="screenModel.sykkYmd"
+                        :return-value.sync="screenModel.sykkYmdList"
                         persistent
                         width="30vw"
                       >
@@ -30,11 +30,11 @@
                             v-on="on"
                             outlined
                             class="py-0"
-                            style="max-width: 250px; height: 40px"
+                            style="max-width: 275px; height: 40px"
                           ></v-text-field>
                         </template>
                         <v-date-picker
-                          v-model="screenModel.sykkYmd"
+                          v-model="screenModel.sykkYmdList"
                           locale="ja-jp"
                           no-title
                           range
@@ -52,7 +52,9 @@
                             text
                             class="subwin_button"
                             color="primary"
-                            @click="$refs.dialog_date.save(screenModel.sykkYmd)"
+                            @click="
+                              $refs.dialog_date.save(screenModel.sykkYmdList)
+                            "
                             >OK</v-btn
                           >
                         </v-date-picker>
@@ -61,7 +63,7 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">引当状況</v-subheader>
                       <v-select
-                        v-model="hikiateStatusModel"
+                        v-model="screenModel.hkatJykyList"
                         :items="hikiateStatusList"
                         dense
                         outlined
@@ -75,6 +77,7 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2">在庫有無</v-subheader>
                       <v-select
+                        v-model="screenModel.zikUm"
                         :items="zaikoUmuList"
                         dense
                         outlined
@@ -85,6 +88,7 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">輸送手段</v-subheader>
                       <v-select
+                        v-model="screenModel.ysuSydn"
                         :items="binUnsoCdList"
                         dense
                         outlined
@@ -101,6 +105,7 @@
                         ></v-subheader
                       >
                       <v-select
+                        v-model="screenModel.knrbmn"
                         :items="kanriBukaList"
                         dense
                         outlined
@@ -112,28 +117,30 @@
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
                       <v-text-field
+                        v-model="screenModel.chuNoH"
                         outlined
                         dense
                         clearable
                         hint=""
                         hide-details="auto"
-                        class="chuban1"
-                        style="max-width: 70px"
+                        maxlength="1"
+                        style="max-width: 60px"
                       ></v-text-field>
                       <v-text-field
+                        v-model="screenModel.chuNoL"
                         outlined
                         dense
                         clearable
                         hint=""
                         hide-details="auto"
-                        class="chuban2"
-                        style="max-width: 200px"
+                        maxlength="5"
+                        style="max-width: 100px"
                       ></v-text-field>
-                      <div style="width: 15px"></div>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
                       <v-subheader class="mr-2">&ensp;&ensp;品種</v-subheader>
                       <v-select
+                        v-model="screenModel.hnsy"
                         :items="hinsyuList"
                         dense
                         outlined
@@ -197,24 +204,30 @@
                   dense
                   hide-details
                   v-model="item.jn"
-                  class="junArea textRight compact-form"
+                  class="compact-form"
                   background-color="white"
                 />
               </template>
               <template #[`item.jyry`]="{ item }">
                 <div style="text-align: right">
-                  {{ item.jyry == null ? '' : item.jyry.toLocaleString()
-                  }}kg
+                  {{ item.jyry == null ? '' : item.jyry.toLocaleString() }} kg
                 </div>
               </template>
               <template #[`item.sjCnt`]="{ item }">
                 <div style="text-align: right">
-                  {{
-                    item.sjCnt == null ? '' : item.sjCnt.toLocaleString()
-                  }}{{ item.shijiCntUnit }}
+                  {{ item.sjCnt == null ? '' : item.sjCnt.toLocaleString()
+                  }}{{ item.sjCntUnit }}
                 </div>
               </template>
 
+              <template #[`item.tutykDt`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.tutykDt }}</span>
+                  </template>
+                  <span>{{ item.tutykDt }}</span>
+                </v-tooltip>
+              </template>
               <template #[`item.addr`]="{ item }">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -223,13 +236,36 @@
                   <span>{{ item.addr }}</span>
                 </v-tooltip>
               </template>
-
+              <template #[`item.tdkskNm`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.tdkskNm }}</span>
+                  </template>
+                  <span>{{ item.tdkskNm }}</span>
+                </v-tooltip>
+              </template>
+              <template #[`item.tkisk`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.tkisk }}</span>
+                  </template>
+                  <span>{{ item.tkisk }}</span>
+                </v-tooltip>
+              </template>
               <template #[`item.hnNm`]="{ item }">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <span v-on="on">{{ item.hnNm }}</span>
                   </template>
                   <span>{{ item.hnNm }}</span>
+                </v-tooltip>
+              </template>
+              <template #[`item.aigyBku`]="{ item }">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <span v-on="on">{{ item.aigyBku }}</span>
+                  </template>
+                  <span>{{ item.aigyBku }}</span>
                 </v-tooltip>
               </template>
             </v-data-table>
@@ -319,22 +355,28 @@ export default {
     return {
       drawer: false,
       panelState: 0,
+      today: new Date(),
       // ダイアログ画面のclose用変数
       modal_date: false,
-      // 出荷日用初期日付(fromのみ)
-      // dates: [new Date().toISOString().substr(0, 10)],
-      dates: ['2022-07-15'],
 
       // 画面モデル
       screenModel: {
         // 検索条件
-        sykkYmd: ['2022-07-15'],
-        hkatJyky: [],
+        // 出荷日
+        sykkYmdList: [],
+        // 引当状況
+        hkatJykyList: [],
+        // 在庫有無
         zikUm: null,
+        // 輸送手段
         ysuSydn: null,
+        // 管理部署
+        knrbmn: [],
+        // 事 注番
         chuNoH: null,
         chuNoL: null,
-        hnsy: null,
+        // 品種
+        hnsy: [],
 
         // 検索結果一覧
         searchedRow: [],
@@ -455,22 +497,30 @@ export default {
           sortable: false,
         },
       ],
-      itemList: [],
-      // リストボックスの初期値
-      hikiateStatusModel: '未引当',
       // リストボックスの中身
-      inputKbnList: ['新規', '引当取消', '強制完了'],
-      binUnsoCdList: ['', '車建', '個配'],
-      hikiateStatusList: ['未引当', '一部引当中', '引当済'],
-      zaikoUmuList: ['', '在庫有り分', '在庫無し分'],
+      binUnsoCdList: [
+        { text: '', value: null },
+        { text: '車建', value: '0' },
+        { text: '個配', value: '1' },
+      ],
+      hikiateStatusList: [
+        { text: '未引当', value: '0' },
+        { text: '一部引当中', value: '1' },
+        { text: '引当済', value: '2' },
+      ],
+      zaikoUmuList: [
+        { text: '', value: null },
+        { text: '在庫有り分', value: '0' },
+        { text: '在庫無し分', value: '1' },
+      ],
       hinsyuList: [
-        '一般',
-        '紙器',
-        '特印',
-        '液体',
-        'プラスチック',
-        '建装',
-        'レーベル',
+        { text: '一般', value: '0' },
+        { text: '紙器', value: '1' },
+        { text: '特印', value: '2' },
+        { text: '液体', value: '3' },
+        { text: 'プラスチック', value: '4' },
+        { text: '建装', value: '5' },
+        { text: 'レーベル', value: '6' },
       ],
       kanriBukaList: [
         { text: '4 生活産業', value: '4' },
@@ -483,10 +533,19 @@ export default {
   methods: {
     // クリアボタン
     clearList() {
-      this.itemList = [];
+      var nextDay = new Date();
+      nextDay.setDate(new Date().getDate() + 1);
+      this.screenModel.searchedRow = [];
+      this.screenModel.sykkYmdList = [nextDay.toISOString().substr(0, 10)];
+      this.screenModel.hkatJykyList = ['0'];
+      this.screenModel.zikUm = null;
+      this.screenModel.ysuSydn = null;
+      this.screenModel.knrbmn = [];
+      this.screenModel.chuNoH = null;
+      this.screenModel.chuNoL = null;
+      this.screenModel.hnsy = [];
     },
     // select() {
-    //   this.itemList = this.resultList;
     //   this.panelState = false;
     // },
     select: async function () {
@@ -497,6 +556,7 @@ export default {
         );
         if (res.data) {
           this.screenModel.searchedRow = res.data.searchedRow;
+          this.panelState = false;
         }
       } catch (error) {
         alert('検索に失敗しました。');
@@ -532,9 +592,7 @@ export default {
     },
     // datepickerクリア処理
     clear: function () {
-      // this.dates = [new Date().toISOString().substr(0, 10)];
-//      this.dates = ['2022-07-15'];
-      this.screenModel.sykkYmd = ['2022-07-15'];
+      this.screenModel.sykkYmdList = ['2022-07-15'];
     },
   },
   computed: {
@@ -546,12 +604,18 @@ export default {
     },
     // datepickerのfrom-to日付ソートとYYYY-MM-DD形式→YYYY/MM/DD形式への変換
     dateRangeText() {
-//      return this.dates.slice().sort().join(' ～ ').replaceAll('-', '/');
-      return this.screenModel.sykkYmd.slice().sort().join(' ～ ').replaceAll('-', '/');
+      return this.screenModel.sykkYmdList
+        .slice()
+        .sort()
+        .join(' ～ ')
+        .replaceAll('-', '/');
     },
   },
   components: {
     draggable,
+  },
+  mounted: function () {
+    this.clearList();
   },
 };
 </script>
@@ -593,15 +657,6 @@ export default {
 
 .textRight input {
   text-align: right;
-}
-.chuban1 {
-  width: 50px;
-}
-.chuban2 {
-  width: 90px;
-}
-.junArea {
-  width: 50px;
 }
 
 .hoverBtn {
