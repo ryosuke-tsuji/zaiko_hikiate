@@ -190,7 +190,6 @@
             <v-data-table
               :headers="shownHeaders"
               :items="screenModel.searchedRow"
-              item-key="ID"
               dense
               multi-sort
               fixed-header
@@ -490,7 +489,7 @@ export default {
         {
           displayOrder: 1,
           text: '',
-          value: 'ID',
+          value: 'id',
           width: 65,
           shown: false,
           manage: true,
