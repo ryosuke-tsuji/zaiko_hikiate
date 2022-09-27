@@ -41,6 +41,12 @@ const routes = [
     component: () => import('../components/pages/ZaikoHikiateKobetsu.vue'),
   },
   {
+    path: '/zaiko_hikiate_kobetsu',
+    name: 'zaiko_hikiate_kobetsu',
+    props: true,
+    component: () => import('../components/pages/ZaikoHikiateKobetsu.vue'),
+  },
+  {
     path: '/zaiko_hikiate_kakutei',
     name: 'zaiko_hikiate_kakutei',
     component: () => import('../components/pages/ZaikoHikiateKakutei.vue'),

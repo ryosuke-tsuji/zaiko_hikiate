@@ -190,6 +190,7 @@
             <v-data-table
               :headers="shownHeaders"
               :items="screenModel.searchedRow"
+              v-model="selectRowList"
               dense
               multi-sort
               fixed-header
@@ -203,8 +204,10 @@
                   dense
                   hide-details
                   v-model="item.jn"
-                  class="compact-form"
+                  class="compact-form textRight"
                   background-color="white"
+                  type="number"
+                  min="0"
                 />
               </template>
               <template #[`item.jyry`]="{ item }">
@@ -212,10 +215,10 @@
                   {{ item.jyry == null ? '' : item.jyry.toLocaleString() }} kg
                 </div>
               </template>
-              <template #[`item.sjCnt`]="{ item }">
+              <template #[`item.sjNum`]="{ item }">
                 <div style="text-align: right">
-                  {{ item.sjCnt == null ? '' : item.sjCnt.toLocaleString()
-                  }}{{ item.sjCntUnit }}
+                  {{ item.sjNum == null ? '' : item.sjNum.toLocaleString()
+                  }}{{ item.sjNumUnit }}
                 </div>
               </template>
 
@@ -288,12 +291,12 @@
           <v-btn class="mx-5 mb-3 secondary" large href="zaiko_hikiate"
             ><span>一括引当</span></v-btn
           >
-          <v-btn
-            class="mx-5 mb-3 secondary"
-            large
-            href="zaiko_hikiate_kobetsu/1"
-            ><span>個別引当</span></v-btn
-          >
+          <KobetsuDlg
+            :kobetsuIdx="this.kobetsuIdx"
+            :selectRowList="this.selectRowList"
+            @result="resDialog"
+            ref="kobetsu"
+          />
           <v-btn class="mx-5 mb-3 secondary" large @click="hikiateCancel"
             ><span>引当取消</span></v-btn
           >
@@ -349,6 +352,7 @@
 <script>
 import draggable from 'vuedraggable';
 import * as axios from 'axios';
+import KobetsuDlg from '@/components/pages/Ssb01002Pc.vue';
 export default {
   data() {
     return {
@@ -357,6 +361,8 @@ export default {
       today: new Date(),
       // ダイアログ画面のclose用変数
       modal_date: false,
+      // 個別画面表示用モデル
+      showKobetsuContent: false,
 
       // 画面モデル
       screenModel: {
@@ -386,7 +392,7 @@ export default {
           displayOrder: 2,
           text: '順',
           value: 'jn',
-          width: 65,
+          width: 90,
           shown: true,
           manage: false,
         },
@@ -473,7 +479,7 @@ export default {
         {
           displayOrder: 13,
           text: '指示数',
-          value: 'sjCnt',
+          value: 'sjNum',
           width: 100,
           shown: true,
           manage: false,
@@ -526,6 +532,9 @@ export default {
         { text: '6 西日本', value: '6' },
       ],
 
+      selectRowList: [],
+      kobetsuIdx: 0,
+      hikiateArray: [],
       headersBack: null,
     };
   },
@@ -544,11 +553,9 @@ export default {
       this.screenModel.chuNoL = null;
       this.screenModel.hnsy = [];
     },
-    // select() {
-    //   this.panelState = false;
-    // },
     select: async function () {
       try {
+        this.selectRowList = [];
         const res = await axios.post(
           'http://localhost:8081/ssb01001pc/select',
           this.screenModel
@@ -583,6 +590,28 @@ export default {
     appendClick() {
       // alert("クリックテスト");
     },
+    kobetsu_hikiate() {
+      this.hikiateArray = [];
+      var currentId = 1;
+      var chuNo = null;
+      for (const rowInfo of this.selectRowList) {
+        this.hikiateArray.push({
+          targetId: currentId++,
+          chuNo: rowInfo.chuNo,
+          proc: false,
+        });
+        chuNo = rowInfo.chuNo;
+      }
+      if (this.hikiateArray.length > 0) {
+        this.$router.push({
+          name: 'zaiko_hikiate_kobetsu',
+          params: {
+            chuNo: chuNo,
+            id: 1,
+          },
+        });
+      }
+    },
     hikiateCancel() {
       var result = confirm('引当を取り消します。よろしいですか？');
       if (result) {
@@ -592,6 +621,23 @@ export default {
     // datepickerクリア処理
     clear: function () {
       this.screenModel.sykkYmdList = ['2022-07-15'];
+    },
+    // 個別画面戻り
+    resDialog(obj) {
+      if (obj.res) {
+        // 決定:1, 強制決定:2, 引当保留:3
+        this.screenModel.searchedRow[this.kobetsuIdx].kobetsuStatus =
+          obj.status;
+        if (this.selectRowList.length > this.kobetsuIdx + 1) {
+          // 次の個別画面へ
+          this.kobetsuIdx++;
+          this.$refs.kobetsu.getData(this.kobetsuIdx);
+        } else {
+          // 確定画面へ
+          this.$refs.kobetsu.dialogClose();
+          this.kobetsuIdx = 0;
+        }
+      }
     },
   },
   computed: {
@@ -612,6 +658,7 @@ export default {
   },
   components: {
     draggable,
+    KobetsuDlg,
   },
   mounted: function () {
     this.clearList();
@@ -667,7 +714,7 @@ export default {
 
 .compact-form {
   transform: scale(0.75);
-  transform-origin: right;
+  transform-origin: left;
 }
 
 /* datepicker ボタン定義 */

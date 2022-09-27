@@ -6,8 +6,11 @@
           <v-card>
             <v-card-title class="pt-0 pb-2 ml-1">
               <span class="titleFont d-flex">輸送指示ヘッダー</span>
-              <span class="leyerTop mr-1" style="width:200px; text-align: right;">
-                {{id}}/4
+              <span
+                class="leyerTop mr-1"
+                style="width: 200px; text-align: right"
+              >
+                {{ id }}/4
               </span>
               <v-spacer></v-spacer>
             </v-card-title>
@@ -15,39 +18,89 @@
           <v-card>
             <v-row class="pb-0">
               <v-col class="pb-0">
-                <v-data-table :headers="shownHeadersShijiH" :items="itemsShijiH" dense fixed-header hide-default-footer height="auto">
+                <v-data-table
+                  :headers="headersShijiH"
+                  :items="screenModel.upperInfo"
+                  dense
+                  fixed-header
+                  hide-default-footer
+                  height="auto"
+                  disable-sort
+                >
                 </v-data-table>
               </v-col>
             </v-row>
             <v-row class="pb-0">
               <v-col cols="4">
-                <v-data-table :headers="shownHeadersShijiL" :items="itemsShijiL" dense fixed-header hide-default-footer height="auto" width="auto">
+                <v-data-table
+                  :headers="headersShijiL"
+                  :items="screenModel.upperInfo"
+                  dense
+                  fixed-header
+                  hide-default-footer
+                  height="auto"
+                  width="auto"
+                  disable-sort
+                >
                 </v-data-table>
               </v-col>
               <v-col cols="3">
-                <v-data-table :headers="headersCaution" :items="itemsCaution" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="caution" />
+                <v-data-table
+                  :headers="headersCaution"
+                  :items="screenModel.upperInfo"
+                  dense
+                  fixed-header
+                  hide-default-footer
+                  disable-sort
+                  height="auto"
+                  width="auto"
+                  id="caution"
+                />
               </v-col>
               <v-col cols="5" class="d-flex justify-end">
-                <v-data-table :headers="shownHeadersSum" :items="itemsSum" dense fixed-header hide-default-footer disable-sort height="auto" width="auto" id="summarys">
-                  <template #[`item.shijiCnt`]="{ item }">
-                    <div style="text-align: right;">{{item.shijiCnt}}</div>
+                <v-data-table
+                  :headers="headersSum"
+                  :items="screenModel.upperInfo"
+                  dense
+                  fixed-header
+                  hide-default-footer
+                  disable-sort
+                  height="auto"
+                  width="auto"
+                  id="summarys"
+                >
+                  <template #[`item.sjNum`]="{ item }">
+                    <div style="text-align: right">
+                      {{
+                        item.sjNum == null ? '' : item.sjNum.toLocaleString()
+                      }}
+                    </div>
                   </template>
-                  <template #[`item.hikiateCnt`]="{ item }">
-                    <div style="text-align: right;">{{item.hikiateCnt}}</div>
+                  <template #[`item.hkatNum`]="{}">
+                    <!-- 出庫箱数から自動で計算 -->
+                    <div style="text-align: right">
+                      {{ hkatSum.toLocaleString() }}
+                    </div>
                   </template>
-                  <template #[`item.kansanCnt`]="{ item }">
-                    <div style="text-align: right;">{{item.kansanCnt}}</div>
+                  <template #[`item.knsnNum`]="{ item }">
+                    <div style="text-align: right">
+                      {{
+                        item.knsnNum == null
+                          ? ''
+                          : item.knsnNum.toLocaleString()
+                      }}
+                    </div>
                   </template>
-                  <template #[`item.fusokuCnt`]="{ item }">
-                    <div v-if="isFusoku(item.fusokuCnt)" class="text-end errorStatus">{{item.fusokuCnt}}</div>
-                    <div v-else style="text-align: right;">{{item.fusokuCnt}}</div>
+                  <template #[`item.fskNum`]="{}">
+                    <div v-if="isFusoku(fskSum)" class="text-end errorStatus">
+                      {{ fskSum.toLocaleString() }}
+                    </div>
+                    <div v-else style="text-align: right">
+                      {{ fskSum.toLocaleString() }}
+                    </div>
                   </template>
                 </v-data-table>
-                <keppin-add-dlg :isYoteiAdd=isYoteiAdd></keppin-add-dlg>
-<!--
-                <v-btn v-if="isYoteiAdd" class="mx-1 secondary" depressed large @click="yoteiAdd"><span>予定</span></v-btn>
-                <v-btn v-else class="mx-1 disable" disabled depressed large><span>予定</span></v-btn>
--->
+                <keppin-add-dlg :isYoteiAdd="isYoteiAdd"></keppin-add-dlg>
               </v-col>
             </v-row>
           </v-card>
@@ -61,11 +114,22 @@
             <v-card-title class="pt-0 pb-2 ml-1">
               <span class="titleFont d-flex">吊札個別出庫数</span>
               <v-spacer></v-spacer>
-              <div class="text-left leyerTop" style="width:400px;">
-                <v-data-table :headers="headersHikiateJun" :items="itemsHikiateJun" dense fixed-header hide-default-header hide-default-footer calculate-widths height="40px">
+              <div class="text-left leyerTop" style="width: 400px">
+                <v-data-table
+                  :headers="headersHikiateJun"
+                  :items="itemsHikiateJun"
+                  dense
+                  fixed-header
+                  hide-default-header
+                  hide-default-footer
+                  calculate-widths
+                  height="40px"
+                >
                   <template v-slot:item="{ item }">
                     <tr>
-                      <td max-width="100" class="hikiateSyoriJun">{{ item.title }}</td>
+                      <td max-width="100" class="hikiateSyoriJun">
+                        {{ item.title }}
+                      </td>
                       <td max-width="300">{{ item.value }}</td>
                     </tr>
                   </template>
@@ -75,56 +139,152 @@
             </v-card-title>
           </v-card>
           <v-card>
-            <v-data-table :headers="shownHeadersKobetsu" :items="itemsKobetsu" dense multi-sort fixed-header height="300px">
-              <template #[`item.suryo`]="{ item }">
-                <div style="text-align: right;">{{ (item.suryo == null ? "" : item.suryo.toLocaleString()) }}{{ item.suryoUnit }}</div>
-              </template>
-              <template #[`item.iriCnt`]="{ item }">
-                <div style="text-align: right;">{{(item.iriCnt == null ? "" : item.iriCnt.toLocaleString())}}</div>
-              </template>
-              <template #[`item.hakosu`]="{ item }">
-                <div style="text-align: right;">{{(item.hakosu == null ? "" : item.hakosu.toLocaleString())}}</div>
-              </template>
-              <template #[`item.syukkohakosu`]="{ item }">
-                <div style="display: flex; align-items: center;">
-                  <v-text-field outlined dense hide-details v-model="item.syukkohakosu" class="syukkoArea textRight compact-form" background-color="white" v-if="item.status != 2" />
-                  <v-spacer></v-spacer>
-                  <v-btn :class='[item.isSetting ? "outlined" : "secondary"]' depressed dense @click="hakoShitei(item.ID)"><span>箱指定</span></v-btn>
+            <v-data-table
+              :headers="shownHeadersKobetsu"
+              :items="screenModel.lowerInfo"
+              dense
+              multi-sort
+              fixed-header
+              height="auto"
+            >
+              <template #[`item.num`]="{ item }">
+                <div style="text-align: right">
+                  {{ item.num == null ? '' : item.num.toLocaleString()
+                  }}{{ item.numUnit }}
                 </div>
               </template>
-              <template #[`item.tsurifuraBiko`]="{ item }">
-                <v-text-field outlined dense hide-details v-model="item.tsurifuraBiko" style="bikoArea" class="compact-form" background-color="white" /> 
+              <template #[`item.iriNum`]="{ item }">
+                <div style="text-align: right">
+                  {{ item.iriNum == null ? '' : item.iriNum.toLocaleString()
+                  }}{{ item.iriNumUnit }}
+                </div>
               </template>
-              <template #[`item.fudagamiNo`]="{ item }">
-                {{ item.fudagamiNo }}
+              <template #[`item.uchNum`]="{ item }">
+                <div style="text-align: right">
+                  {{ item.uchNum == null ? '' : item.uchNum.toLocaleString()
+                  }}{{ item.uchNumUnit }}
+                </div>
+              </template>
+
+              <template #[`item.hkNum`]="{ item }">
+                <div style="text-align: right">
+                  {{ item.hkNum == null ? '' : item.hkNum.toLocaleString()
+                  }}{{ item.hkNumUnit }}
+                </div>
+              </template>
+              <template #[`item.shkkHkNum`]="{ item }">
+                <div style="display: flex; align-items: center">
+                  <v-text-field
+                    outlined
+                    dense
+                    hide-details
+                    v-model="item.shkkHkNum"
+                    class="syukkoArea textRight compact-form"
+                    background-color="white"
+                    v-if="item.status != 2"
+                  />
+                  <v-spacer></v-spacer>
+                  <hakoSelDlg
+                    :isSetting="item.isSetting"
+                    :id="item.id"
+                    @result="resDialog"
+                  />
+                </div>
+              </template>
+              <template #[`item.trfdBik`]="{ item }">
+                <v-text-field
+                  outlined
+                  dense
+                  hide-details
+                  v-model="item.trfdBik"
+                  style="bikoArea"
+                  class="compact-form"
+                  background-color="white"
+                />
+              </template>
+              <template #[`item.fdgmNo`]="{ item }">
+                {{ item.fdgmNo }}
                 <!-- ここの条件をフラグ値にすればアイコン出る。 -->
-                <v-icon v-if="item.status == 1" color="orange darken-3" text class="btn-icon mr-2" style="background-color: transparent !important" >mdi-arrow-u-left-top-bold</v-icon>
-                <v-icon v-if="item.status == 2" color="red darken-3" class="btn-icon mr-2" style="background-color: transparent !important">mdi-alert-circle</v-icon>
+                <v-icon
+                  v-if="item.status == 1"
+                  color="orange darken-3"
+                  text
+                  class="btn-icon mr-2"
+                  style="background-color: transparent !important"
+                  >mdi-arrow-u-left-top-bold</v-icon
+                >
+                <v-icon
+                  v-if="item.status == 2"
+                  color="red darken-3"
+                  class="btn-icon mr-2"
+                  style="background-color: transparent !important"
+                  >mdi-alert-circle</v-icon
+                >
               </template>
             </v-data-table>
-            <div style="height:60px"></div>
+            <div style="height: 60px"></div>
           </v-card>
         </v-col>
       </v-row>
       <v-row class="hoverBtn">
         <v-col class="d-flex justify-start mr-10">
-          <v-btn class="mr-10 mb-3" depressed outlined large href="../zaiko_hikiate"><span>戻る</span></v-btn>
+          <v-btn
+            class="mr-10 mb-3"
+            depressed
+            outlined
+            large
+            href="../zaiko_hikiate"
+            ><span>戻る</span></v-btn
+          >
         </v-col>
 
         <v-col class="d-flex justify-center">
-          <v-btn class="mx-5 mb-3 secondary" large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>引当保留</span></v-btn>
-          <v-btn class="mx-5 mb-3 secondary" large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>強制決定</span></v-btn>
-          <v-btn class="mx-5 mb-3 primary"   large :href="(parseInt(id)==4) ? '../zaiko_hikiate_kakutei': '../zaiko_hikiate_kobetsu/' + (parseInt(id)+1)"><span>決定</span></v-btn>
+          <v-btn
+            class="mx-5 mb-3 secondary"
+            large
+            :href="
+              parseInt(id) == 4
+                ? '../zaiko_hikiate_kakutei'
+                : '../zaiko_hikiate_kobetsu/' + (parseInt(id) + 1)
+            "
+            ><span>引当保留</span></v-btn
+          >
+          <v-btn
+            class="mx-5 mb-3 secondary"
+            large
+            :href="
+              parseInt(id) == 4
+                ? '../zaiko_hikiate_kakutei'
+                : '../zaiko_hikiate_kobetsu/' + (parseInt(id) + 1)
+            "
+            ><span>強制決定</span></v-btn
+          >
+          <v-btn
+            class="mx-5 mb-3 primary"
+            large
+            :href="
+              parseInt(id) == 4
+                ? '../zaiko_hikiate_kakutei'
+                : '../zaiko_hikiate_kobetsu/' + (parseInt(id) + 1)
+            "
+            ><span>決定</span></v-btn
+          >
         </v-col>
         <v-col class="d-flex justify-end ml-10">
-          <v-btn class="ml-10 mb-3" depressed outlined large @click="redist"><span>再引当</span></v-btn>
-          <v-btn class="ml-10 mb-3" depressed outlined large @click.stop="setting"><span>設定</span></v-btn>
+          <v-btn class="ml-10 mb-3" depressed outlined large @click="redist"
+            ><span>再引当</span></v-btn
+          >
+          <v-btn
+            class="ml-10 mb-3"
+            depressed
+            outlined
+            large
+            @click.stop="setting"
+            ><span>設定</span></v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
-<!--
-    <DragSet v-bind:drawerParent="myDrawer" />
--->
 
     <v-navigation-drawer v-model="drawer" absolute clipped right>
       <v-list-item>
@@ -132,442 +292,356 @@
       </v-list-item>
       <v-divider></v-divider>
       <table>
-        <draggable v-model="headersKobetsu" tag="tbody" class="dragArea list-group">
-          <tr v-for="header in shownHeadersKobetsuDraggable" :key="header.displayOrder">
-            <td class="text-center" scope="row" width="40"><input type="checkbox" v-model="header.shown"></td>
-            <td>{{header.text}}</td>
-            <td><input type="number" min="1" class="text-end" v-model="header.width" style="width:50px; text-align:right;"></td>
-            <td><img src="@/assets/menu.png" width=20></td>
+        <draggable
+          v-model="headersKobetsu"
+          tag="tbody"
+          class="dragArea list-group"
+        >
+          <tr
+            v-for="header in shownHeadersKobetsuDraggable"
+            :key="header.displayOrder"
+          >
+            <td class="text-center" scope="row" width="40">
+              <input type="checkbox" v-model="header.shown" />
+            </td>
+            <td>{{ header.text }}</td>
+            <td>
+              <input
+                type="number"
+                min="1"
+                class="text-end"
+                v-model="header.width"
+                style="width: 50px; text-align: right"
+              />
+            </td>
+            <td><img src="@/assets/menu.png" width="20" /></td>
           </tr>
         </draggable>
       </table>
       <v-btn @click="cancel"><span>キャンセル</span></v-btn>
       <v-btn @click="save"><span>保存</span></v-btn>
     </v-navigation-drawer>
-
-    <!-- 箱番号個別引当画面 -->
-    <div id="overlay" v-show="showContent">
-      <div id="content">
-        <v-row>
-          <v-col class="pb-0">
-            <v-card class="pd-10">
-              <v-card-title class="pt-0 pb-2 ml-1">
-                <span class="titleFont d-flex">箱番号個別引当</span>
-                <v-spacer></v-spacer>
-              </v-card-title>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="d-flex py-1" >
-            <v-subheader class="mr-2">指示区分</v-subheader>
-            <div style="display: flex; align-items: center; justify-content: center;">
-              <v-radio-group row>
-                <v-radio dense label="指示型" value="1"></v-radio>
-                <v-radio dense label="実績型" value="2"></v-radio>
-              </v-radio-group>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row align-content="center">
-          <v-col>
-            <v-data-table :headers="shownHeadersBunkatsu" :items="bunkatsuMoto" item-key="id" v-model="selectMoto" dense multi-sort fixed-header hide-default-footer show-select height="360px" no-data-text="">
-              <template #[`item.hakoNo`]="{ item }">
-                <div style="text-align: right;">{{item.hakoNo}}</div>
-              </template>
-              <template #[`item.suryo`]="{ item }">
-                <div style="text-align: right;">{{ (item.suryo == null ? "" : item.suryo.toLocaleString()) }}{{ item.suryoUnit }}</div>
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col class="d-flex justify-start mr-10">
-            <v-btn class="mr-10 mb-3" depressed outlined large @click="cancelModal"><span>戻る</span></v-btn>
-          </v-col>
-
-          <v-col class="d-flex justify-center">
-          </v-col>
-
-          <v-col class="d-flex justify-end ml-10">
-            <v-btn class="ml-10 mb-3 primary" depressed large @click="closeModal"><span>決定</span></v-btn>
-          </v-col>
-        </v-row>
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable"
-// import DragSet from '@/components/common/DragSetting.vue'
-import KeppinAddDlg from '@/components/pages/dialogs/KeppinAddDialog.vue'
+import draggable from 'vuedraggable';
+import KeppinAddDlg from '@/components/pages/dialogs/KeppinAddDialog.vue';
+import hakoSelDlg from '@/components/pages/dialogs/HakoSelectDialog.vue';
+import * as axios from 'axios';
 export default {
-  props: ["id"],
+  props: ['id'],
   data() {
     return {
       drawer: false,
-      showContent: false,
       myDrawer: null,
+      dialog: false,
+
+      // 画面モデル
+      screenModel: {
+        // 上段情報
+        upperInfo: [],
+        // 下段情報
+        lowerInfo: [],
+      },
       headersShijiH: [
-        { displayOrder: 1, text: '届先名',   value: 'destinationName', width: 150,  shown: true },
-        { displayOrder: 2, text: '注番',     value: 'orderNo',       width: 100, shown: true, },
-        { displayOrder: 3, text: '得意先',   value: 'customerName',  width: 150, shown: true, },
-        { displayOrder: 4, text: '品名',     value: 'productName',   width: 180, shown: true, },
-        { displayOrder: 5, text: '内訳№',   value: 'uchiwakeNo',    width: 90,  shown: true, },
-        { displayOrder: 6, text: '内訳名',   value: 'uchiwakeName',  width: 100, shown: true, },
+        {
+          text: '届先名',
+          value: 'tdkskNm',
+          width: 150,
+        },
+        {
+          text: '注番',
+          value: 'chuNo',
+          width: 100,
+        },
+        {
+          text: '得意先',
+          value: 'tkisk',
+          width: 150,
+        },
+        {
+          text: '品名',
+          value: 'hnNm',
+          width: 180,
+        },
+        {
+          text: '内訳№',
+          value: 'ucwkNo',
+          width: 90,
+        },
+        {
+          text: '内訳名',
+          value: 'ucwkNm',
+          width: 100,
+        },
       ],
       headersShijiL: [
-        { displayOrder: 1, text: '営業備考',   value: 'eigyoBiko', width: 150,  shown: true },
+        {
+          text: '営業備考',
+          value: 'aigyBku',
+          width: 150,
+        },
       ],
       headersCaution: [
-        { displayOrder: 1, text: '注意事項',   value: 'caution', width: 300,  shown: true },
+        {
+          text: '注意事項',
+          value: 'chiJku',
+          width: 300,
+        },
       ],
       headersSum: [
-        { displayOrder: 1,  text: '指示数', value: 'shijiCnt',   width: 100,  shown: true, },
-        { displayOrder: 2,  text: '引当数', value: 'hikiateCnt', width: 100,  shown: true, },
-        { displayOrder: 3,  text: '換算数', value: 'kansanCnt',  width: 100,  shown: true, },
-        { displayOrder: 4,  text: '不足数', value: 'fusokuCnt',  width: 100,  shown: true, },
+        {
+          text: '指示数',
+          value: 'sjNum',
+          width: 100,
+        },
+        {
+          text: '引当数',
+          value: 'hkatNum',
+          width: 100,
+        },
+        {
+          text: '換算数',
+          value: 'knsnNum',
+          width: 100,
+        },
+        {
+          text: '不足数',
+          value: 'fskNum',
+          width: 100,
+        },
       ],
       headersKobetsu: [
-        { displayOrder: 2,  text: '入荷日',     value: 'nyukaYmd',      width: 100,  shown: true, manage: false, },
-        { displayOrder: 3,  text: '倉庫',       value: 'soko',          width: 100,  shown: true, manage: false, },
-        { displayOrder: 4,  text: '棚番',       value: 'tanaBan',       width: 100,  shown: true, manage: false, },
-        { displayOrder: 5,  text: '札紙番号',   value: 'fudagamiNo',    width: 200,  shown: true, manage: false, },
-        { displayOrder: 6,  text: '札紙連番',   value: 'fudagamiSeq',   width: 80,  shown: true, manage: false, },
-        { displayOrder: 7,  text: 'サブ',       value: 'fudagamiSabu',  width: 80,  shown: true, manage: false, },
-        { displayOrder: 8,  text: '製造年月日', value: 'productYmd',    width: 100,  shown: true, manage: false, },
-        { displayOrder: 9,  text: '数量',       value: 'suryo',         width: 80,  shown: true, manage: false, },
-        { displayOrder: 10, text: '入り数',     value: 'iriCnt',        width: 70,  shown: true, manage: false, },
-        { displayOrder: 11, text: '内数',       value: 'uchisu',        width: 60,  shown: true, manage: false, },
-        { displayOrder: 12, text: '箱数',       value: 'hakosu',        width: 60,  shown: true, manage: false, },
-        { displayOrder: 13, text: '出庫箱数',   value: 'syukkohakosu',  width: 180,  shown: true, manage: false, },
-        { displayOrder: 14, text: '吊札備考',   value: 'tsurifuraBiko', width: 200,  shown: true, manage: false, },
-        { displayOrder: 91, text: '',           value: 'suryoUnit',     width: 80,  shown: false, manage: true, },
-        { displayOrder: 98, text: '',          value: 'status',         width: 200,  shown: false, manage: true, },
-        { displayOrder: 99, text: '',           value: 'ID',            width: 150,  shown: false, manage: true, },
+        {
+          displayOrder: 2,
+          text: '入荷日',
+          value: 'nykDt',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 3,
+          text: '倉庫',
+          value: 'sko',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 4,
+          text: '棚番',
+          value: 'tnNo',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 5,
+          text: '札紙番号',
+          value: 'fdgmNo',
+          width: 200,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 6,
+          text: '札紙連番',
+          value: 'fdgmSeq',
+          width: 80,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 7,
+          text: 'サブ',
+          value: 'sb',
+          width: 80,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 8,
+          text: '製造年月日',
+          value: 'sizDt',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 9,
+          text: '数量',
+          value: 'num',
+          width: 80,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 10,
+          text: '入り数',
+          value: 'iriNum',
+          width: 70,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 11,
+          text: '内数',
+          value: 'uchNum',
+          width: 60,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 12,
+          text: '箱数',
+          value: 'hkNum',
+          width: 60,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 13,
+          text: '出庫箱数',
+          value: 'shkkHkNum',
+          width: 180,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 14,
+          text: '吊札備考',
+          value: 'trfdBik',
+          width: 200,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 91,
+          text: '',
+          value: 'numUnit',
+          width: 80,
+          shown: false,
+          manage: true,
+        },
+        {
+          displayOrder: 97,
+          text: '',
+          value: 'isSetting',
+          width: 10,
+          shown: false,
+          manage: true,
+        },
+        {
+          displayOrder: 98,
+          text: '',
+          value: 'status',
+          width: 200,
+          shown: false,
+          manage: true,
+        },
+        {
+          displayOrder: 99,
+          text: '',
+          value: 'ID',
+          width: 150,
+          shown: false,
+          manage: true,
+        },
       ],
       headersBunkatsu: [
-        { displayOrder: 3,  text: '箱番号',   value: 'hakoNo', width: 40,  shown: true },
-        { displayOrder: 4,  text: '数量',     value: 'suryo',  width: 80,  shown: true },
-        { displayOrder: 91, text: '',         value: 'suryoUnit',width: 80,shown: false },
-        { displayOrder: 99, text: '',         value: 'id',     width: 10,  shown: false },
-      ],
-      itemsShijiH:[],
-      itemsShijiHList: [
-        [
-          // 1明細目
-          {
-            destinationName: "東京工場",
-            orderNo: "4	QDA9Q2",
-            customerName: "花王",
-            productName: "９１８６４３　ＰＶキープＢＣＮ　ＴＰ９Ｂ",
-            uchiwakeNo: "-",
-            uchiwakeName: "",
-          }
-        ],
-        [
-          // 2明細目
-          {
-            destinationName: "㈲ヨコヤマ",
-            orderNo: "4 8A61Q2",
-            customerName: "コカ・コーラ",
-            productName: "７ミリヨウチューブ",
-            uchiwakeNo: "01",
-            uchiwakeName: "本体",
-          }
-        ],
-        [
-          // 3明細目
-          {
-            destinationName: "㈲ヨコヤマ",
-            orderNo: "4 8O45S2",
-            customerName: "コカ・コーラ",
-            productName: "１１５＿７Ｍ／Ｍ　ヨウ　リング",
-            uchiwakeNo: "01",
-            uchiwakeName: "本体",
-          }
-        ],
-        [
-          // 4明細目
-          {
-            destinationName: "㈲双葉商事",
-            orderNo: "4	QBA1R2",
-            customerName: "丸美屋食品",
-            productName: "７３ＣＪ　チイカワヨウキイリデイカワ",
-            uchiwakeNo: "01",
-            uchiwakeName: "本体",
-          }
-        ],
-      ],
-      itemsShijiL: [],
-      itemsShijiLList: [
-        [{ eigyoBiko: "", }],
-        [{ eigyoBiko: "", }],
-        [{ eigyoBiko: "", }],
-        [{ eigyoBiko: "", }],
-      ],
-      itemsCaution: [],
-      itemsCautionList: [
-        [{ caution:"数量厳守", }],
-        [{ caution:"数量厳守", }],
-        [{ caution:"数量厳守", }],
-        [{ caution:"数量厳守", }],
-      ],
-      itemsSum: [],
-      itemsSumList: [
-        [
-          { shijiCnt: "42,000 S", hikiateCnt: "42,000 S", kansanCnt: "42,000 S", fusokuCnt: "0 S"},
-        ],
-        [
-          { shijiCnt: "64,000 S", hikiateCnt: "57,600 S", kansanCnt: "57,600 S", fusokuCnt: "-6,400 S"}
-        ],
-        [
-          { shijiCnt: "52,500 S", hikiateCnt: "45,000 S", kansanCnt: "45,000 S", fusokuCnt: "-7,500 S"}
-        ],
-        [
-          { shijiCnt: "6,048 S", hikiateCnt: "6,048 S", kansanCnt: "6,048 S", fusokuCnt: "0 S"}
-        ],
-      ],
-      itemsKobetsu: [],
-      itemsKobetsuList: [
-        [
-          // 1明細目
-          {
-            ID: 1,
-            nyukaYmd: '22/07/14',
-            soko: '1810 関宿物流センター',
-            tanaBan: '070230',
-            fudagamiNo: '5056001108061X',
-            fudagamiSabu: '1',
-            fudagamiSeq: '001',
-            productYmd: '22/07/13',
-            suryo: 30000,
-            suryoUnit: " S",
-            iriCnt: 3000,
-            uchisu: null,
-            hakosu: 10,
-            syukkohakosu: 10,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-          {
-            ID: 2,
-            nyukaYmd: '22/07/14',
-            soko: '1810 関宿物流センター',
-            tanaBan: '061603',
-            fudagamiNo: '5056001108063Z',
-            fudagamiSabu: '1',
-            fudagamiSeq: '002',
-            productYmd: '22/07/14',
-            suryo: 30000,
-            suryoUnit: " S",
-            iriCnt: 3000,
-            uchisu: null,
-            hakosu: 10,
-            syukkohakosu: 4,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-          {
-            ID: 3,
-            nyukaYmd: '22/07/14',
-            soko: '1810 関宿物流センター',
-            tanaBan: '080802',
-            fudagamiNo: '5056001131548$',
-            fudagamiSabu: '1',
-            fudagamiSeq: '003',
-            productYmd: '22/07/14',
-            suryo: 30000,
-            suryoUnit: " S",
-            iriCnt: 3000,
-            uchisu: null,
-            hakosu: 10,
-            syukkohakosu: null,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-        ],
-        [
-          // 2明細目
-          {
-            ID: 1,
-            nyukaYmd: '22/07/14',
-            soko: '1810 関宿物流センター',
-            tanaBan: '020201',
-            fudagamiNo: '438940398593$%',
-            fudagamiSabu: '1',
-            fudagamiSeq: '001',
-            productYmd: '22/07/14',
-            suryo: 64000,
-            suryoUnit: " S",
-            iriCnt: 640,
-            uchisu: null,
-            hakosu: 90,
-            syukkohakosu: 90,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-        ],
-        [
-          // 3明細目
-          {
-            ID: 1,
-            nyukaYmd: '22/07/14',
-            soko: '1810 関宿物流センター',
-            tanaBan: '010101',
-            fudagamiNo: '3248990234890A',
-            fudagamiSabu: '1',
-            fudagamiSeq: '001',
-            productYmd: '22/07/14',
-            suryo: 37500,
-            suryoUnit: " S",
-            iriCnt: 7500,
-            uchisu: null,
-            hakosu: 5,
-            syukkohakosu: 5,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-          {
-            ID: 2,
-            nyukaYmd: '22/07/14',
-            soko: '1220 盛運羽生倉庫',
-            tanaBan: '999999',
-            fudagamiNo: '9394938953889B',
-            fudagamiSabu: '1',
-            fudagamiSeq: '002',
-            productYmd: '22/07/14',
-            suryo: 37500,
-            suryoUnit: " S",
-            iriCnt: 7500,
-            uchisu: null,
-            hakosu: 1,
-            syukkohakosu: 1,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-        ],
-        [
-          // 4明細目
-          {
-            ID: 1,
-            nyukaYmd: '22/07/12',
-            soko: '1810 関宿物流センター',
-            tanaBan: '090403',
-            fudagamiNo: '3948038034589C',
-            fudagamiSabu: '1',
-            fudagamiSeq: '001',
-            productYmd: '22/07/12',
-            suryo: 8640,
-            suryoUnit: " S",
-            iriCnt: 432,
-            uchisu: null,
-            hakosu: 20,
-            syukkohakosu: 14,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-          {
-            ID: 2,
-            nyukaYmd: '22/07/13',
-            soko: '1810 関宿物流センター',
-            tanaBan: '090404',
-            fudagamiNo: '3948038035628D',
-            fudagamiSabu: '1',
-            fudagamiSeq: '002',
-            productYmd: '22/07/12',
-            suryo: 8640,
-            suryoUnit: " S",
-            iriCnt: 432,
-            uchisu: null,
-            hakosu: 20,
-            syukkohakosu: null,
-            tsurifuraBiko: '',
-            status: "0",
-            isSetting: false,
-          },
-        ],
+        {
+          displayOrder: 3,
+          text: '箱番号',
+          value: 'hakoNo',
+          width: 40,
+          shown: true,
+        },
+        {
+          displayOrder: 4,
+          text: '数量',
+          value: 'num',
+          width: 80,
+          shown: true,
+        },
+        {
+          displayOrder: 91,
+          text: '',
+          value: 'numUnit',
+          width: 80,
+          shown: false,
+        },
+        { displayOrder: 99, text: '', value: 'id', width: 10, shown: false },
       ],
       headersHikiateJun: [
-        { text: "引当処理順", value: "title", width: '25%', },
-        { text: "札紙番号⇒入荷日", value: "value", width: '75%', },
+        { text: '引当処理順', value: 'title', width: '25%' },
+        { text: '札紙番号⇒入荷日', value: 'value', width: '75%' },
       ],
-      itemsHikiateJun: [
-        { title:"引当処理順", value:"札紙番号⇒入荷日"}
-      ],
-      bunkatsuMoto: [
-        { hakoNo:"1",  suryo:3000, suryoUnit: " S",id:1 },
-        { hakoNo:"2",  suryo:3000, suryoUnit: " S",id:2 },
-        { hakoNo:"3",  suryo:3000, suryoUnit: " S",id:3 },
-        { hakoNo:"4",  suryo:3000, suryoUnit: " S",id:4 },
-        { hakoNo:"5",  suryo:3000, suryoUnit: " S",id:5 },
-        { hakoNo:"6",  suryo:3000, suryoUnit: " S",id:6 },
-        { hakoNo:"7",  suryo:3000, suryoUnit: " S",id:7 },
-        { hakoNo:"8",  suryo:3000, suryoUnit: " S",id:8 },
-        { hakoNo:"9",  suryo:3000, suryoUnit: " S",id:9 },
-        { hakoNo:"10", suryo:3000, suryoUnit: " S",id:10 },
-      ],
-      selectMoto: [],
+      itemsHikiateJun: [{ title: '引当処理順', value: '札紙番号⇒入荷日' }],
       headersBack: null,
       procId: 0,
+    };
+  },
+  mounted: async function () {
+    try {
+      const res = await axios.post(
+        'http://localhost:8081/ssb01002pc/select',
+        this.screenModel
+      );
+      if (res.data) {
+        this.screenModel.upperInfo = res.data.upperInfo;
+        this.screenModel.lowerInfo = res.data.lowerInfo;
+      }
+    } catch (error) {
+      alert('検索に失敗しました。');
     }
   },
-  mounted: function() {
-    this.itemsShijiH = this.itemsShijiHList[parseInt(this._props.id) - 1];
-    this.itemsShijiL = this.itemsShijiLList[parseInt(this._props.id) - 1];
-    this.itemsCaution = this.itemsCautionList[parseInt(this._props.id) - 1];
-    this.itemsSum = this.itemsSumList[parseInt(this._props.id) - 1];
-    this.itemsKobetsu = this.itemsKobetsuList[parseInt(this._props.id) - 1];
-  },
   computed: {
-    shownHeadersShijiH() {
-      return this.headersShijiH.filter(h => h.shown);
-    },
-    shownHeadersShijiL() {
-      return this.headersShijiL.filter(h => h.shown);
-    },
-    shownHeadersSum() {
-      return this.headersSum.filter(h => h.shown);
-    },
     shownHeadersKobetsu() {
-      return this.headersKobetsu.filter(h => h.shown);
+      return this.headersKobetsu.filter((h) => h.shown);
     },
     shownHeadersKobetsuDraggable() {
-      return this.headersKobetsu.filter(h => !h.manage);
-    },
-    shownHeadersBunkatsu() {
-      return this.headersBunkatsu.filter(h => h.shown);
+      return this.headersKobetsu.filter((h) => !h.manage);
     },
     isFusoku() {
-      return function(fusoku) {
-        let fusokuNum = parseInt(fusoku.replace(/,/g, ''));
-        if (fusokuNum < 0)
-          return true;
+      return function (fusoku) {
+        let fusokuNum = parseInt(fusoku);
+        if (fusokuNum < 0) return true;
         return false;
-      }
+      };
     },
     isYoteiAdd() {
-    // 予定ボタン表示制御
-      var work = new String(this.itemsSum[0]?.fusokuCnt);
-      return work.substring(0, 1) == "-";
+      // 予定ボタン表示制御
+      var work = new String(this.calcFskNum());
+      return work.substring(0, 1) == '-';
     },
-    classObject: function(id) {
+    classObject: function (id) {
       return {
-        active: this.itemsKobetsu[id].isSetting, "primary" : "errorClass"
-      }
+        active: this.screenModel.lowerInfo[id].isSetting,
+        primary: 'errorClass',
+      };
+    },
+    hkatSum: function () {
+      return this.calcHkateNum();
+    },
+    fskSum: function () {
+      return this.calcFskNum();
     },
   },
   methods: {
+    calcHkateNum() {
+      // 引当数算出
+      let sum = 0;
+      for (const rowInfo of this.screenModel.lowerInfo) {
+        sum += parseInt(rowInfo.shkkHkNum || 0) * parseInt(rowInfo.iriNum);
+      }
+      return sum;
+    },
+    calcFskNum() {
+      let sjNum = this.screenModel.upperInfo[0]?.sjNum;
+      return this.calcHkateNum() - sjNum;
+    },
     setting() {
       // 現在の状態を退避
       this.headersBack = JSON.parse(JSON.stringify(this.headersKobetsu));
@@ -586,46 +660,50 @@ export default {
     },
     hakoShitei: async function (id) {
       // データ準備
-      this.selectMoto = [];
-      this.showContent = true;
-      this.procId = id-1;
+      this.procId = id;
     },
     yoteiAdd() {
       // 予定ボタン 欠品分入荷予定登録
-
-    },
-    closeModal() {
-      this.itemsKobetsu[this.procId].isSetting = true;
-      this.showContent = false;
-    },
-    cancelModal() {
-      this.showContent = false;
     },
     redist() {
-      // 現在の引当クリア
-      for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
-        this.itemsKobetsu[idx].syukkohakosu = "";
-      }
-      // 残り要求数
-      let lastRequest = parseInt(this.itemsSum[0].hikiateCnt);
-      for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
-        let syukko = 0;
-        for (let hako = parseInt(this.itemsKobetsu[idx].hakosu); hako > 0; hako--) {
-          if (lastRequest <= 0)
+      // // 現在の引当クリア
+      // for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
+      //   this.itemsKobetsu[idx].shkkHkNum = '';
+      // }
+      // // 残り要求数
+      // let lastRequest = parseInt(this.itemsSum[0].hikiateNum);
+      // for (let idx = 0; idx < this.itemsKobetsu.length; idx++) {
+      //   let syukko = 0;
+      //   for (
+      //     let hako = parseInt(this.itemsKobetsu[idx].hkNum);
+      //     hako > 0;
+      //     hako--
+      //   ) {
+      //     if (lastRequest <= 0) break;
+      //     lastRequest -= parseInt(this.itemsKobetsu[idx].iriNum);
+      //     syukko += 1;
+      //   }
+      //   this.itemsKobetsu[idx].shkkHkNum = syukko;
+      // }
+    },
+    // 箱指定結果
+    resDialog(obj) {
+      if (obj.res) {
+        for (const rowInfo of this.screenModel.lowerInfo) {
+          if (rowInfo.id == obj.id) {
+            rowInfo.isSetting = '1';
             break;
-          lastRequest -= parseInt(this.itemsKobetsu[idx].iriCnt);
-          syukko += 1;
+          }
         }
-        this.itemsKobetsu[idx].syukkohakosu = syukko;
       }
     },
   },
   components: {
     draggable,
-    // DragSet,
     KeppinAddDlg,
+    hakoSelDlg,
   },
-}
+};
 </script>
 
 <style>
@@ -662,29 +740,51 @@ export default {
 }
 
 /* 注意事項 */
-#caution.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > th {
-  font-size:15px  !important;
-  background-color: #F1B386 !important;
+#caution.v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > th {
+  font-size: 15px !important;
+  background-color: #f1b386 !important;
 }
-#caution.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
-  background-color: #F1B386 !important;
+#caution.v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > td {
+  background-color: #f1b386 !important;
 }
 
 /* サマリ表示専用 */
-#summarys.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > th {
-  font-size:15px  !important;
-  background-color: #FFe699 !important;
+#summarys.v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > th {
+  font-size: 15px !important;
+  background-color: #ffe699 !important;
 }
-#summarys.v-data-table--fixed-header > .v-data-table__wrapper > table > thead > tr > td {
-  background-color: #FFE699 !important;
+#summarys.v-data-table--fixed-header
+  > .v-data-table__wrapper
+  > table
+  > thead
+  > tr
+  > td {
+  background-color: #ffe699 !important;
 }
 #hikiateSyoriJun.v-data-table td:nth-child(odd) {
-  background-color: #FFE699;
+  background-color: #ffe699;
 }
 td.hikiateSyoriJun {
-  background-color: #FFE699 !important;
+  background-color: #ffe699 !important;
 }
-.hikiateSyoriJun {background-color: #FFE699 !important;}
+.hikiateSyoriJun {
+  background-color: #ffe699 !important;
+}
 
 .textRight input {
   text-align: right;
@@ -701,35 +801,13 @@ td.hikiateSyoriJun {
   /* text-danger */
   color: red;
 }
-#overlay {
-  z-index: 99;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#content {
-  z-index: 100;
-  width: "200px";
-  height: "350px";
-  padding: 1em;
-  background: #ffffff;
-}
 
 .v-input--selection-controls {
   margin: 2px;
 }
 
 .leyerTop {
-  position: absolute; 
+  position: absolute;
   right: 86px;
   z-index: 2;
 }
@@ -745,5 +823,4 @@ td.hikiateSyoriJun {
   transform: scale(0.875);
   transform-origin: left;
 }
-
 </style>
