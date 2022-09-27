@@ -114,7 +114,7 @@
                         style="max-width: 150px"
                       ></v-select>
                     </v-col>
-                    <v-col class="pt-0 pr-1 d-flex" cols="3">
+                    <v-col class="pt-0 pr-1 d-flex" cols="4">
                       <v-subheader class="mr-2">事&emsp;注番</v-subheader>
                       <v-text-field
                         v-model="screenModel.chuNoH"
@@ -123,8 +123,8 @@
                         clearable
                         hint=""
                         hide-details="auto"
-                        maxlength="1"
-                        style="max-width: 60px"
+                        maxlength="2"
+                        style="max-width: 70px"
                       ></v-text-field>
                       <v-text-field
                         v-model="screenModel.chuNoL"
@@ -133,8 +133,8 @@
                         clearable
                         hint=""
                         hide-details="auto"
-                        maxlength="5"
-                        style="max-width: 100px"
+                        maxlength="7"
+                        style="max-width: 155px"
                       ></v-text-field>
                     </v-col>
                     <v-col class="pt-0 pr-1 d-flex" cols="3">
@@ -195,8 +195,10 @@
               multi-sort
               fixed-header
               show-select
+              :loading="loadingFlg"
               no-data-text="検索してください。"
-              height="400"
+              loading-text="検索中です。"
+              :height="tableHeight"
             >
               <template #[`item.jn`]="{ item }">
                 <v-text-field
@@ -212,7 +214,8 @@
               </template>
               <template #[`item.jyry`]="{ item }">
                 <div style="text-align: right">
-                  {{ item.jyry == null ? '' : item.jyry.toLocaleString() }} kg
+                  {{ item.jyry == null ? '' : item.jyry.toLocaleString() }}
+                  kg
                 </div>
               </template>
               <template #[`item.sjNum`]="{ item }">
@@ -271,11 +274,10 @@
                 </v-tooltip>
               </template>
             </v-data-table>
-            <div style="height: 40px"></div>
           </v-card>
         </v-col>
       </v-row>
-      <v-row class="hoverBtn">
+      <v-row>
         <v-col class="d-flex justify-start mr-10">
           <v-btn
             class="mr-10 mb-3"
@@ -358,6 +360,7 @@ export default {
     return {
       drawer: false,
       panelState: 0,
+      loadingFlg: false,
       today: new Date(),
       // ダイアログ画面のclose用変数
       modal_date: false,
@@ -388,14 +391,6 @@ export default {
       },
 
       headers: [
-        {
-          displayOrder: 2,
-          text: '順',
-          value: 'jn',
-          width: 90,
-          shown: true,
-          manage: false,
-        },
         {
           displayOrder: 3,
           text: '出荷日',
@@ -493,7 +488,15 @@ export default {
           manage: false,
         },
         {
-          displayOrder: 1,
+          displayOrder: 15,
+          text: '順',
+          value: 'jn',
+          width: 90,
+          shown: true,
+          manage: false,
+        },
+        {
+          displayOrder: 99,
           text: '',
           value: 'id',
           width: 65,
@@ -555,17 +558,20 @@ export default {
     },
     select: async function () {
       try {
+        this.loadingFlg = true;
         this.selectRowList = [];
         const res = await axios.post(
           'http://localhost:8081/ssb01001pc/select',
           this.screenModel
         );
+        this.loadingFlg = false;
         if (res.data) {
           this.screenModel.searchedRow = res.data.searchedRow;
-          this.panelState = false;
+          this.panelState = '1';
         }
       } catch (error) {
         alert('検索に失敗しました。');
+        this.loadingFlg = false;
       }
     },
     setting() {
@@ -654,6 +660,17 @@ export default {
         .sort()
         .join(' ～ ')
         .replaceAll('-', '/');
+    },
+
+    // 解像度に応じてテーブル高さを変更（改良の余地あり）
+    tableHeight: function () {
+      return this.panelState === undefined || this.panelState === '1'
+        ? this.$vuetify.breakpoint.name === 'xl'
+          ? '750px'
+          : '340px'
+        : this.$vuetify.breakpoint.name === 'xl'
+        ? '570px'
+        : '95px'; //検索条件5行の場合20だとぴたり
     },
   },
   components: {

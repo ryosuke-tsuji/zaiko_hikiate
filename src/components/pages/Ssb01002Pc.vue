@@ -1,6 +1,12 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" fullscreen hide-overlay>
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      width="100%"
+      style="margin-top: 0px"
+    >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="mx-5 mb-3 secondary"
@@ -11,10 +17,8 @@
           ><span>個別引当</span></v-btn
         >
       </template>
-      <div
-        class="p-0 m-0"
-        style="background-color: white; margin-top: 68px; height: 100%"
-      >
+
+      <div style="margin-top: 64px; background-color: white">
         <v-container fluid>
           <v-row>
             <v-col class="pb-0">
@@ -167,7 +171,7 @@
                   dense
                   multi-sort
                   fixed-header
-                  height="auto"
+                  :height="tableHeight"
                 >
                   <template #[`item.num`]="{ item }">
                     <div style="text-align: right">
@@ -246,11 +250,10 @@
                     >
                   </template>
                 </v-data-table>
-                <div style="height: 60px"></div>
               </v-card>
             </v-col>
           </v-row>
-          <v-row class="hoverBtn">
+          <v-row>
             <v-col class="d-flex justify-start mr-10">
               <v-btn
                 class="mr-10 mb-3"
@@ -269,7 +272,11 @@
               <v-btn class="mx-5 mb-3 secondary" large @click="force"
                 ><span>強制決定</span></v-btn
               >
-              <v-btn class="mx-5 mb-3 primary" large @click="decide"
+              <v-btn
+                class="mx-5 mb-3 primary"
+                large
+                @click="decide"
+                id="btnDecide"
                 ><span>決定</span></v-btn
               >
             </v-col>
@@ -590,6 +597,12 @@ export default {
       procId: 0,
     };
   },
+  // mounted() {
+  //   document.addEventListener('keydown', this.checkKeyDown);
+  // },
+  // beforeDestroy() {
+  //   document.removeEventListener('keydown', this.checkKeyDown);
+  // },
   computed: {
     shownHeadersKobetsu() {
       return this.headersKobetsu.filter((h) => h.shown);
@@ -621,6 +634,10 @@ export default {
     fskSum: function () {
       return this.calcFskNum();
     },
+    // 解像度に応じてテーブル高さを変更（改良の余地あり）
+    tableHeight: function () {
+      return this.$vuetify.breakpoint.name === 'xl' ? '750px' : '230px';
+    },
   },
   methods: {
     selectData() {
@@ -634,10 +651,6 @@ export default {
       try {
         this.screenModel.chuNoH = this.$props.selectRowList[idx].jgyhmbCd;
         this.screenModel.chuNoL = this.$props.selectRowList[idx].sirNo;
-        // this.screenModel.chuNoH =
-        //   this.$props.selectRowList[this.$props.kobetsuIdx].jgyhmbCd;
-        // this.screenModel.chuNoL =
-        //   this.$props.selectRowList[this.$props.kobetsuIdx].sirNo;
         const res = await axios.post(
           'http://localhost:8081/ssb01002pc/select',
           this.screenModel
@@ -645,6 +658,8 @@ export default {
         if (res.data) {
           this.screenModel.upperInfo = res.data.upperInfo;
           this.screenModel.lowerInfo = res.data.lowerInfo;
+          // 「決定」ボタンにフォーカス設定
+          document.getElementById('btnDecide').focus();
         }
       } catch (error) {
         alert('検索に失敗しました。');
@@ -730,6 +745,11 @@ export default {
             break;
           }
         }
+      }
+    },
+    checkKeyDown(event) {
+      if (event.key == 'Enter') {
+        this.decide();
       }
     },
   },
