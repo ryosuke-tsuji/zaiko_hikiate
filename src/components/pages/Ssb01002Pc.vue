@@ -173,6 +173,14 @@
                   fixed-header
                   :height="tableHeight"
                 >
+                  <template #[`item.sko`]="{ item }">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <span v-on="on">{{ item.sko }}</span>
+                      </template>
+                      <span>{{ item.sko }}</span>
+                    </v-tooltip>
+                  </template>
                   <template #[`item.num`]="{ item }">
                     <div style="text-align: right">
                       {{ item.num == null ? '' : item.num.toLocaleString()
@@ -636,7 +644,7 @@ export default {
     },
     // 解像度に応じてテーブル高さを変更（改良の余地あり）
     tableHeight: function () {
-      return this.$vuetify.breakpoint.name === 'xl' ? '750px' : '230px';
+      return this.$vuetify.breakpoint.name === 'xl' ? '500px' : '205px';
     },
   },
   methods: {

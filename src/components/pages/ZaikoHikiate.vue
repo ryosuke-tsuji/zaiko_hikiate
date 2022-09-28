@@ -639,9 +639,12 @@ export default {
           this.kobetsuIdx++;
           this.$refs.kobetsu.getData(this.kobetsuIdx);
         } else {
-          // 確定画面へ
+          // 個別画面閉じ
           this.$refs.kobetsu.dialogClose();
           this.kobetsuIdx = 0;
+
+          // 確定画面へ
+          this.$router.push({ name: 'zaiko_hikiate_kakutei' });
         }
       }
     },
@@ -666,11 +669,11 @@ export default {
     tableHeight: function () {
       return this.panelState === undefined || this.panelState === '1'
         ? this.$vuetify.breakpoint.name === 'xl'
-          ? '750px'
-          : '340px'
+          ? '615px'
+          : '303px'
         : this.$vuetify.breakpoint.name === 'xl'
-        ? '570px'
-        : '95px'; //検索条件5行の場合20だとぴたり
+        ? '370px'
+        : '58px'; //検索条件5行の場合20だとぴたり
     },
   },
   components: {
