@@ -436,6 +436,14 @@ export default {
       ],
       headersKobetsu: [
         {
+          displayOrder: 1,
+          text: 'デポ',
+          value: 'dp',
+          width: 100,
+          shown: true,
+          manage: false,
+        },
+        {
           displayOrder: 2,
           text: '入荷日',
           value: 'nykDt',
